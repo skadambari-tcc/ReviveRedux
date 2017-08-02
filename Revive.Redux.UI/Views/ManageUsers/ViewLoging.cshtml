@@ -1,0 +1,267 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model UserModels
+@{
+    ViewBag.Title = "Manage Logging";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div style="margin-left:0.5%">
+                        <h2>Manage Logging</h2>
+                    </div>
+                </div>   
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right">Customer</div>
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.Customer_Id, new SelectList(Model.CustomerNameList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right"> Subagent </div>
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.SubAgentId, new SelectList(Model.SubAgentList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubAgentName" })
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right">Subsidiary</div>
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.SubsidiaryId, new SelectList(Model.SubsidiaryList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubsidiaryName" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right"> Location </div>
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.Location_Id, new SelectList(Model.LocationList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlLocationName", })
+                                </div>
+                            </div>
+                        </div>                       
+                    </div>
+                </div>                 
+                <div class="row spacer1 spacer1"></div>
+                <!--<div class="row">
+                    <div class="col-md-10">
+                        <div class="col-md-6 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            <button id="btnSearch" class="btn login_button btn-primary" type="button">Search</button>
+                        </div>
+                    </div>
+                </div>-->
+                
+                <div class="row">
+
+                    <div class="table-responsive Kendogrid col-md-12" style=" margin-top: 3%;">
+
+
+                        @*<div class="k-grid-content">*@
+                        @(Html.Kendo().Grid<DtoUser>()
+                          .Name("ManageStoreUsersLogingGrid")
+                  .Columns(columns =>
+                  {
+                      columns.Bound(p => p.Email_ID).Title("User ID");
+                      columns.Bound(p => p.FullName).Width(200).Title("User Name");
+                      columns.Bound(p => p.CustomerName).Width(200).Title("Customer");
+                      columns.Bound(p => p.SubAgentName).Width(200).Title("Agent");
+                      //  columns.Bound(p => p.Modified_by).Title("Modified By");
+                      //  columns.Bound(p => p.Modified_Date).Title("Modified Date");
+                      columns.Bound(p => p.Customer_ID).Title("Customer_ID").Visible(false);
+                      columns.Bound(p => p.LogTypeId).Title("LogTypeId").Visible(false);
+                      columns.Bound(p => p.IsStoreUserLog).Title("IsStoreUserLog").Visible(false);
+                      columns.Bound(p => p.UserLogging).Width(120).Title("Logging Status");
+                      columns.Bound(c => c.User_ID).ClientTemplate("<a title='Edit'  href='" + Url.Action("ConfigureLogging", "ManageUsers") + "?UserId=#= User_ID #&FullName=#= FullName #&IsUserLogging=#= IsStoreUserLog #&LogTypeId=#= LogTypeId #' ' " + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>").Title("Enable Logging").Filterable(false).Sortable(false).Width(120).HtmlAttributes(new { @style = "cursor:pointer" });
+                  })
+                                       .Pageable(pageable =>
+                                                    {
+                                                        pageable.Refresh(true);
+                                                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                                                        pageable.Messages(messages => messages.Empty("No record found!"));
+                                                    })
+                                                            .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                                          {
+                                                              fs.Clear().Contains("Contains");
+                                                              fs.DoesNotContain("Does not contain");
+                                                              fs.IsEqualTo("Equal to");
+                                                              fs.IsNotEqualTo("Not equal to");
+                                                              fs.StartsWith("Starts with");
+                                                              fs.EndsWith("Ends with");
+                                                          })))
+                                                      .Sortable()
+                                                      .Scrollable()
+                                                      .HtmlAttributes(new { style = "width:98%;" })
+                                                  .DataSource(dataSource => dataSource
+                                                     .Ajax().PageSize(10)
+                                                    .ServerOperation(false) // paging, sorting, filtering and grouping will be applied client-side
+                                                      //.Read("ManageUsersAjax", "ManageUsers")
+                                                                    .Read(read => read.Action("ManageUsersLoggingAjax", "ManageUsers").Data("ManageMemberDetails"))
+
+                                                           )
+                        )
+
+                    </div>
+
+                    @*<div class="kendogrid col-md-2" style=" margin-top: 3%;">
+                        <img src="~/Scripts/images/profile.png" />
+                    </div>*@
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //function CustomerId() {
+    //    var selsectedId = null;
+    //    return { Customer_ID: selsectedId };
+    //}
+    function ManageMemberDetails() {
+        var ManageMembers = {
+            Customer_Id: $("#ddlCustomerName").val(),
+            SubsidiaryId: $("#ddlSubsidiaryName").val(),
+            SubAgentID: $("#ddlSubAgentName").val(),
+            Location_Id: $("#ddlLocationName").val()
+
+        };
+        return { objMemberParameter: ManageMembers };
+    }
+    $(document).ready(function () {
+        ManageMemberDetails();
+        $("#ManageStoreUsersLogingGrid").data("kendoGrid").dataSource.read();
+
+        $("#btnSearch").click(function () {
+            $("#ManageStoreUsersLogingGrid").data("kendoGrid").dataSource.read();
+        });
+        // Customer dropdown change event
+        // Load Subsidiary on select of Customer
+        $("#ddlCustomerName").change(function () {
+            $("#ddlSubsidiaryName").empty();
+            $("#ddlSubAgentName").empty();
+            $("#ddlLocationName").empty();
+            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+            $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+            var nCustomerId = $("#ddlCustomerName").val();
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetSubsidiaryList", "ManageMembershipConfig")', // Calling json method
+                dataType: 'json',
+                data: { CustomeId: nCustomerId, bActive: true },
+                success: function (subsidiaryLst) {
+                    if (subsidiaryLst.length > 0) {
+                        $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                            $("#ddlSubsidiaryName").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                        });                        
+                    }
+                    else {
+                        $("#ddlSubsidiaryName").empty();
+                        $("#ddlSubAgentName").empty();
+                        $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+                        $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                    $("#ManageStoreUsersLogingGrid").data("kendoGrid").dataSource.read();
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve Subsidiary list. ' + ex, confirm: function () { } }); }
+            });
+            return false;
+        });
+
+        // Subsidiary dropdown change event
+        // Load Subagent on select of Subsidiary
+        $("#ddlSubsidiaryName").change(function () {
+            $("#ddlSubAgentName").empty();
+            $("#ddlLocationName").empty();
+            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+            var nCustomerId = $("#ddlSubsidiaryName").val();
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetSubAgentList", "ManageMembershipConfig")', // Calling json method
+                dataType: 'json',
+                data: { SubsidiaryId: nCustomerId, bActive: true },
+                success: function (subsidiaryLst) {
+                    if (subsidiaryLst.length > 0) {
+                        $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                            $("#ddlSubAgentName").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                        });
+                    }
+                    else {
+                        $("#ddlSubAgentName").empty();
+                        $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                    $("#ManageStoreUsersLogingGrid").data("kendoGrid").dataSource.read();
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve SubAgent list. ' + ex, confirm: function () { } }); }
+            });
+            return false;
+        });
+
+
+        // SubAgent dropdown change event
+        // Load Location on select of SubAgent
+        $("#ddlSubAgentName").change(function () {
+            $("#ddlLocationName").empty();
+            var nCustomerId = $("#ddlCustomerName").val();
+            var nSubsidiaryId = $("#ddlSubsidiaryName").val();
+            var nSubAgentId = $("#ddlSubAgentName").val();
+
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+
+            if (nSubsidiaryId == '')
+            { nSubsidiaryId = 0; }
+
+            if (nSubAgentId == '')
+            { nSubAgentId = 0; }
+
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetLocationList", "ManageMembershipConfig")', // Calling json method
+                dataType: 'json',
+                data: { CustomerId: nCustomerId, SubsidiaryId: nSubsidiaryId, SubAgentId: nSubAgentId, bActive: true },
+                success: function (LocationList) {
+                    if (LocationList.length > 0) {
+                        $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(LocationList, function (i, LocationList) {
+                            $("#ddlLocationName").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                        });
+                    }
+                    else {
+                        $("#ddlLocationName").empty();
+                        $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                    $("#ManageStoreUsersLogingGrid").data("kendoGrid").dataSource.read();
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve Location list. ' + ex, confirm: function () { } }); }
+            });
+            return false;
+        });
+
+        // Location dropdown change event
+        // Load Kendo on select of Location
+        $("#ddlLocationName").change(function () {
+            $("#ManageStoreUsersLogingGrid").data("kendoGrid").dataSource.read();
+        });
+    });
+</script>

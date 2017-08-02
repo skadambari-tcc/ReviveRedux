@@ -1,0 +1,401 @@
+﻿@model Revive.Redux.Entities.OrderModel
+@using Kendo.Mvc.UI
+@{
+    ViewBag.Title = "View Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .LableTextMargin {
+        margin-top: 3px;
+    }
+
+    .Title {
+        text-align: left;
+        font-size: larger;
+        color: #7c0000;
+        margin-left: 8px;
+    }
+
+    .k-window-titlebar {
+        height: 35px !important;
+    }
+
+     .k-window div.k-window-content {
+        overflow-x: hidden !important;
+    }
+
+</style>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>VIEW ORDER</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="col-md-1"></div>
+    <div class="col-md-11">
+        <div class="contant_page">
+            <!-- tittle -->
+            <div class="row">
+                <!-- collun1 -->
+                <div class="col-md-5">
+                    <div class="form-group">
+                        @Html.Label("Customer", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(model => model.CustomerName)
+                        </div>
+                    </div>
+                    @if (@Model.PageAccessCode != "MFPC" && @Model.PageAccessCode != "MFASSEMBLY" && @Model.PageAccessCode != "MFSHIP")
+                    {
+                        <div class="form-group">
+                            @Html.Label("Customer PO", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                <a href='@Url.Action("DownloadFileActual", "ManageCustomers", new { DocDetails = Model.CustomerId +","+ Model.CustomerDocName})' target="_blank">@Html.DisplayFor(modelItem => modelItem.CustomerDocName)</a>
+                            </div>
+                        </div>
+                    }
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">No. of Machines</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(model => model.NoOfMachines)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Expected Date", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(model => model.ExpectedOrderDate)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Machine Specs", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                        <div class="col-sm-6 LableTextMargin">
+                            <a onclick='return MachineSpecs_View("@Model.MachineSpecsId");' href='javascript:void(0);'>@Html.DisplayFor(modelItem => modelItem.MachineSpecs)</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Order ID", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(model => model.JobOrderHeaderId)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Current Status", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(model => model.StatusName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">No. of Machines Delivered</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(model => model.NoOfMachinesDelivered)
+                        </div>
+                    </div>
+                </div>
+                <!-- collun2 -->
+                <div class="col-md-5">
+
+                    
+                    @if (@Model.PageAccessCode != "MFPC" && @Model.PageAccessCode != "MFASSEMBLY" && @Model.PageAccessCode != "MFSHIP")
+                    {
+                        
+                          <div class="form-group">
+                          
+                            @Html.Label("AM", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                <label>@Model.AccountManagerName</label>
+                                
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                          
+                            @Html.Label("AM Comments", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @if (@Model.ClientExecComments.Length > 20)
+                                {
+                                    <label>@Model.ClientExecComments.Substring(0,17)...</label><a id='lnkMoreClientExecComments' class='more' title='@Model.ClientExecComments' href='#'>more</a>
+                                    <input id="ClientExecComments" type="hidden" value='@Model.ClientExecComments' />
+                                }
+                                else
+                                {
+                                    <label>@Model.ClientExecComments</label>
+                                }
+                            </div>
+                        </div>
+                        if (@Model.StatusName != "Pending Approval") 
+                        { 
+                            <div class="form-group">
+                                @Html.Label("Approver Comments", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                <div class="col-sm-6 LableTextMargin">
+                                    @if (@Model.ApproverComments.Length > 20)
+                                    {
+                                        <label>@Model.ApproverComments.Substring(0, 17)...</label><a id='lnkMoreApproverComments' class='more' title='@Model.ApproverComments' href='#'>more</a>
+                                        <input id="ApproverComments" type="hidden" value='@Model.ApproverComments' />
+                                    }
+                                    else
+                                    {
+                                        <label>@Model.ApproverComments</label>
+                                    }
+                                    @Html.ValidationMessageFor(model => model.ApproverComments)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Approved/Rejected By", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                <div class="col-sm-6 LableTextMargin">
+                                    @Html.DisplayFor(model => model.ApprovedRejectedUserName)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Approved/Rejected Date", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                <div class="col-sm-6 LableTextMargin">
+                                    @Html.DisplayFor(model => model.ApprovedRejectedDate)
+                                </div>
+                            </div>
+                        }
+                    }
+                    <div class="form-group">
+                        @Html.Label("Locations", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                        <div class="col-sm-6 LableTextMargin">
+                            <a href='@Url.Action("ViewLocations", "Order", new { Id = Model.JobOrderHeaderIdEncoded })' target="_blank">View</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @if (@Model.StatusName == "In-Progress" || @Model.StatusName == "Closed" || @Model.StatusName == "Shipped")
+                        {
+                            @Html.Label("More Details", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                <a href='@Url.Action("MoreDetails", "Machine", new { Id = Model.JobOrderHeaderIdEncoded })' target="_self">View</a>
+                            </div>
+                        }
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Manufacturer", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(model => model.ManufacturerName)
+                        </div>
+                    </div>                    
+                    @if (@Model.StatusName == "In-Progress" || @Model.StatusName == "Closed" || @Model.StatusName == "Shipped")
+                    {
+                    <div class="form-group">
+                        @Html.Label("Manufacturer Comments", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                        <div class="col-sm-6 LableTextMargin">
+                            @if (@Model.ManufacturerComments.Length > 20)
+                            {
+                                <label>@Model.ManufacturerComments.Substring(0, 17)...</label><a id='lnkMoreManufacturerComments' class='more' title='@Model.ManufacturerComments' href='#'>more</a>
+                                <input id="ManufacturerComments" type="hidden" value='@Model.ManufacturerComments' />
+                            }
+                            else
+                            {
+                                <label>@Model.ManufacturerComments</label>
+                            }
+                            @Html.ValidationMessageFor(model => model.ManufacturerComments)
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+            <!-- collun4 ends-->
+        </div>
+    </div>
+</div>
+<div style="float:none; clear:both; text-align:center">
+    <button type="submit" id="btnBack" class="btn login_button btn-primary yellow" name="Command" value="Back">Back</button>
+</div>
+<br />
+<div id="MachineWindow">
+    @(Html.Kendo().Window() 
+           .Name("MachineSpecsWindow")
+           .Title("View Machine Specs")
+           .Modal(true)
+           .Content(@<text>
+   
+        </text>)
+                                                                        .Draggable()
+                                                                        .Resizable()
+                                                                        .Width(600)
+                                                                        .Height(370)
+                                                                        .Actions(actions => actions.Close())
+
+    )
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Orders');
+
+        $(".k-overlay").hide();
+        $(".k-window").hide();
+        $("#btnBack").click(function () {
+            if ('@Session["RedirectArchiveManage"]' == 'Archive')
+                window.location.href = '@Url.Action("Archive", "Order")';
+            else if ('@Session["RedirectArchiveManage"]' == 'Home')
+                window.location.href = '@Url.Action("Index","Home")';
+            else if ('@Session["RedirectArchiveManage"]' == 'ViewPendingTask')
+                window.location.href = '@Url.Action("ViewPendingTask", "ManageUsers")';
+            else
+                window.location.href = '@Url.Action("Manage", "Order")';
+            
+        });
+
+        $('a#lnkMoreClientExecComments').click(function (e) {
+            $.dialog({
+                title: 'Comments',
+                content: $("input#ClientExecComments").val(),
+            });
+        });
+        $('a#lnkMoreApproverComments').click(function (e) {
+            $.dialog({
+                title: 'Approver Comments',
+                content: $("input#ApproverComments").val(),
+            });
+        });
+        $('a#lnkMoreManufacturerComments').click(function (e) {
+            $.dialog({
+                title: 'Manufacturer Comments',
+                content: $("input#ManufacturerComments").val(),
+            });
+        });
+    });
+</script>
+
+
+<script type="text/x-kendo-template" id="ViewMachineTemplate">
+    <div id="details-container">
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Generation", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Generation #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("PCB Version", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= PCB_Version #
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Power Supply1(HV)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= PowerSupply_1 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Power Supply1(LV)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= PowerSupply_2 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Valve 1(Vaccum)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Valve_1 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Valve 3(Fresh Air)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Valve_3 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others1", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield1 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others3", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield3 #
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Pump", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Pump #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Injection Heater", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= INjection_Heater #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Platen heater", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Platen_heater #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Valve 2(Injection)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Valve_2 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Firmware Version", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= software_version #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Others2:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield2 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others4", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield4 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others5", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield5 #
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+    function MachineSpecs_View(ID) {
+        var detailsTemplate = kendo.template($("#ViewMachineTemplate").html());
+        $.ajax({
+            dataType: 'json',
+            type: 'Post',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ id: ID }),
+            url: '/ManageMachineSpecs/ViewMachineSpecs',
+            success: function (result) {
+                var wnd = $("#MachineSpecsWindow").data("kendoWindow");
+                wnd.content(detailsTemplate(result));
+                wnd.center().open();
+                $(".k-overlay").show();
+                $(".k-window").show();
+            },
+            error: function (obj) {
+                $.alert({ content: 'Error while getting record!', confirm: function () { } });
+            }
+        });
+    }
+</script>

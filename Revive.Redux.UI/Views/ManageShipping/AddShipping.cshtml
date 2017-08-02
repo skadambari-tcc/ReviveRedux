@@ -1,0 +1,156 @@
+﻿@model Revive.Redux.Entities.ShippingConfigModel
+
+@{
+    ViewBag.Title = "AddShipping";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("SubmitShipping", "ManageShipping", FormMethod.Post, new { id = "addshippingconfigform", name = "addshippingconfigform", enctype = "multipart/form-data" }))
+{
+    // if (ViewData.ModelState.IsValid)
+    {
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+            @Html.HiddenFor(m=>m.IsEdit)
+            @Html.HiddenFor(m => m.Id)
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 nomargin nopadding">
+                <div class="contant_page">
+                    <!-- tittle -->
+                    <div class="row">
+
+                        <div class="col-md-4 nopadding Account_display">
+                            @if (Model!=null)
+                            {
+                                <h4 class="" style="margin-right:4%">Edit Configuration</h4>
+                            }
+                            else
+                            {
+                            <h4 class="" style="margin-right:4%">Add Configuration</h4>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+
+
+                                @Html.LabelFor(M => M.ServiceTypeId, htmlAttributes: new { @class = " required col-md-5  col-sm-3 control-label text-right required" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.ServiceTypeId, new SelectList(ViewBag.Servicelst, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "txtAccountMgr" })
+                                        @Html.ValidationMessageFor(model => model.ServiceTypeId, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Insurance Amount", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right required" })
+
+                                <div class="col-md-7 col-sm-9">
+
+                                    @Html.TextBoxFor(M => M.InsuranceAmount, new { @class = "form-control", @id = "txtInsuranceAmount", maxlength = "100" })
+                                    <div>
+
+                                        @Html.ValidationMessageFor(model => model.InsuranceAmount, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+
+
+                                @Html.Label("Package Weight(lbs)", htmlAttributes: new { @class = "col-md-5  col-sm-3 required  control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.PkgWt, new { @class = " form-control ", maxlength = "50", @id = "txtPkgWt" })
+                                    @Html.ValidationMessageFor(model => model.PkgWt, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+
+                                @Html.Label("Package Length", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.PkgLength, new { @class = "form-control numericOnly ", maxlength = "5", @id = "txtPkgLength" })
+                                    @Html.ValidationMessageFor(M => M.PkgLength, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+                            </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+
+
+                                @Html.Label("Package Width", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.PkgWidth, new { @class = "form-control", maxlength = "50", @id = "txtPkgWidth" })
+                                    @Html.ValidationMessageFor(model => model.PkgWidth, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Package Height", htmlAttributes: new { @class = "required col-md-5   col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.PkgHeight, new { @class = "form-control", maxlength = "100", @id = "txtPkgHeight" })
+                                    @Html.ValidationMessageFor(model => model.PkgHeight, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+
+                                @Html.Label("Machine Identifier", htmlAttributes: new { @class = "required col-md-5  col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.MachineIdentifier, new { @class = "form-control", maxlength = "100", @id = "txtMachineIdentifier" })
+                                    @Html.ValidationMessageFor(model => model.MachineIdentifier, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                           
+                        </div>
+                    
+
+
+                    </div>
+
+                    <div class="row" style="padding-top: 1%;">
+                        <div class="col-md-6 col-sm-6"></div>
+                            <div class="col-md-6 col-sm-6">
+                                <button class="btn GreenBtn" type="submit">Save</button>
+                                <button  type="button" class="YellowBtn" onclick="location.href='@Url.Action("ManageShippingConfiguration", "ManageShipping")'">Cancel</button>
+                            </div>
+                        </div>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+    </div>
+    }
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<style type="text/css">
+    .form-group {
+        float: left;
+        margin-bottom: 14px;
+        width: 100%;
+    }
+
+    #body {
+        height: auto;
+    }
+</style>

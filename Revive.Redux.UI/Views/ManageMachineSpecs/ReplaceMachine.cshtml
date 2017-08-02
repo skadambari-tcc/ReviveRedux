@@ -1,0 +1,316 @@
+﻿@model Revive.Redux.Entities.ReplaceMachineModel
+@using Kendo.Mvc
+@{
+    ViewBag.Title = "Replace Machine";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+@using (Html.BeginForm("UpdateMachine", "ManageMachineSpecs", FormMethod.Post, new { id = "submitForm" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    <div>
+        <div class="col-md-12">
+            <div class="contant_page">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>Replace Machine</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6" style="margin-left: -4%;">
+                        <div class="form-group">
+                            @Html.Label("Customer", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(m => m.CustomerId, new SelectList(Model.CustomerList, "Id", "Text"), "--Select--", new Dictionary<string, Object> { { "id", "CustomerId" }, { "class", "form-control pull-right topspace selecter" } })
+                                </div>
+                                <span class="field-validation-error">@Html.ValidationMessageFor(m => m.CustomerId)&nbsp;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="margin-left: -4%;">
+                        <div class="form-group">
+                            @Html.Label("Subsidiary", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(m => m.SubsidiaryId, new SelectList(Model.SubsidiaryNameList, "Id", "Text"), "--Select--", new Dictionary<string, Object> { { "id", "SubsidiaryId" }, { "class", "form-control pull-right topspace selecter" } })
+                                </div>
+                                <span class="field-validation-error">@Html.ValidationMessageFor(m => m.SubsidiaryId)&nbsp;</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-md-6" style="margin-left: -4%;">
+                        <div class="form-group">
+                            @Html.Label("Agent", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(m => m.SubAgentId, new SelectList(Model.AgentNameList, "Id", "Text"), "--Select--",  new Dictionary<string, Object> { { "id", "SubAgentId" }, { "class", "form-control pull-right topspace selecter" } })
+                                </div>
+                                <span class="field-validation-error">@Html.ValidationMessageFor(m => m.SubAgentId)&nbsp;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="margin-left: -4%;">
+                        <div class="form-group">
+                            @Html.Label("Location", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(m => m.LocationId, new SelectList(Model.LocationList, "Id", "Text"), "--Select--", new Dictionary<string, Object> { { "id", "LocationId" }, { "class", "form-control pull-right topspace selecter" } })
+                                </div>
+                                <span class="field-validation-error">@Html.ValidationMessageFor(m => m.LocationId)&nbsp;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6" style="margin-left: -4%;">
+                        <div class="form-group">
+                            @Html.Label("Current Machine", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(m => m.ShippedMachId, new SelectList(Model.ShippedMachines, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlShippedMachines" })
+                                </div>
+                                <span class="field-validation-error">@Html.ValidationMessageFor(m => m.ShippedMachId)&nbsp;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="margin-left: -4%;">
+                        <div class="form-group">
+                            @Html.Label("New Machine", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(m => m.UnassignedMachId, new SelectList(Model.UnassignedMachines, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlUnassignedMachines" })
+                                </div>
+                                <span class="field-validation-error">@Html.ValidationMessageFor(m => m.UnassignedMachId)&nbsp;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6" style="margin-left: -4%;">
+                        <div class="form-group">
+                            @Html.Label("Current Machine New Location", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right " })
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(m => m.Machine_LocationId, new SelectList(Model.Machine_LocationList, "Id", "Text"), "--Select--", new Dictionary<string, Object> { { "id", "ddlMachineLocation" }, { "class", "form-control pull-right topspace selecter" } })
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row" style="padding-top:2%">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-8">
+                        <div class="col-md-3 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            <a id="btnReplace" href="#" class="btn login_button btn-primary">Replace</a>
+                            <a id="btnCancel" href="#" style="margin-left:0px;" class="btn login_button btn-primary yellow">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        @if (TempData["MachineReplaced"] != null && (bool)TempData["MachineReplaced"] == true)
+        {
+            <text>toastr.success('You have successfully replaced the machine.');</text>
+        }
+
+        $("#btnReplace").click(function () {
+            var isValid = false;
+            if ($('#submitForm') != null) {
+                if ($('#submitForm').valid()) {
+                    $.confirm({
+                        content: 'Are you sure want to replace Shipped Machine: ' + $("#ddlShippedMachines").find(":selected").text() + ' with Unassigned Machine: ' + $("#ddlUnassignedMachines").find(":selected").text() + '?',
+                        confirm: function () {
+                            $("input#hdnActionTaken").val("Approve");
+                            $("#submitForm").submit();
+                        },
+                        cancel: function () {
+                            isValid = false;
+                        }
+                    });
+                }
+                else {
+                    isValid = false;
+                }
+            }
+            else {
+                isValid = false;
+            }
+            return isValid;
+        });
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("Index", "Home")';
+        });
+        $("#CustomerId").change(function () {
+            // Empty the Shipped machines list
+            $("#ddlShippedMachines").empty();
+            $("#ddlShippedMachines").append('<option value="">' + "--Select--" + '</option>');
+
+            var customerVal = $("#CustomerId").val();
+            var LocationId = $("#LocationId");
+
+            if (IfValEmpty(customerVal)) {
+                $("#LocationId").empty();
+                $("#SubsidiaryId").empty();
+                $("#SubAgentId").empty();
+                $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+                $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                $("#LocationId").append('<option value="">' + "--Select--" + '</option>');
+            }
+            else {
+                var deferredObj = $.Deferred();
+                $("#LocationId").empty();
+                $("#SubsidiaryId").empty();
+                $("#SubAgentId").empty();
+                $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                $("#LocationId").append('<option value="">' + "--Select--" + '</option>');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: customerVal },
+                    success: function (data) {
+                        $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+                        if (data.length > 0) {
+                            $.each(data, function (i, dataitem) {
+                                $("#SubsidiaryId").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                            });
+                        }
+                    },
+                    error: function (ex) {
+                        if ($("#Customer_Id").val() != null && $("#Customer_Id").val() != '')
+                            $.alert({ content: 'Failed to retrieve Subsidairy. ' + ex, confirm: function () { } });
+                    }
+                });
+                return deferredObj.promise();
+            }
+        });
+
+        $("#LocationId").change(function () {
+            // Empty the Shipped machines list
+
+            $("#ddlShippedMachines").empty();
+            $("#ddlShippedMachines").append('<option value="">' + "--Select--" + '</option>');
+
+            var locationVal = $("#LocationId").val();
+
+            if (!IfValEmpty(locationVal)) {
+
+                var deferredObj = $.Deferred();
+                $("#ddlShippedMachines").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetShippedMachines")', // Calling json method
+                    dataType: 'json',
+                    data: { customerId: $("#CustomerId").val(), locationId: locationVal },
+                    success: function (MachinesList) {
+                        if (MachinesList.length > 0) {
+                            $.each(MachinesList, function (i, Machine) {
+                                if (i == 0 && Machine.Text != "--Select--")
+                                    $("#ddlShippedMachines").append('<option value="">' + "--Select--" + '</option>');
+                                $("#ddlShippedMachines").append('<option value="' + Machine.Id + '">' + Machine.Text + '</option>');
+                            });
+                        }
+                        else {
+                            $("#ddlShippedMachines").append('<option value="">' + "--Select--" + '</option>');
+                        }
+                        deferredObj.resolve();
+                    },
+                    error: function (ex) {
+                        $("#ddlShippedMachines").empty();
+                        $("#ddlShippedMachines").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                });
+                return deferredObj.promise();
+            }
+        });
+
+        $("#SubsidiaryId").change(function () {
+            $("#SubAgentId").empty();
+            $("#LocationId").empty();
+            $("#LocationId").append('<option value="">' + "--Select--" + '</option>');
+            if ($("#SubsidiaryId").val() != "") {
+                
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetAgentBySubsidiary")', // Calling json method
+                    dataType: 'json',
+                    data: { SubsidiaryId: $("#SubsidiaryId").val() },
+                    success: function (AgentList) {
+                        $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                        if (AgentList.length > 0) {
+                            $.each(AgentList, function (i, AgentList) {
+                                $("#SubAgentId").append('<option value="' + AgentList.Id + '">' + AgentList.Text + '</option>');
+                            });
+                        }
+
+                    },
+                    error: function (ex) {
+                        if ($("#SubsidiaryId").val() != null && $("#SubsidiaryId").val() != '')
+                            $.alert({ content: 'Failed to retrieve Agent. ' + ex, confirm: function () { } });
+                    }
+                });
+               
+
+            }
+            else {
+                $("#SubAgentId").empty();
+                $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            }
+        });
+
+        function IfValEmpty(valTOCheck) {
+            if (valTOCheck == '')
+                return true;
+            else
+                return false;
+        }
+
+        $("#SubAgentId").change(function () {
+            $("#LocationId").empty();
+            if ($("#SubAgentId").val() != "") {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetCustomerLocationbyAgent")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: $("#CustomerId").val(), SubsidiaryId: $("#SubsidiaryId").val(), AgentId: $("#SubAgentId").val(), IsActive: true },
+                    success: function (LocationList) {
+                        if (LocationList.length > 0) {
+                            $("#LocationId").append('<option value="">' + "--Select--" + '</option>');
+                            $.each(LocationList, function (i, LocationList) {
+                                $("#LocationId").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                            });
+                        }
+                        else {
+                            $("#LocationId").append('<option value="">' + "--Select--" + '</option>');
+                        }
+                    },
+                    error: function (ex) { $.alert({ content: 'Failed to retrieve Location. ' + ex, confirm: function () { } }); }
+                });
+            }
+            else {
+                $("#LocationId").empty();
+                $("#LocationId").append('<option value="">' + "--Select--" + '</option>');
+            }
+        });
+
+    });
+</script>

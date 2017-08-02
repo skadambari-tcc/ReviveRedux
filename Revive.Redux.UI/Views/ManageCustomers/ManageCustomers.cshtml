@@ -1,0 +1,222 @@
+﻿@model Revive.Redux.Entities.ManageCustomersModel
+@{
+    // ViewBag.Title = "UploadFile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<input type="hidden" id="RecordID" name="DeactivateRecord" />
+<div id="myModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    @Html.Label("Title", htmlAttributes: new { @class = "", @id = "Title" })
+                </div>
+            </div>
+
+            <!-- dialog buttons -->
+            <div class="modal-footer footerbtn" >
+                <button type="button" id="Deactivatebtn" class="btn GreenBtn btn-primary" data-dismiss="modal">YES</button>
+                <button type="button" class="btn btn-primary YellowBtn" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-body" @*style="padding:0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>Manage Customers</h2>
+                    </div>                   
+                    <div class="row">
+                        <div class="col-md-8 col-sm-8"></div>
+                        <div class="col-md-4 col-sm-4" style="float: right;">
+                            <div class="col-md-5 col-sm-5 "></div>
+                            <div class="col-md-7 col-sm-7 ">
+
+                                @if (Model.PageAccessCode != "ACCNTMGR")
+                                {
+                                     <button id="btnAddCustomer" type="submit" class="GreenBtn" onclick="location.href='@Url.Action("CreateCustomer", "ManageCustomers")'">Add Customer</button>
+                                }
+                              
+                            </div>
+
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid" >
+
+                            @(Html.Kendo().Grid<Revive.Redux.Entities.ManageCustomersModel>()
+            .Name("CustomerGrid")
+                     .DataSource(dataSource => dataSource
+                                                    .Ajax().PageSize(10)
+                                                            .ServerOperation(false)
+                                                           .Read("ManageCustomersAjax", "ManageCustomers")
+                                    //.Read(read => read.Url("GetRolesData","UserRole"))
+                                    //read => read.Action("GetRolesData", "UserRole");
+                                    //.Events(events => events.Error("error_handler").Sync("RefreshGrid"))
+                        )
+            .Columns(columns =>
+                {
+                    columns.Bound(c => c.Customer_Ref_Code).Width(120).Title("Customer ID");
+                    columns.Bound(c => c.Customer_Name).Width(160).Title("Customer Name");
+                    columns.Bound(c => c.Primary_Address).Width(160).Title("Address");
+                    //columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
+                    //columns.Command(command => command.Custom("View").Text("Access Level").HtmlAttributes(@Html.ActionLink("Delete", "Delete")));
+                    columns.Bound(c => c.Primary_Phone).Width(140).Title("Contact Number");
+                    columns.Bound(c => c.Acct_manager_Name).Width(150).Title("Account Manager");
+                    columns.Bound(c => c.Status).Visible(false);
+                    columns.Bound(c => c.Customer_ID).ClientTemplate("<a title='View Customer Location' onclick=\"\" href='" + Url.Action("viewCustomerLocation", "ManageCustomers") + "?Id=#= Customer_ID #' ' " + "><i class='fa fa-eye fa-lg icon-color'></i></a>").Title("Customer Locations").Filterable(false).Sortable(false).Width(160).HtmlAttributes(new { @style = "cursor:pointer" });
+                    columns.Bound(c => c.Customer_ID).ClientTemplate("<a title='Edit' onclick=\"Edit();\" href='" + Url.Action("EditCustomer", "ManageCustomers") + "?Id=#= Customer_ID #' ' " + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>").Title("Edit").Filterable(false).Sortable(false).Width(80).HtmlAttributes(new { @style = "cursor:pointer" });
+                    if(Model.PageAccessCode !="ACCNTMGR")
+                    {
+                         columns.Bound(c => c.Status).ClientTemplate(
+                        "# if (Status == false) { #<a id=\"deactivate\" runat=\"server\" href='javascript: void(0);' onclick=\"Action(this,'#= Customer_ID#,#= Status#');\" " + "><img src='" + Url.Content("~/Scripts/images/disable_icon.png") + "' /></a># }else{#<a id=\"activate\" runat=\"server\" href='javascript: void(0);' onclick=\"Action(this,'#= Customer_ID#,#= Status#');\" " + "><img src='" + Url.Content("~/Scripts/images/activate_icon.png") + "' /></a>#} #").Title("Active").Sortable(false).Width(80).HtmlAttributes(new { @style = "cursor:pointer" });
+                    
+                    }
+                  
+
+                })
+
+                .HtmlAttributes(new { style = "width: 1069px;" })
+                .Pageable(pageable =>
+                                                {
+                                                    pageable.Refresh(true);
+                                                    pageable.PageSizes(new int[] { 10, 20, 50 });
+                                                    pageable.Messages(messages => messages.Empty("No customer found!"));
+                                                })
+                                           .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                                          {
+                                                              fs.Clear().Contains("Contains");
+                                                              fs.DoesNotContain("Does not contain");
+                                                              fs.IsEqualTo("Equal to");
+                                                              fs.IsNotEqualTo("Not equal to");
+                                                              fs.StartsWith("Starts with");
+                                                              fs.EndsWith("Ends with");
+                                                          })))
+                                              .Sortable()
+                                              .Scrollable()
+                                              .ColumnResizeHandleWidth(900)
+
+                            )
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<style type="text/css">
+    /*.k-grid-content {
+        max-height: 300px;
+    }*/
+    
+    .k-grid tbody tr:hover {
+        background: #faecc1;
+    }
+    .modal .fade {
+        top: 30%;
+        transition: opacity 0.3s linear;
+    }
+
+        .modal.fade.in {
+            top: 30%;
+        }
+
+    .modal-backdrop {
+        background-color: #000;
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 0 !important;
+    }
+    
+</style>
+<script type="text/javascript">
+  
+    function Edit() {
+        $('#btnView').css("visibility", "visible");
+        //$('#DocumentGridModal').css("visibility", "visible");
+    }
+    function Action(e, Id) {
+        //alert(e.id);
+        var arr = Id;
+        $('#myModal').modal('show');
+        if (e.id == "deactivate") {
+
+            $("#Title").text("Do you want to activate this customer");
+        }
+        else {
+            $("#Title").text("Do you want to deactivate this customer");
+        }
+
+        $("#RecordID").val(arr);
+    }
+    $('#Deactivatebtn').click(function (e) {
+        var record = $("#RecordID").val();
+        var arr = record.split(',');
+        var recordID = arr[0];
+        var status = arr[1];
+        var ManageCustomersModel =
+             {
+                 "Customer_ID": recordID,
+                 "Status": status
+             };
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ActivateDeactivateCustomer", "ManageCustomers")',
+
+            //Your Action name in the DropDownListConstroller.cs
+            data: JSON.stringify(ManageCustomersModel),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+        }).done(function (data) {
+            //Successfully pass to server and get response
+            $('#CustomerGrid').data().kendoGrid.dataSource.read(data); // or
+            if (data.result = "OK") {
+                toastr.success(data.Successmsg);
+                result = true;
+            }
+        })
+    });
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Customers');
+        Revive.Redux.Common.SetKendoGridHeight();
+        $("#CustomerGrid").data("kendoGrid").dataSource.read();
+        @*@if (Model.Successmsg != null)
+        {
+
+            <text>toastr.success(Model.Successmsg);</text>
+        }*@
+       
+    });
+    
+    @if (TempData["isCreatedSuccess"] != null && (bool)TempData["isCreatedSuccess"] == true)
+
+    {
+
+
+        <text>toastr.success('@ReviveMessages.Add');</text>
+    }
+    @if (TempData["isUpdatedSuccess"] != null && (bool)TempData["isUpdatedSuccess"] == true)
+    {
+
+
+        <text>toastr.success('@ReviveMessages.Update');</text>
+    }
+</script>

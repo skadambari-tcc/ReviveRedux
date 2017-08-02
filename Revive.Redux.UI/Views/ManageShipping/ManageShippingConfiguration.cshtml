@@ -1,0 +1,107 @@
+﻿@model Revive.Redux.Entities.ShippingConfigModel
+@{
+    ViewBag.Title = "Manage Shipping Configuration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.UI.Fluent
+<style>
+    .GreenBtn {
+        float: right;
+    }
+</style>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div>
+                    <div class="row"><div style="margin-left: 0.5%;"><h2>Manage Shipping Configuration</h2></div></div>
+                    <div class="row" style="margin-bottom:1%;">
+                        <div class="col-md-7"></div>
+                        <div class="col-md-4" style="float: right;">
+                            <div class="col-md-12">
+                                <button id="upssetting" type="submit" class="GreenBtn" onclick="location.href='@Url.Action("EditUPSSetting", "ManageShipping")'">Edit UPS Settings</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-7"></div>
+                        <div class="col-md-4" style="float: right;">
+                            <div class="col-md-12">
+                                <button id="btnAddshippingconfig" type="submit" class="GreenBtn" onclick="location.href='@Url.Action("AddShipping", "ManageShipping")'">Add Configuration</button>
+                                </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="Kendogrid table-responsive" style="margin-left:-0.8%">
+
+                        @(Html.Kendo().Grid<Revive.Redux.Entities.ShippingConfigModel>()
+                                        .Name("GroupShippingConfigurations")
+                                .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(10)
+                                 .Read("GetShippingConfigurations", "ManageShipping")
+                                .ServerOperation(false)
+
+                        )
+                    .Columns(columns =>
+                        {
+                            columns.Bound(c => c.MachineIdentifier).Width(60).Title("Configuration");
+                            columns.Bound(c => c.Id).ClientTemplate("<a href='" + Url.Action("EditShippingConfig", "ManageShipping") + "/#= Id #'" + "><i class='fa fa-pencil fa-lg icon-color' , style='align:center'></i></a>").Title("Edit").Filterable(false).Sortable(false).Width(80).HtmlAttributes(new { @style = "cursor:pointer" });
+
+
+                        })
+                                .HtmlAttributes(new { style = "width: 100%;" })
+                                .Pageable(pageable =>
+                                    {
+                                        pageable.Refresh(true);
+                                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                                        pageable.Messages(messages => messages.Empty("No record found!"));
+                                    })
+                                    .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                    {
+                                        fs.Clear().Contains("Contains");
+                                        fs.DoesNotContain("Does not contain");
+                                        fs.IsEqualTo("Equal to");
+                                        fs.IsNotEqualTo("Not equal to");
+                                        fs.StartsWith("Starts with");
+                                        fs.EndsWith("Ends with");
+                                    })))
+                                .Sortable()
+                                .Scrollable()
+
+
+                        )
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+      @if (TempData["isCreatedSuccess"] != null && (bool)TempData["isCreatedSuccess"] == true)
+    {
+
+
+        //<text>toastr.success('@ReviveMessages.ManageUserSaveInfo');</text>
+        <text>toastr.success('@ReviveMessages.Add');</text>
+        
+    }
+    @if (TempData["isUpdatedSuccess"] != null && (bool)TempData["isUpdatedSuccess"] == true)
+    {
+
+
+        <text>toastr.success('@ReviveMessages.Update');</text>
+    }
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Orders');
+        Revive.Redux.Common.SetKendoGridHeight();
+
+      
+    });
+
+  
+</script>

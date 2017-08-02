@@ -1,0 +1,615 @@
+﻿@model Revive.Redux.Entities.OrderModel
+@using Kendo.Mvc
+@{
+    ViewBag.Title = "Create Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .Title {
+        text-align: left;
+        font-size: larger;
+        color: #7c0000;
+        margin-left: 10px;
+    }
+    .k-picker-wrap.k-state-default {
+        width: 103%;
+    }
+    .k-widget.k-datepicker.k-header.DisableKeyboardInput.form-control {
+        padding-left: 0px;
+    }
+    .chicher{
+        float:left;
+    }
+    span.DisableKeyboardInput {
+        background-color: transparent;
+    }
+</style>
+<style>
+    table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        align-content: center;
+        box-sizing: content-box;
+        width: 100%;
+    }
+
+    thead, tbody {
+        display: block;
+    }
+
+    th, td {
+        height: 1em;
+        text-align: center;
+    }
+
+    .c1 {
+        width: 10em;
+    }
+
+    .c12 {
+        width: 11.60em;
+    }
+    .cb {
+        float: left;
+    }
+
+    tbody, thead {
+        overflow-y: scroll;
+    }
+
+    tbody {
+        height: 9em;
+        box-sizing: border-box;
+    }
+</style>
+
+
+
+<head>
+    <title>NEW MACHINE ORDER</title>
+</head>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script src="~/Scripts/knockout-3.2.0.js"></script>
+
+@using (Html.BeginForm("CreateOrder", "Order", FormMethod.Post, new { @ID = "CreateOrderForm" }))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="modal-body">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="contant_page">
+                    <div class="row">
+                        <div class="lable-align-top">
+                            <h2>NEW MACHINE ORDER</h2>
+                        </div>
+                        <!-- tittle -->
+                        <div class="row">
+                            <!-- collun1 -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.Label("Customer", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                                    <div class="col-sm-6">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(m => m.CustomerId, new SelectList(Model.CustomerList, "Id", "Text"), "--Select--", new Dictionary<string, Object> { { "data-bind", "event:{change:OnDDLCustomerChange}" }, { "id", "ddlCustomer" }, { "class", "form-control pull-right topspace selecter" } })
+                                        </div>
+                                        <span class="field-validation-error">@Html.ValidationMessageFor(model => model.CustomerId)&nbsp;</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-6  col-sm-3 control-label text-right required" for="inputtype1">Customer PO</label>
+                                    <div class="col-sm-6">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(M => M.CustomerDocId, new SelectList(Model.CustomerDocList, "Id", "Text"), new Dictionary<string, Object> { { "data-bind", "event:{change:OnDDLPOChange}" }, { "class", "form-control pull-right topspace selecter" }, { "id", "ddlCustPOs" } })
+                                        </div>
+                                        <span class="field-validation-error">
+                                            @Html.ValidationMessageFor(model => model.CustomerDocId)
+                                            <a id="ViewPO" href="#" target="_blank" style="display:none;">View</a>&nbsp;
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-6  col-sm-3 control-label text-right required" for="inputtype1">Machine Specs</label>
+                                    <div class="col-sm-6">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(M => M.MachineSpecsId, new SelectList(Model.MachineSpecsList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlMachineSpecsList" })
+                                            @Html.ValidationMessageFor(model => model.MachineSpecsId)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- collun2 -->
+                            
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.Label("Subsidiary", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                                    <div class="col-sm-6">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(m => m.SubsidiaryId, new SelectList(Enumerable.Empty<SelectListItem>(), "Id", "Text"), "--Select--", new { @class = "form-control topspace selecter" })
+                                        </div>
+                                        <span class="field-validation-error">@Html.ValidationMessageFor(model => model.SubsidiaryId)&nbsp;</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-6  col-sm-3 control-label text-right required" for="inputtype1">No. of Machines</label>
+                                    <div class="col-sm-6">
+                                        @Html.TextBoxFor(model => model.NoOfMachines, new { @class = "form-control numericOnly", maxlength = "50", @id = "txtNoOfMachines" })
+                                        <span class="field-validation-error">@Html.ValidationMessageFor(model => model.NoOfMachines) &nbsp;</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-6  col-sm-3 control-label text-right required" for="inputtype1">Expected Delivery Date</label>
+                                    <div class="col-md-6  ">
+                                        @(Html.Kendo().DatePickerFor(model => model.ExpectedDate).Min(DateTime.Today)
+                                .HtmlAttributes(new { @class = "DisableKeyboardInput form-control" }))
+                                        @Html.ValidationMessageFor(model => model.ExpectedDate)
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <!-- collun3 -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.Label("Agent", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                                    <div class="col-sm-6">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(m => m.SubAgentId, new SelectList(Enumerable.Empty<SelectListItem>(), "Id", "Text"), "--Select--", new Dictionary<string, Object> { { "data-bind", "event:{change:OnDDLAgentChange}" }, { "class", "form-control pull-right topspace selecter" }, { "id", "SubAgentId" } })
+                                        </div>
+                                        <span class="field-validation-error">@Html.ValidationMessageFor(model => model.SubAgentId)&nbsp;</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Manufacturer", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                                    <div class="col-sm-6">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(M => M.ManufacturerId, new SelectList(Model.ManufacturerList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlManufacturerList" })
+                                        </div>
+                                        <span class="field-validation-error">@Html.ValidationMessageFor(model => model.ManufacturerId)&nbsp;</span>
+                                    </div>
+                                </div>
+                                
+                                
+                            </div>
+                        
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-2">
+                                        <label style="float:right;" class="col-md-6  col-sm-3 control-label text-right" for="inputtype2">Notes</label>
+                                    </div>
+                                    <div class="col-sm-6" style="padding: 0 1.3% 0 0.3%;">
+                                        @Html.TextAreaFor(model => model.ClientExecComments, 2, 20, new { @class = "form-control", @placeholder = "Add notes here", @id = "txtComments" })
+                                        <span class="field-validation-error">@Html.ValidationMessageFor(model => model.ClientExecComments)&nbsp;</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- collun4 -->
+                        <div class="row">
+                            <div class="col-md-2  col-sm-12 control-label text-right" data-bind="visible: locList().length > 0">Please select locations </div>
+                            <div class="col-md-6  col-sm-12">
+                                <div class="table-responsive scroller scrollerMapMachine" data-bind="visible: locList().length > 0">
+                                    <table style="width:100%; max-width: 99.99%" class="table table-striped table-hover table-bordered ">
+                                        <thead>
+                                            <tr>
+                                                @*<th class="c1"><span class="order_tittle">Subsidiary </span></th>
+                                                <th class="c1"><span class="order_tittle">Agent </span></th>*@
+                                                <th class="c1"><span class="order_tittle">Locations </span></th>                                                
+                                                <th class="c1"><span class="order_tittle">Priority </span></th>
+                                                <th class="c1"><span class="order_tittle">No. of Machines </span></th>
+                                                <th class="c1">
+                                                    <input id="Checkbox5" data-bind="checked: selectAll" class="chicher2" type="checkbox" />
+                                                    <span class="order_tittle">Select </span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-bind="foreach: locList">
+                                            <tr data-bind="attr: {id:LocationID}">
+                                                @*<td class="c12"><label data-bind='text: SubsidiaryName' /><label data-bind='text: SubsidiaryID' style="display:none;" /></td>
+                                                <td class="c12"><label data-bind='text: SubAgentName' /><label data-bind='text: SubAgentID' style="display:none;" /></td>*@
+                                                <td class="c12"><label data-bind='text: LocationName' /><label data-bind='text: LocationID' style="display:none;" /></td>
+                                                <td class="c12">
+                                                    <div class="select-icon">
+                                                        <select data-bind="value: Priority" class="priorityDDL form-control pull-right topspace selecter" disabled="disabled">
+                                                            <option value="1">P1</option>
+                                                            <option value="2">P2</option>
+                                                            <option value="3">P3</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                                <td class="c12"><input id="txtMachines" data-bind="value: NumberOfMachines, valueUpdate: 'afterkeydown'" class="NumOfMachTxt form-control bar1 mymachine numericOnly" disabled="disabled" maxlength="4" /></td>
+                                                <td class="c12"><input class="cb chicher" type="checkbox" data-bind="checked: IsChecked, click: $root.OnRowSelected"  /></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div data-bind="visible: locList().length == 0 && AgentVal() != ''" style="padding-top:5px;padding-left: 4%;">
+                                    <b>No locations have been added for this customer</b>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row" style="padding-top: 2%">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-8">
+                                <div class="col-md-3 col-sm-3"></div>
+                                <div class="col-md-6 col-sm-6">
+                                    @if (Model.PageAccessCode == "ACCNTMGR" || Model.PageAccessCode == "CLIENTEXEC")
+                            {
+                                <a id="btnCreate" href="#" data-bind='click:save' class="btn login_button btn-primary">Send For Approval</a>
+                            }
+                                    <button id="btnCancel" type="button" class="btn login_button btn-primary yellow">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            @Html.TextAreaFor(model => model.JsonPostbackVal, new Dictionary<string, Object> { { "data-bind", "value: lastSavedJson" }, { "id", "JsonPostbackVal" }, { "style", "display:none;" } })
+                        </div>
+                        <!-- collun4 ends-->
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+        }
+        <script type="text/javascript">
+            var Locations = [];
+
+            $(".DisableKeyboardInput").keypress(function () {
+                return false;
+            });
+
+            $(document).ready(function () {
+                Revive.Redux.Common.SetParentMenuSelected('Orders');
+                // Remove value of first val in customer PO's to make data annotation work.
+                if ($("select#ddlCustPOs") != null && $("select#ddlCustPOs").length > 0)
+                    $("select#ddlCustPOs").find(":selected").val('');
+
+                var LocationsModel = function () {
+                    var self = this;
+                    self.locList = ko.observableArray();
+                    self.LocationObject = function (location) {
+                        var self1 = {};
+                        self1.LocationID = ko.observable(location.LocationId);
+                        self1.LocationName = ko.observable(location.LocationName);
+                        self1.SubsidiaryID = ko.observable(location.SubsidiaryID);
+                        self1.SubsidiaryName = ko.observable(location.SubsidiaryName);
+                        self1.SubAgentID = ko.observable(location.SubAgentID);
+                        self1.SubAgentName = ko.observable(location.SubAgentName);
+                        self1.Priority = ko.observable(location.Priority);
+                        self1.NumberOfMachines = ko.observable(location.NumberOfMachines);
+                        self1.IsChecked = ko.observable(location.IsChecked);
+                        return self1;
+                    };
+                    self.CustomerVal = ko.observable($("select#ddlCustomer").val());
+                    
+                    self.OnRowSelected = function () {
+                        self.EnableDisableRow(this, this.IsChecked());
+                        return true;
+                    };
+                    self.TotalMachines = ko.computed(function () {
+                        var total = 0;
+                        $.each(self.locList(), function (i, location1) {
+                            if (location1.NumberOfMachines() != null) {
+                                total += parseFloat(ko.utils.unwrapObservable(location1.NumberOfMachines));
+                            }
+                        });
+                        return total;
+                    });
+                    self.save = function () {
+                        var isValid = true;
+                        if ($('#CreateOrderForm').valid()) {
+                            var machinesOrder = $("input#txtNoOfMachines").val();
+                            if (machinesOrder != '') {
+                                //Bug#6837 - User should add greater than 0 - starts here
+                                $.each(self.locList(), function (i, location1) {
+                                    if (location1.NumberOfMachines() != null && location1.NumberOfMachines() == 0) {
+                                        $.alert({ content: 'Number of machines per location should be greater than 0!', confirm: function () { } });
+                                        isValid = false;
+                                        return isValid;
+                                    }
+                                });
+                                //Ends here
+                                if (self.TotalMachines() > 0 && isValid == true) {
+                                    // SR32.9
+                                    $.each(self.locList(), function (i, location1) {
+                                        if (location1.NumberOfMachines() != null && location1.NumberOfMachines() > 1000) {
+                                            $.alert({ content: 'Number of machines per location can\'t be greater than 1000!', confirm: function () { } });
+                                            isValid = false;
+                                            return isValid;
+                                        }
+                                    });
+                                    // SR32.4
+                                    if (self.TotalMachines() > machinesOrder && isValid == true) {
+                                        $.alert({ content: 'Number of machines at selected locations can\'t be greater than total number of machines being ordered!', confirm: function () { } });
+                                        isValid = false;
+                                        return false;
+                                    }
+                                        // SR32.6
+                                    else if (self.TotalMachines() < machinesOrder && isValid == true) {
+                                        $.confirm({
+                                            content: 'Number of machines at selected locations is less than total number of machines being ordered. Would you like to continue?',
+                                            confirm: function () {
+                                                //isValid = true;
+                                                self.lastSavedJson(JSON.stringify(ko.toJS(self.locList), null, 2));
+                                                $("#CreateOrderForm").submit();
+                                            },
+                                            cancel: function () {
+                                                isValid = false;
+                                            }
+                                        });
+                                    }
+                                    else if (isValid == true) {
+                                        self.lastSavedJson(JSON.stringify(ko.toJS(self.locList), null, 2));
+                                        $("#CreateOrderForm").submit();
+                                    }
+                                }
+                                else if (isValid == true) {
+                                    // SR32.10
+                                    $.confirm({
+                                        content: 'You have not added the customer locations. Do you want to continue?',
+                                        confirm: function () {
+                                            //isValid = true;
+                                            self.lastSavedJson(JSON.stringify(ko.toJS(self.locList), null, 2));
+                                            $("#CreateOrderForm").submit();
+                                        },
+                                        cancel: function () {
+                                            isValid = false;
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        else
+                            isValid = false;
+                        //if (isValid == true)
+                        //    self.lastSavedJson(JSON.stringify(ko.toJS(self.locList), null, 2));
+                        return isValid;
+                    };
+
+                    self.OnDDLCustomerChange = function () {
+                        self.CustomerVal($("select#ddlCustomer").val());
+                        $("a#ViewPO").attr('href', '#');
+                        $("a#ViewPO").hide();
+                        if ($("#ddlCustomer").val() != '') {
+                            
+                            GetCustomerPOs().done();
+                           
+                        }
+                        else
+                        {
+                            self.locList([]);
+                            $(ddlCustPOs).empty();
+                            $(ddlCustPOs).append('<option value="">' + "--Select--" + '</option>');
+                        }
+                    };
+
+                    self.AgentVal = ko.observable($("select#SubAgentId").val());
+
+                    self.OnDDLAgentChange = function () {
+                        self.AgentVal($("select#SubAgentId").val());
+                        if ($("#AgentVal").val() != '') {
+                            GetCustomerLocations().done(function (locs) {
+                                // Clear observable array
+                                self.locList([]);
+                                $.each(locs, function (i, location) {
+                                    self.locList.push(self.LocationObject(location));
+                                });
+                                ApplyNumericOnly();
+                            })
+                            .fail(function () {
+                                // Clear observable array
+                                self.locList([]);
+                            })
+                            .always(function () {
+                            });
+                        }
+                        else {
+                            self.locList([]);
+                        }
+                    };
+
+                    self.OnDDLPOChange = function () {
+                        $("a#ViewPO").attr('href', '#');
+                        $("a#ViewPO").hide();
+                        if ($("#ddlCustomer").val() != '' && $("#ddlCustPOs").val() != '') {
+                            var href = "/ManageCustomers/DownloadFileActual?DocDetails=" + $("#ddlCustomer").val() + "," + $("#ddlCustPOs").find(":selected").text();
+                            $("a#ViewPO").attr('href', href);
+                            $("a#ViewPO").show();
+                        }
+                    };
+
+                    self.selectAll = ko.computed({
+                        read: function () {
+                            //if (self.locList().length > 0) {
+                            var locations = self.locList();
+                            for (var i = 0, l = locations.length; i < l; i++)
+                                if (!locations[i].IsChecked()) return false;
+                            return true;
+                            //}
+                        },
+                        write: function (value) {
+                            $.each(self.locList(), function (i, location1) {
+                                location1.IsChecked(value);
+                                self.EnableDisableRow(location1, value);
+                            });
+                        }
+                    });
+
+                    self.EnableDisableRow = function (location1, ischecked) {
+                        var row = $("tr#" + location1.LocationID());
+                        if (ischecked) {
+                            $(row).find('.priorityDDL,.NumOfMachTxt').prop("disabled", false);
+                            location1.NumberOfMachines(1);
+                        }
+                        else {
+                            location1.Priority("P1");
+                            location1.NumberOfMachines(null);
+                            $(row).find('.priorityDDL,.NumOfMachTxt').prop("disabled", true);
+                        }
+                    }
+                    self.lastSavedJson = ko.observable("");
+                };
+
+                ko.applyBindings(new LocationsModel(Locations));
+
+
+                // Cancel Button Click event
+                $("#btnCancel").click(function () {
+                    window.location.href = '@Url.Action("Manage", "Order")';
+                });
+                function ApplyNumericOnly(){
+                    $(".numericOnly").on("keypress keyup blur", function (e) {
+                        //$(this).val($(this).val().replace(/[^\d].+/, ""));
+                        var regex = /[^\d].+/;
+                        if (regex.test($(this).val())) {
+                            $(this).val($(this).val().replace(regex, ''));
+                        }
+                        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                            return false;
+                        }
+                    });
+                }
+                function GetCustomerLocations() {
+                    var deferredObj = $.Deferred();
+
+                    var nCustomerIdForOrder =$("#ddlCustomer").val();
+                    var nSubsidiaryIdForOrder =$("#SubsidiaryId").val();
+                    var nSubagentIdForOrder = $("#SubAgentId").val();
+
+                    if (nCustomerIdForOrder == "")
+                    {
+                        $.alert({ content: 'Select Customer. ' });
+                    }
+
+                    if (nSubsidiaryIdForOrder == "") {
+                        $.alert({ content: 'Select Subsidiary. ' });
+                    }
+
+                    if (nSubagentIdForOrder == "") {
+                        $.alert({ content: 'Select Agent. ' });
+                        return false;
+                    }
+
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("/GetCustomerLocations")', // Calling json method
+                        dataType: 'json',
+                        data: { customerId: nCustomerIdForOrder, subsidiaryId: nSubsidiaryIdForOrder, subagentId: nSubagentIdForOrder },
+                        success: function (Locs) {
+                            deferredObj.resolve(Locs);
+                        },
+                        error: function (ex) {
+                            //if ($("#ddlCustomer").val() != '')
+                            //    $.alert({ content: 'Failed to retrieve Customer locations list. ' + ex, confirm: function () { } });
+                            deferredObj.reject(ex);
+                        }
+                    });
+                    return deferredObj.promise();
+                }
+
+                function GetCustomerPOs() {
+                    var deferredObj = $.Deferred();
+                    var ddlCustPOs = $("#ddlCustPOs");
+                    $(ddlCustPOs).empty();
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("/GetCustomerPOs")', // Calling json method
+                        dataType: 'json',
+                        data: { customerId: $("#ddlCustomer").val() },
+                        success: function (POList) {
+                            if (POList.length > 0) {
+                                $.each(POList, function (i, PO) {
+                                    if (i == 0 && PO.Text != "--Select--")
+                                        $(ddlCustPOs).append('<option value="">' + "--Select--" + '</option>');
+                                    $(ddlCustPOs).append('<option value="' + PO.Id + '">' + PO.Text + '</option>');
+                                });
+                            }
+                            else {
+                                //if (i == 0 && PO.Text != "--Select--")
+                                $(ddlCustPOs).append('<option value="">' + "--Select--" + '</option>');
+                            }
+                            deferredObj.resolve();
+                        },
+                        error: function (ex) {
+                            $(ddlCustPOs).empty();
+                            $(ddlCustPOs).append('<option value="">' + "--Select--" + '</option>');
+                            if ($("#ddlCustomer").val() != "") {
+                                //$.alert({ content: 'Failed to retrieve Customer PO list. ' + ex, confirm: function () { } });
+                            }
+                        }
+                    });
+                    return deferredObj.promise();
+                }
+
+
+                //Subsidairy Changes
+                $("#ddlCustomer").change(function () {
+                    $("#SubsidiaryId").empty();
+                    $("#SubAgentId").empty();
+                    $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                    if ($("#ddlCustomer").val() != "") {                       
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+                            dataType: 'json',
+                            data: { CustomerId: $("#ddlCustomer").val() },
+                            success: function (data) {
+                                $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+                                if (data.length > 0) {
+                                    $.each(data, function (i, dataitem) {
+                                        $("#SubsidiaryId").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                                    });
+                                }
+                            },
+                            error: function (ex) {
+                                if ($("#ddlCustomer").val() != null && $("#ddlCustomer").val() != '')
+                                    $.alert({ content: 'Failed to retrieve Subsidairy. ' + ex, confirm: function () { } });
+                            }
+                        });
+                    }
+                    else {
+                        $("#SubsidiaryId").empty();
+                        $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                    return false;
+                });
+
+                $("#SubsidiaryId").change(function () {
+                    $("#SubAgentId").empty();
+                    if ($("#SubsidiaryId").val() != "") {                        
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("/GetAgentBySubsidiary")', // Calling json method
+                            dataType: 'json',
+                            data: { SubsidiaryId: $("#SubsidiaryId").val() },
+                            success: function (AgentList) {
+                                $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                                if (AgentList.length > 0) {
+                                    $.each(AgentList, function (i, AgentList) {
+                                        $("#SubAgentId").append('<option value="' + AgentList.Id + '">' + AgentList.Text + '</option>');
+                                    });
+                                }
+
+                            },
+                            error: function (ex) {
+                                if ($("#SubsidiaryId").val() != null && $("#SubsidiaryId").val() != '')
+                                    $.alert({ content: 'Failed to retrieve Agent. ' + ex, confirm: function () { } });
+                            }
+                        });   
+                    }
+                    else {
+                        $("#SubAgentId").empty();
+                        $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                    return false;
+                });
+
+
+
+            });
+        </script>

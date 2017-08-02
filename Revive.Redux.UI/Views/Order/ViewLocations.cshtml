@@ -1,0 +1,198 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model OrderModel
+<style>
+    .LableTextMargin {
+        margin-top: 3px;
+    }
+</style>
+<style>
+    table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        align-content: center;
+        box-sizing: content-box;
+        width: 100%;
+    }
+
+    thead, tbody {
+        display: block;
+    }
+
+    th, td {
+        height: 1em;
+        text-align: center;
+    }
+
+    .c1 {
+        width: 15em;
+    }
+
+    .c12 {
+        width: 17em;
+    }
+
+    tbody, thead {
+        overflow-y: scroll;
+    }
+
+    tbody {
+        height: 9em;
+        box-sizing: border-box;
+    }
+</style>
+@{
+    ViewBag.Title = "View Order Locations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script src="~/Scripts/knockout-3.2.0.js"></script>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>VIEW ORDER LOCATIONS</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="col-md-12">
+        <div class="contant_page">
+            <div class="row">
+                <!-- collun1 -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.Label("Customer", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.CustomerName) @Html.HiddenFor(order => order.JobOrderHeaderId)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Expected Date</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.ExpectedOrderDate)
+                        </div>
+                    </div>
+                </div>
+                <!-- collun2 -->
+                <div class="col-md-4">
+
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Customer PO</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.CustomerDocName)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Machine Specs</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.MachineSpecs)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- collun3 -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">No. of Machines</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.NoOfMachines)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Current Status</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.StatusName)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- collun4 -->
+            <div class="row" style="height:30px"></div>
+            <div class="row">
+                <div class="col-md-2  col-sm-12 control-label text-right">Order locations</div>
+                <div class="col-md-6  col-sm-12">
+                    <div class="table-responsive scroller scrollerMapMachine" data-bind="visible: locList().length > 0">
+                        <table style="width:100%; max-width: 99.99%" class="table table-striped table-hover table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th class="c1"><span class="order_tittle">Locations</span></th>
+                                    <th class="c1"><span class="order_tittle">Priority</span></th>
+                                    <th class="c1"><span class="order_tittle">No. of Machines</span></th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: locList">
+                                <tr data-bind="attr: {id:LocationId}">
+                                    <td class="c12"><label data-bind='text: LocationName' /><label data-bind='text: LocationId' style="display:none;" /></td>
+                                    <td class="c12">
+                                        <div class="select-icon">
+                                            <select data-bind="value: Priority" class="priorityDDL form-control pull-right topspace selecter" disabled="disabled">
+                                                <option value="1">P1</option>
+                                                <option value="2">P2</option>
+                                                <option value="3">P3</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td class="c12"><input data-bind='value: NumberOfMachines' class="NumOfMachTxt form-control bar1" disabled="disabled" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div data-bind="visible: locList().length == 0" class="LableTextMargin">
+                        <b>No locations have been added for this customer</b>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-top: 2%;display:none;">
+                <div class="col-md-3"></div>
+                <div class="col-md-8">
+                    <div class="col-md-3 col-sm-3"></div>
+                    <div class="col-md-6 col-sm-6">
+                        <a class="btn login_button btn-primary yellow" href="@Html.Raw(Html.AttributeEncode(ViewBag.ReturnUrl))">Back</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- collun4 ends-->
+<script type="text/javascript">
+    
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Orders');
+
+        var LocationsModel = function () {
+            var self = this;
+            self.locList = ko.observableArray();
+            self.Locations = function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetOrderLocationsByOrderId")', // Calling json method
+                    dataType: 'json',
+                    data: { id: $("input#JobOrderHeaderId").val(),Pagemode:1 },
+                    success: function (Locs) {
+                        if (Locs.length > 0) {
+                            $.each(Locs, function (i, loc) {
+                                if (loc.NumberOfMachines != null)
+                                    self.locList.push(loc);
+                            });
+                        }
+                    },
+                    error: function (ex) {
+                        $.alert({ content: 'Failed to retrieve Customer locations list. ' + ex, confirm: function () { } });
+                    }
+                });
+            };
+            self.Locations();
+        };
+        ko.applyBindings(new LocationsModel());
+    });
+</script>

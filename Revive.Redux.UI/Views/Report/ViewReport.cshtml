@@ -1,0 +1,1731 @@
+﻿@model Revive.Redux.Entities.ReportConfigModel
+
+@{
+    ViewBag.Title = "View Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string ViewColumnName = "View";
+    string IsShippedMachine = "false";
+}
+
+<!-- Include the plugin's CSS and JS For Multi Select SubAgent: -->
+<script type="text/javascript" src="~/Scripts/bootstrap-multiselect.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-multiselect.css" type="text/css" />
+
+@Html.HiddenFor(m => m.SubAgentIDMultiValue)
+@using (Html.BeginForm("Show", "Report", FormMethod.Post, new { @id = "ReportForm" }))
+{
+    @Html.HiddenFor(M => M.ReportId);
+    <input type="hidden" id="RecordID" name="RecordID" />
+    <input type="hidden" id="isMembership" name="isMembership" />
+    <input type="hidden" id="flag" name="flag" />
+
+    <div class="modal-body" @*style="padding:0px!important" *@>
+        @if (Model.ReportId == 18)
+        {
+            <div id="myModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">@Html.Label("Title", htmlAttributes: new { @class = "", @id = "lblTitle" })</h4>
+                        </div>
+                        <!-- dialog body -->
+                        <div class="modal-body">
+                            @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                            <div>
+
+                            </div>
+                            <ul class="nav nav-tabs" id="myTabs" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#activityType" aria-controls="activityType" role="tab" data-toggle="tab" >Activity Type</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#checkInDetails" aria-controls="checkInDetails" role="tab" data-toggle="tab" >Checkin Details</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#machineActivityDetails" aria-controls="machineActivityDetails" role="tab" data-toggle="tab" >Machine Activity</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#checkoutDetails" aria-controls="checkoutDetails" role="tab" data-toggle="tab" >Checkout Details</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="activityType">
+                                    <div class="k-grid-content">
+                                        @(Html.Kendo().Grid(Model.ReportModelResultList)
+                    .Name("MachineActivityGrid")
+                    .DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(false)
+                    .Read(read => read.Action("MachineActivityAjax", "Report").Data("getProcessId")))
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.custom1).Title("Item").Filterable(true);
+                        columns.Bound(p => p.custom2).Title("Value").Filterable(true);
+
+                    })
+                    .Pageable(pageable =>
+                    {
+                        pageable.Refresh(true);
+                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                        pageable.Messages(messages => messages.Empty("No records available!"));
+                    })
+                    .Sortable()
+                    .Filterable()
+                    .HtmlAttributes(new { style = "width:575px" })
+                                        )
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="checkInDetails">
+                                    <div class="k-grid-content">
+                                        @(Html.Kendo().Grid(Model.ReportModelResultList)
+.Name("CheckinGrid")
+                    .DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(false)
+.Read(read => read.Action("MachineActivityCheckInAjax", "Report").Data("getProcessId")))
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.custom1).Title("Item").Filterable(true);
+                        columns.Bound(p => p.custom2).Title("Value").Filterable(true);
+
+                    })
+                    .Pageable(pageable =>
+                    {
+                        pageable.Refresh(true);
+                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                        pageable.Messages(messages => messages.Empty("No records available!"));
+                    })
+                    .Sortable()
+                    .Filterable()
+                    .HtmlAttributes(new { style = "width:575px" })
+                                        )
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="machineActivityDetails">
+                                    <div class="k-grid-content">
+                                        @(Html.Kendo().Grid(Model.ReportModelResultList)
+                    .Name("MachineActivityDetails")
+                    .DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(false)
+                    .Read(read => read.Action("MachineActivityDebugValuesAjax", "Report").Data("getProcessId")))
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.custom1).Title("Item").Filterable(true);
+                        columns.Bound(p => p.custom2).Title("Value").Filterable(true);
+
+                    })
+                    .Pageable(pageable =>
+                    {
+                        pageable.Refresh(true);
+                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                        pageable.Messages(messages => messages.Empty("No records available!"));
+                    })
+                    .Sortable()
+                    .Filterable()
+                    .HtmlAttributes(new { style = "width:575px" })
+                                        )
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="checkoutDetails">
+                                    <div class="k-grid-content">
+                                        @(Html.Kendo().Grid(Model.ReportModelResultList)
+                    .Name("CheckoutDetails")
+                    .DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(false)
+.Read(read => read.Action("MachineActivityCheckOutAjax", "Report").Data("getProcessId")))
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.custom1).Title("Item").Filterable(true);
+                        columns.Bound(p => p.custom2).Title("Value").Filterable(true);
+
+                    })
+                    .Pageable(pageable =>
+                    {
+                        pageable.Refresh(true);
+                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                        pageable.Messages(messages => messages.Empty("No records available!"));
+                    })
+                    .Sortable()
+                    .Filterable()
+                    .HtmlAttributes(new { style = "width:575px" })
+                                        )
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- dialog buttons -->
+                        @*<div class="modal-footer footerbtn">
+                                <button type="button" class="btn YellowBtn" data-dismiss="modal">Ok</button>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            <div class=" contant_page">
+                <div class="col-md-12">
+                    <!-- tittle -->
+                    <div class="row">
+                        <div class="lable-align-top">
+                            @Html.HiddenFor(model => model.PageHeader, new { @id = "hiddReportTitile" })
+                            @Html.HiddenFor(model => model.ReportId, new { @id = "hiddReportId" })
+
+
+
+                            <h2>@Html.DisplayFor(model => model.PageHeader)</h2>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+
+                                @foreach (var filter in @Model.ReportFilterTypeList)
+                                {
+                                    if (filter.Priority % 2 != 0)
+                                    {
+                                        <div class="form-group">
+                                            @if (filter.FitlerText.Trim() == "From Date" || filter.FitlerText.Trim() == "To Date")
+                                            {
+                                                <div class="col-md-4  col-sm-3 control-label text-right required"> @filter.FitlerText </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-4  col-sm-3 control-label text-right"> @filter.FitlerText </div>
+                                            }
+
+                                            @*@if (filter.IsMachineAvalable)
+                                                {
+                                                <div class="col-md-6  col-sm-3 control-label text-right required"> @filter.FitlerText </div>
+                                                }
+                                                else
+                                                {
+
+                                                <div class="col-md-6  col-sm-3 control-label text-right"> @filter.FitlerText </div>
+                                                }*@
+
+                                            <div class="col-sm-7">
+                                                @if (filter.IsModeAvailable)
+                                                {
+                                                    <div class="select-icon">
+
+                                                        @Html.DropDownListFor(M => M.ModeId, new SelectList(Model.ModeList, "Id", "Text"), new { @class = "form-control pull-right topspace selecter", @id = "ddlMode" })
+                                                    </div>
+
+                                                }
+
+                                                @if (filter.IsCustomerAvailable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.CustomerId, new SelectList(Model.CustomerNameList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName", @style = "float: left !important ;width: 220px;" })
+                                                    </div>
+
+                                                }
+                                                @if (filter.IsSubsidiaryAvailable)
+                                                {
+                                                    <div class="select-icon" style="float: left;">
+                                                        @Html.DropDownListFor(M => M.SubsidiaryID, new SelectList(Model.SubsidiaryList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubsidiaryName", @style = "width: 140px;" })
+                                                    </div>
+                                                }
+                                                @if (filter.IsSubAgentMultiAvailable)
+                                                {
+                                                    @Html.Hidden("HdnIsSubAgentMultiAvailable", filter.IsSubAgentMultiAvailable)
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.SubAgentIDMulti, new SelectList(Model.SubAgentList, "Id", "Text"), new { @class = "form-control pull-right topspace selecter", @id = "ddlSubAgentName", @multiple = "multiple" })
+                                                    </div>
+
+                                                }
+                                                @if (filter.IsSubAgentAvailable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.SubAgentID, new SelectList(Model.SubAgentList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubAgentName", @style = "float: left !important ;width: 220px;" })
+                                                    </div>
+                                                }
+
+                                                @if (filter.IsLocationAvailable)
+                                                {
+                                                    <div class="select-icon" style="float: left;">
+                                                        @Html.DropDownListFor(M => M.LocationId, new SelectList(ViewBag.LocationList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlLocationName", @style = "float: left;width: 140px;" })
+                                                    </div>
+                                                }
+                                                @if (filter.IsDateFromAvailable)
+                                                {
+                                                    @(Html.Kendo().DatePickerFor(m => m.DateFrom).Value(DateTime.Now.Date.AddDays(-60)).Format("MM/dd/yyyy")
+                                       .HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "DateFrom", @style = "width: 220px;", @type = "" })
+                                                    )
+                                                    <span id="invalidFromDt" class="field-validation-error" style="display:none">Required</span>
+                                                    <span id="blankFromDt" class="field-validation-error" style="display:none">Invalid date</span>
+                                                }
+                                                @if (filter.IsDateToAvailable)
+                                                {
+                                                    @(Html.Kendo().DatePickerFor(m => m.DateTo).Value(DateTime.Now.Date).Format("MM/dd/yyyy")
+                                    .HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "DateTo", @style = "width: 220px;", @type = "" })
+                                                    )
+                                                    <span id="invalidToDt" class="field-validation-error" style="display:none">Required</span>
+                                                    <span id="blankToDt" class="field-validation-error" style="display:none">Invalid date</span>
+                                                    <span id="date" class="field-validation-error" style="display:none">To Date should be Greater than eaual to From Date</span>
+                                                }
+                                                @if (filter.IsDateExpireAvailable)
+                                                {
+                                                    @(Html.Kendo().DatePickerFor(m => m.DateExpire)
+                                    .HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "DateExpire", @style = "width: 220px;" })
+                                                    )
+                                                    <span id="invalidExpire" class="field-validation-error" style="display:none">Invalid date</span>
+                                                }
+                                                @if (filter.IsMembershipStatusAvailable)
+                                                {
+                                                    @Html.RadioButtonFor(model => model.MembershipStatus, "All", new { @id = "MembershipStatus1", @checked = "checked" })
+                                                    @Html.LabelFor(model => model.MembershipStatus, "All")
+                                                    @Html.RadioButtonFor(model => model.MembershipStatus, "Active", new { id = "MembershipStatus2" })
+                                                    @Html.LabelFor(model => model.MembershipStatus, "Active")
+                                                    @Html.RadioButtonFor(model => model.MembershipStatus, "InActive", new { id = "MembershipStatus3" })
+                                                    @Html.LabelFor(model => model.MembershipStatus, "In-Active")
+                                                    @Html.RadioButtonFor(model => model.MembershipStatus, "Void", new { id = "MembershipStatus4" })
+                                                    @Html.LabelFor(model => model.MembershipStatus, "Void")
+                                                }
+                                                @if (filter.IsPhoneManufacturerAvailable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.PhoneManufacturerId, new SelectList(Model.PhoneManufacturerList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlPhoneManufacturerName" })
+                                                    </div>
+                                                }
+                                                @if (filter.IsOrderAvailable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.OrderId, new SelectList(Model.OrderList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlOrderName" })
+                                                    </div>
+                                                }
+                                                @if (filter.IsMachineAvalable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.MachineId, new SelectList(Model.MachineList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlMachineName" })
+
+                                                        @*<span id="ErrormsgMachineId" class="field-validation-error" style="display:none">Required</span>*@
+
+                                                    </div>
+                                                }
+                                                @if (filter.IsManufacturerAvailable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.ManufacturerId, new SelectList(Model.ManufacturerList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlManufacturerName" })
+                                                    </div>
+                                                }
+                                                @if (filter.IsOrderMachineUnassigned)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.OrderId, new SelectList(Model.OrderList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlOrderName" })
+                                                    </div>
+                                                }
+
+                                                @if (filter.IsLocationGroupAvailable)
+                                                {
+                                                    IsShippedMachine = "true";
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.GroupId, new SelectList(Model.LocationGroupList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlGroupList", onchange = "dropchange();" })
+                                                    </div>
+                                                }
+
+                                                @if (filter.IsMultiDeviceAvailable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.MultiDeviceTypeCode, new SelectList(Model.MultiDeviceList, "otherStrVal", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlMultiDeviceLst" })
+                                                    </div>
+                                                }
+
+                                                @if (filter.IsReportStatusAvailable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.ReportStatusCode, new SelectList(Model.ReportStatusList, "otherStrVal", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlReportStatusLst" })
+                                                    </div>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    }
+
+                                }
+                            </div>
+
+                            <div class="col-md-6">
+
+                                @foreach (var filter in @Model.ReportFilterTypeList)
+                                {
+                                    if (filter.Priority % 2 == 0)
+                                    {
+                                        <div class="form-group">
+                                            @if (filter.FitlerText.Trim() == "To Date" || filter.FitlerText.Trim() == "From Date")
+                                            {
+                                                <div class="col-md-6  col-sm-3 control-label text-right required"> @filter.FitlerText </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-6  col-sm-3 control-label text-right"> @filter.FitlerText </div>
+                                            }
+                                            <div class="col-sm-5">
+                                                @if (filter.IsModeAvailable)
+                                                {
+                                                    <div class="select-icon" style="float:left">
+                                                        @Html.DropDownListFor(M => M.ModeId, new SelectList(Model.ModeList, "Id", "Text"), new { @class = "form-control pull-right topspace selecter", @id = "ddlMode", @style = "float: left;width: 140px;" })
+                                                    </div>
+
+                                                }
+                                                @if (filter.IsCustomerAvailable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.CustomerId, new SelectList(Model.CustomerNameList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName" })
+                                                    </div>
+                                                }
+                                                @if (filter.IsSubsidiaryAvailable)
+                                                {
+                                                    <div class="select-icon" style="">
+                                                        @Html.DropDownListFor(M => M.SubsidiaryID, new SelectList(Model.SubsidiaryList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubsidiaryName", @style = "" })
+                                                    </div>
+
+                                                }
+                                                @if (filter.IsSubAgentMultiAvailable)
+                                                {
+                                                    @Html.Hidden("HdnIsSubAgentMultiAvailable", filter.IsSubAgentMultiAvailable)
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.SubAgentIDMulti, new SelectList(Model.SubAgentList, "Id", "Text"), new { @class = "form-control pull-right topspace selecter", @id = "ddlSubAgentName", @multiple = "multiple" })
+                                                    </div>
+
+                                                }
+                                                @if (filter.IsSubAgentAvailable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.SubAgentID, new SelectList(Model.SubAgentList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubAgentName" })
+                                                    </div>
+
+                                                }
+                                                @if (filter.IsLocationAvailable)
+                                                {
+                                                    <div class="select-icon" style="">
+                                                        @Html.DropDownListFor(M => M.LocationId, new SelectList(ViewBag.LocationList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlLocationName", @style = "" })
+                                                    </div>
+                                                }
+                                                @if (filter.IsDateFromAvailable)
+                                                {
+                                                    @(Html.Kendo().DatePickerFor(m => m.DateFrom).Value(DateTime.Now.Date.AddDays(-60)).Format("MM/dd/yyyy")
+                                        .HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "DateFrom", @style = "width: 220px;", @type = "" })
+                                                    )
+                                                    <span id="invalidFromDt" class="field-validation-error" style="display:none">Required</span>
+                                                    <span id="blankFromDt" class="field-validation-error" style="display:none">Invalid date</span>
+                                                }
+                                                @if (filter.IsDateToAvailable)
+                                                {
+                                                    @(Html.Kendo().DatePickerFor(m => m.DateTo).Value(DateTime.Now.Date).Format("MM/dd/yyyy")
+                                                          .HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "DateTo", @style = "width: 220px;", @type = "" }))
+                                                    <span id="invalidToDt" class="field-validation-error" style="display:none">Required</span>
+                                                    <span id="blankToDt" class="field-validation-error" style="display:none">Invalid date</span>
+                                                    <span id="date" class="field-validation-error" style="display:none">To Date should be Greater than eaual to From Date</span>
+                                                }
+                                                @if (filter.IsDateExpireAvailable)
+                                                {
+                                                    @(Html.Kendo().DatePickerFor(m => m.DateExpire)
+                                    .HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "DateExpire", @style = "width: 220px;" })
+                                                    )
+                                                    <span id="invalidExpire" class="field-validation-error" style="display:none">Invalid date</span>
+                                                }
+                                                @if (filter.IsMembershipStatusAvailable)
+                                                {
+                                                    @Html.RadioButtonFor(model => model.MembershipStatus, "All", new { @id = "MembershipStatus1", @checked = "checked" })
+                                                    @Html.LabelFor(model => model.MembershipStatus, "All")
+                                                    @Html.RadioButtonFor(model => model.MembershipStatus, "Active", new { id = "MembershipStatus2" })
+                                                    @Html.LabelFor(model => model.MembershipStatus, "Active")
+                                                    @Html.RadioButtonFor(model => model.MembershipStatus, "InActive", new { id = "MembershipStatus3" })
+                                                    @Html.LabelFor(model => model.MembershipStatus, "In-Active")
+                                                    @Html.RadioButtonFor(model => model.MembershipStatus, "Void", new { id = "MembershipStatus4" })
+                                                    @Html.LabelFor(model => model.MembershipStatus, "Void")
+                                                }
+                                                @if (filter.IsPhoneManufacturerAvailable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.PhoneManufacturerId, new SelectList(Model.PhoneManufacturerList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlPhoneManufacturerName" })
+                                                    </div>
+                                                }
+                                                @if (filter.IsOrderAvailable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.OrderId, new SelectList(Model.OrderList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlOrderName" })
+                                                    </div>
+                                                }
+                                                @if (filter.IsMachineAvalable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.MachineId, new SelectList(Model.MachineList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlMachineName" })
+                                                        @*<span id="ErrormsgMachineId" class="field-validation-error" style="display:none">Required</span>*@
+
+                                                    </div>
+                                                }
+                                                @if (filter.IsManufacturerAvailable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.ManufacturerId, new SelectList(Model.ManufacturerList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlManufacturerName" })
+                                                    </div>
+                                                }
+                                                @if (filter.IsOrderMachineUnassigned)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.OrderId, new SelectList(Model.OrderList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlOrderName" })
+                                                    </div>
+                                                }
+
+                                                @if (filter.IsLocationGroupAvailable)
+                                                {
+                                                    IsShippedMachine = "true";
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.GroupId, new SelectList(Model.LocationGroupList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlGroupList" })
+                                                    </div>
+                                                }
+
+                                                @if (filter.IsMultiDeviceAvailable)
+                                                {
+
+                                                    @*<div>
+                                                            @Html.CheckBoxFor(model => model.IsMultiDevice)
+
+
+                                                        </div>*@
+
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.MultiDeviceTypeCode, new SelectList(Model.MultiDeviceList, "otherStrVal", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlMultiDeviceLst" })
+                                                    </div>
+
+
+                                                }
+                                                @if (filter.IsReportStatusAvailable)
+                                                {
+                                                    <div class="select-icon">
+                                                        @Html.DropDownListFor(M => M.ReportStatusCode, new SelectList(Model.ReportStatusList, "otherStrVal", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlReportStatusLst" })
+                                                    </div>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    }
+
+                                }
+                            </div>
+
+                        </div>
+
+                        @*<div class="row"
+                                <div class="col-md-2" style="float: right;">
+                                    <div class="col-md-5 col-sm-5 "></div>
+                                    <div class="col-md-7 col-sm-7" style="margin-left:65%;margin-bottom:3%">
+                                        <a title="Export to Excel" href="#" onclick="javascript:ExportToExcel(event);"><img src="~/Scripts/images/excel_icon.png" /></a>
+                                    </div>
+                                </div>
+                            </div>*@
+                        <div class="row spacer1 spacer1"></div>
+                        @if (@Model.ReportFilterTypeList.Count() > 0)
+                        {
+                            <div class="row">
+
+                                <div class="col-md-9">
+                                    <div class="col-md-6 col-sm-3"></div>
+                                    <div class="col-md-5 col-sm-5">
+
+                                        <button id="btnCreate" class="btn login_button btn-primary" style="@if (ViewBag.ShowSubmit==false){<text>display: none;</text>}" type="submit">@Html.DisplayFor(model => model.PageButtonSubmit)</button>
+
+                                        <img name="img_loading" class="" id="img_loading" src="~/Scripts/images/loading-Spinner.gif" width="22" />
+
+
+                                        @*@if (Model.ReportId == 2)
+                                            {
+                                            <input type="button" title="ImportUsers" class="btn login_button btn-primary" value="Upload Member" id="btnImportUsers" />
+                                            }*@
+                                    </div>
+                                </div>
+                                @*<div id="divXlsIcon" class="col-md-4 col-sm-4" style="padding-left: 5%;">
+
+                                        <b><a title="Export to Excel" href="#" onclick="javascript:ExportToExcel(event);">Export Data</a></b>
+
+                                        <b><a title="Export to Excel" href="#" id="export_data" onclick="javascript: ExportRawDataToExcel(event);">Export Raw Data</a></b>
+                                        <img name="export_img_loading" class="" id="export_img_loading" src="~/Scripts/images/loading-Spinner.gif" width="22" />
+
+
+                                    </div>*@
+
+                                @if (Model.ReportId == 18)
+                                {
+                                    <div id="divXlsIcon" class="col-md-3 col-sm-3" style="">
+                                        <img src="~/Scripts/images/excel_icon.png" />&nbsp;<a title="Export to Excel" href="#" id="export_data_all" ><b>Export Data</b></a>&nbsp;&nbsp;
+                                        <img src="~/Scripts/images/excel_icon.png" />&nbsp;<a title="Export to Excel Raw Data" id="export_data" href="#"><b>Export Raw Data</b></a>
+                                        <img name="export_img_loading" class="" id="export_img_loading" src="~/Scripts/images/loading-Spinner.gif" width="22" />
+                                       
+                                         <img name="export_img_loading_AllReport" class="" id="export_img_loading_AllReport" src="~/Scripts/images/loading-Spinner.gif" width="22" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div id="divXlsIcon" class="col-md-2 col-sm-2" style="padding-left: 5%;">
+                                        @*<img src="~/Scripts/images/excel_icon.png" />&nbsp;<a title="Export to Excel" href="#" id="export_data_all" onclick="javascript:ExportToExcel(event);"><b>Export Data</b></a>*@
+                                        <img src="~/Scripts/images/excel_icon.png" />&nbsp;<a title="Export to Excel" href="#" id="export_data_all" ><b>Export Data</b></a>
+                                        <img name="export_img_loading_AllReport" class="" id="export_img_loading_AllReport" src="~/Scripts/images/loading-Spinner.gif" width="22" />
+                                    </div>
+                                }
+
+
+
+                            </div>
+                        }
+                        @if (Model.IsReportAvailable)
+                        {
+                            <div class="row" style="padding-top:10px;" id="gridblock">
+                                <div class="grid-align table-responsive Kendogrid">
+                                    @(Html.Kendo().Grid<Revive.Redux.Entities.ReportModel>()
+                            .Name("grdGeneric")
+
+                            .DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(true)
+                            .Read(read => read.Action("Show_Read", "Report").Data("ReportPara"))
+
+                            )
+
+                            .Columns(columns =>
+                            {
+                                // columns.Bound(p => p.custom1).Hidden().Filterable(true);
+
+
+                                //columns.Bound(p => p.custom4).Hidden().Filterable(true);
+                                //columns.Bound(p => p.custom5).Hidden().Filterable(true);
+
+                                //columns.Bound(p => p.custom9).Hidden().Filterable(true);
+                                // columns.Bound(p => p.custom10).Hidden().Filterable(true);
+
+
+                                if (Model.ReportId == 4 || Model.ReportId == 15 || Model.ReportId == 18)
+                                {
+
+                                    columns.Bound(p => p.custom1).Hidden().Filterable(true).ClientTemplate("#= kendo.toString(kendo.parseDate(custom1, 'yyyy-MM-dd'), 'MM/dd/yyyy HH:mm') #");
+
+
+                                }
+                                else
+                                {
+                                    columns.Bound(p => p.custom1).Hidden().Filterable(true);
+                                }
+                                columns.Bound(p => p.custom2).Hidden().Filterable(true);
+
+                                 columns.Bound(p => p.custom3).Hidden().Filterable(true);
+                                //columns.Bound(p => p.custom3).ClientTemplate("<span >#=custom3 #</span>");
+
+
+                                if (Model.ReportId == 8 || Model.ReportId == 19)
+                                {
+                                    columns.Bound(p => p.custom4).Hidden().Filterable(true).ClientTemplate("#= kendo.toString(kendo.parseDate(custom4, 'yyyy-MM-dd'), 'MM/dd/yyyy') #");
+                                }
+                                else
+                                {
+                                     columns.Bound(p => p.custom4).Hidden().Filterable(true);
+
+                                    //columns.Bound(p => p.custom4).ClientTemplate("<span >#=custom4 #</span>");
+
+                                }
+
+
+                                if (Model.ReportId == 13 || Model.ReportId == 3 || Model.ReportId == 19)
+                                {
+                                    columns.Bound(p => p.custom5).Hidden().Filterable(true).ClientTemplate("#= kendo.toString(kendo.parseDate(custom5, 'yyyy-MM-dd'), 'MM/dd/yyyy') #");
+                                }
+                                else
+                                {
+                                    columns.Bound(p => p.custom5).Hidden().Filterable(true);
+                                }
+
+                                columns.Bound(p => p.custom6).Hidden().Filterable(true);
+                                columns.Bound(p => p.custom7).Hidden().Filterable(true);
+                                columns.Bound(p => p.custom8).Hidden().Filterable(true);
+
+                                if (Model.ReportId == 2)
+                                {
+                                    columns.Bound(p => p.custom9).Hidden().Filterable(true).ClientTemplate("#= kendo.toString(kendo.parseDate(custom9, 'yyyy-MM-dd'), 'MM/dd/yyyy') #");
+                                }
+                                else
+                                {
+                                    columns.Bound(p => p.custom9).Hidden().Filterable(true);
+                                }
+                                if (Model.ReportId == 2)
+                                {
+                                    columns.Bound(p => p.custom10).Hidden().Filterable(true).ClientTemplate("#= kendo.toString(kendo.parseDate(custom10, 'yyyy-MM-dd'), 'MM/dd/yyyy') #");
+                                }
+                                else
+                                {
+                                    columns.Bound(p => p.custom10).Hidden().Filterable(true);
+                                }
+
+
+                                if (Model.ReportId == 18)
+                                {
+
+                                    columns.Bound(p => p.custom10).Title("Detail").ClientTemplate(
+                                        //"<a onclick=\"Action('# =custom10#','# =custom9#');\"><i class='fa fa-eye fa-lg icon-color' , style='align:center'></i></a>").Sortable(false).Filterable(false).HtmlAttributes(new { @style = "cursor:pointer" });
+                                    "# if (custom9 != '') { # <a onclick=\"Action('#=custom10#','#=custom9#');\"><i class='fa fa-eye fa-lg icon-color' , style='align:center'></i></a># }else{} #").Sortable(false).Filterable(false).HtmlAttributes(new { @style = "cursor:pointer" });
+
+
+                                }
+
+                                if (Model.ReportId == 24)
+                                {
+
+                                    columns.Bound(p => p.custom8).Width(50).Title(ViewColumnName).ClientTemplate("# if (custom8 != '' && custom8!=null) {#<a onclick=\"ViewMachineShippingLabel('#=custom8#');\"><i class='fa fa-eye fa-lg icon-color' , style='align:center'></i></a> #} #").Filterable(false).Sortable(false).HtmlAttributes(new { @style = "cursor:pointer" });
+                                }
+                            })
+                            .Pageable(pageable =>
+                            {
+                                pageable.Refresh(true);
+                                pageable.PageSizes(new int[] { 10, 20, 50 });
+                                pageable.Messages(messages => messages.Empty("No records available!"));
+                            })
+                        .Events(events => events
+        .DataBound("onDataBound")
+    )
+                            .Sortable()
+                            .Scrollable()
+                            .Filterable()
+                            .HtmlAttributes(new { style = "width: 97%;" })
+                                    )
+                                </div>
+
+                            </div>
+
+                            <style>
+                                .contant_sector {
+                                    height: 100%;
+                                }
+                            </style>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+<div id="ShippingLabelGridModal" class="modal" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Shipping Label Data</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" style="height:400px;">
+                        <img name="img_label" class="ImgLabel imageTransform" id="img_label" height="200" width="400" src="" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    .imageTransform {
+        margin-top: 100px;
+        -ms-transform: rotate(90deg); /* IE 9 */
+        -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+        transform: rotate(90deg);
+        border: 2px solid #000;
+    }
+
+    .k-grid-content {
+        max-height: 300px;
+    }
+
+    .modal .fade {
+        top: 30%;
+        transition: opacity 0.3s linear;
+    }
+
+        .modal.fade.in {
+            top: 30%;
+        }
+
+    .modal-backdrop {
+        background-color: #000;
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 0 !important;
+    }
+
+    .col-RV {
+        /*width: 110%;*/
+    }
+</style>
+
+<script type="text/javascript">
+    function ViewMachineShippingLabel(ShippingLabelData) {
+        $('#ShippingLabelGridModal').css("visibility", "visible");
+        $('#ShippingLabelGridModal').modal('show');
+        $("#img_label").attr('src', 'data:image/png;base64,' + ShippingLabelData);
+    }
+    function dropchange() {
+        $("#flag").val(true);
+        $("#ReportForm").submit();
+    }
+
+    function callGrid(tabType) {
+
+        debugger;
+        if (tabType == 'activityType') {
+            $("#CheckinGrid").data('kendoGrid').dataSource.data([]);
+            $("#MachineActivityDetails").data('kendoGrid').dataSource.data([]);
+            $("#CheckoutDetails").data('kendoGrid').dataSource.data([]);
+
+            $('#MachineActivityGrid').data().kendoGrid.dataSource.read();
+            $('#MachineActivityGrid').data('kendoGrid').refresh();
+
+        }
+        else if (tabType == 'checkInDetails') {
+            $("#MachineActivityGrid").data('kendoGrid').dataSource.data([]);
+            $("#MachineActivityDetails").data('kendoGrid').dataSource.data([]);
+            $("#CheckoutDetails").data('kendoGrid').dataSource.data([]);
+
+
+            $('#CheckinGrid').data().kendoGrid.dataSource.read();
+            $('#CheckinGrid').data('kendoGrid').refresh();
+        }
+        else if (tabType == 'machineActivityDetails') {
+            $("#MachineActivityGrid").data('kendoGrid').dataSource.data([]);
+            $("#CheckinGrid").data('kendoGrid').dataSource.data([]);
+            $("#CheckoutDetails").data('kendoGrid').dataSource.data([]);
+
+            $('#MachineActivityDetails').data().kendoGrid.dataSource.read();
+            $('#MachineActivityDetails').data('kendoGrid').refresh();
+
+        }
+        else if (tabType == 'checkoutDetails') {
+            $("#MachineActivityGrid").data('kendoGrid').dataSource.data([]);
+            $("#CheckinGrid").data('kendoGrid').dataSource.data([]);
+            $("#MachineActivityDetails").data('kendoGrid').dataSource.data([]);
+
+            $('#CheckoutDetails').data().kendoGrid.dataSource.read();
+            $('#CheckoutDetails').data('kendoGrid').refresh();
+        }
+
+    }
+    $(document).ready(function () {
+        $('#myTabs a').click(function (e) {
+
+        $("#myTabs").tabs();
+          e.preventDefault();
+            $('#myTabs').tab('show')
+
+
+
+        });
+
+        var IsSubAgentMultiAvailable = $('#HdnIsSubAgentMultiAvailable').val();
+        if (IsSubAgentMultiAvailable == 'True') {
+            var SubAgentSelectedString = $('#SubAgentIDMultiValue').val();
+            if (SubAgentSelectedString.length > 0) {
+
+                var SubAgentSelectedList = SubAgentSelectedString.split("#");
+
+                $("#ddlSubAgentName").val(SubAgentSelectedList);
+                $('#ddlSubAgentName').multiselect({
+                    includeSelectAllOption: true,
+                    selectAllName: 'Select-All',
+                    maxHeight: 200,
+                    numberDisplayed: 0,
+                    onInitialized: function (select, container) {
+                    },
+                });
+                $("#ddlSubAgentName").multiselect('refresh');
+
+            }
+            $('#ddlSubAgentName').multiselect({
+                includeSelectAllOption: true,
+                selectAllName: 'Select-All',
+                maxHeight: 200,
+                numberDisplayed: 0,
+                onInitialized: function (select, container) {
+                },
+            });
+        }
+
+
+        if ('@IsShippedMachine' == "true") {
+            Revive.Redux.Common.SetParentMenuSelected('Orders');
+        } else {
+            Revive.Redux.Common.SetParentMenuSelected('Reports');
+        }
+        Revive.Redux.Common.SetKendoGridHeight();
+        // Handled client issue number 176
+        //if ($("#grdGeneric").length > 0) {
+        //    $("#grdGeneric").data("kendoGrid").dataSource.read();
+        //}
+
+        var report_Id = $("#hiddReportId").val();
+        if (report_Id == 2) {
+            $("#grdGeneric").kendoTooltip({
+                filter: "td:nth-child(1)", //this filter selects the second column's cells
+                position: "top",
+                content: function (e) {
+                    var dataItem = $("#grdGeneric").data("kendoGrid").dataItem(e.target.closest("tr"));
+                    var content = dataItem.custom1;
+                    return content;
+                }
+            }).data("kendoTooltip");
+
+            $("#grdGeneric").kendoTooltip({
+                filter: "td:nth-child(8)", //this filter selects the second column's cells
+                position: "top",
+                content: function (e) {
+                    var dataItem = $("#grdGeneric").data("kendoGrid").dataItem(e.target.closest("tr"));
+                    var content = dataItem.custom8;
+                    return content;
+                }
+            }).data("kendoTooltip");
+        }
+
+
+        // Pending  validation
+        $('form').submit(function () {
+            $(this).find(':submit').attr('disabled', 'disabled');
+        });
+
+        $("#btnCreate").click(function () {
+            $("#invalidFromDt").hide();
+            $("#invalidToDt").hide();
+            $("#invalidExpire").hide();
+            $("#date").hide();
+            //$("#ErrormsgMachineId").hide();
+
+            $("#blankToDt").hide();
+            $("#blankExpire").hide();
+
+            var IsSubAgentMultiAvailable = $('#HdnIsSubAgentMultiAvailable').val();
+            if (IsSubAgentMultiAvailable == 'True') {
+                $('#ddlSubAgentName').multiselect({
+                    includeSelectAllOption: true,
+                    selectAllName: 'Select-All',
+                    maxHeight: 200,
+                    numberDisplayed: 0,
+                    onInitialized: function (select, container) {
+
+                    },
+                });
+            }
+            var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+            var firstDate = new Date($("#DateFrom").data("kendoDatePicker").element[0].value);
+            var secondDate = new Date($("#DateTo").data("kendoDatePicker").element[0].value);
+
+            var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
+
+
+            var startPicker = $("#DateFrom").data("kendoDatePicker");
+            var endDate = $("#DateTo").data("kendoDatePicker");
+            var expireDate = $("#DateExpire").data("kendoDatePicker");
+            var machineId = $("#ddlMachineName").val();
+
+            var sDate;
+            var eDate;
+            var expDate;
+            var sDateBlank = false;
+            var eDateBlank = false;
+            var expireDateBlank = false;
+
+            var sDateInvalid = false;
+            var eDateInvalid = false;
+            var expireDateInvalid = false;
+
+            if (typeof startPicker != 'undefined' && startPicker != null) {
+                if ($("#DateFrom").data("kendoDatePicker").element[0].value != "") {
+                    if (startPicker.value() != null) {
+                        sDate = Date.parse(startPicker.value());
+                    }
+                    else {
+                        sDateInvalid = true;
+                    }
+                }
+                else {
+                    sDateBlank = true;
+                }
+            }
+            else {
+                sDateBlank = true;
+            }
+            if (typeof endDate != 'undefined' && endDate != null) {
+                if ($("#DateTo").data("kendoDatePicker").element[0].value != "") {
+                    if (endDate.value() != null) {
+                        eDate = Date.parse(endDate.value());
+                    }
+                    else {
+                        eDateInvalid = true;
+                    }
+                }
+                else {
+                    eDateBlank = true;
+                }
+            }
+            else {
+
+                eDateBlank = true;
+            }
+
+            if (typeof expireDate != 'undefined' && expireDate != null) {
+
+                if ($("#DateExpire").data("kendoDatePicker").element[0].value != "") {
+                    expDate = Date.parse(expireDate.value());
+                }
+                else {
+                    expireDateBlank = true;
+                }
+
+            }
+            else {
+                expireDateBlank = true;
+            }
+
+
+            //if(typeof $("#From_Date") === 'undefined'){
+            var _error = false;
+
+            if (sDate != "" && sDateBlank == true) {
+                if (!sDate) {
+                    $("#invalidFromDt").show();
+                    $("#blankFromDt").hide();
+                    _error = true;
+                }
+            }
+            if (eDate != "" && eDateBlank == true) {
+                if (!eDate) {
+                    $("#invalidToDt").show();
+                    $("#blankToDt").hide();
+                    //return false;
+                    _error = true;
+                }
+            }
+            if (expDate != "" && expireDateBlank == false) {
+                if (!expDate) {
+                    $("#invalidExpire").show();
+                    //return false;
+                    _error = true;
+                }
+            }
+
+            if (sDate != "" && sDateInvalid == true) {
+                if (!sDate) {
+                    $("#blankFromDt").show();
+                    $("#invalidFromDt").hide();
+                    _error = true;
+                }
+            }
+
+            if (eDate != "" && eDateInvalid == true) {
+                if (!eDate) {
+                    $("#blankToDt").show();
+                    $("#invalidToDt").hide();
+                    _error = true;
+                }
+            }
+
+
+            if (sDateBlank == false && eDateBlank == false) {
+                if (startPicker.value() != null && endDate.value() != null) {
+                    if (endDate.value() < startPicker.value()) {
+                        $("#date").show();
+                        // return false;
+                        _error = true;
+                    }
+                }
+            }
+
+            if (startPicker.value() != null && endDate.value() != null) {
+                if (diffDays > 60) {
+                    toastr.error("Date difference greater than 60 days.");
+                    return false;
+                }
+            }
+
+
+            //if (typeof machineId != 'undefined' && machineId != null) {
+            //    if (machineId == '') {
+            //        $("#ErrormsgMachineId").show();
+            //        _error = true;
+
+            //    }
+            //}
+
+            if (_error == true) {
+                return false;
+            }
+        });
+
+
+
+        /// Commented by KD
+
+
+        $(".DisableKeyboardInput").keydown(function (e) {
+            if (e.shiftKey || e.ctrlKey || e.altKey) {
+                e.preventDefault();
+            }
+            var key = e.keyCode;
+            if (((key == 32) || (key >= 65 && key <= 90) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105))) {
+                e.preventDefault();
+            }
+            if ((key >= 35 && key <= 40) || (key == 46)) {
+
+            }
+        });
+
+
+
+        $("#divXlsIcon").hide();
+
+
+        // Back Button Click event
+        $("#btnBack").click(function () {
+            window.location.href = '@Url.Action("Details", "Report")';
+        });
+
+        // Customer dropdown change event
+        // Load Subsidiary on select of Customer
+        $("#ddlCustomerName").change(function () {
+            $("#ddlSubsidiaryName").empty();
+            $("#ddlSubAgentName").empty();
+            $("#ddlLocationName").empty();
+
+            var IsSubAgentMultiAvailable = $('#HdnIsSubAgentMultiAvailable').val();
+            if (IsSubAgentMultiAvailable == 'True') {
+                $('#ddlSubAgentName').multiselect('destroy');
+                $('#ddlSubAgentName').multiselect('refresh');
+            }
+            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+            $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+
+            var nCustomerId = $("#ddlCustomerName").val();
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetSubsidiaryList")', // Calling json method
+                dataType: 'json',
+                data: { CustomeId: nCustomerId, bActive: true },
+                success: function (subsidiaryLst) {
+                    if (subsidiaryLst.length > 0) {
+                        $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                            $("#ddlSubsidiaryName").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                        });
+                    }
+                    else {
+
+                        $("#ddlSubsidiaryName").empty();
+                        $("#ddlSubAgentName").empty();
+                        $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+                        $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve Subsidiary list. ' + ex, confirm: function () { } }); }
+            });
+            //bindmachineId(nCustomerId);
+            return false;
+        });
+
+        // Load Subsidiary on select of Customer
+        $("#ddlSubsidiaryName").change(function () {
+            $("#ddlSubAgentName").empty();
+            var IsSubAgentMultiAvailable = $('#HdnIsSubAgentMultiAvailable').val();
+            if (IsSubAgentMultiAvailable == 'True') {
+                $('#ddlSubAgentName').multiselect('destroy');
+                $('#ddlSubAgentName').multiselect('refresh');
+            }
+            $("#ddlLocationName").empty();
+            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+            var nCustomerId = $("#ddlSubsidiaryName").val();
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetSubAgentList")', // Calling json method
+                dataType: 'json',
+                data: { SubsidiaryId: nCustomerId, bActive: true },
+                success: function (subsidiaryLst) {
+                    if (subsidiaryLst.length > 0) {
+                        var IsSubAgentMultiAvailable = $('#HdnIsSubAgentMultiAvailable').val();
+                        if (IsSubAgentMultiAvailable == 'True') {
+
+                            $('#ddlSubAgentName').multiselect('destroy');
+                            $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                                $("#ddlSubAgentName").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                            });
+                            $('#ddlSubAgentName').multiselect({
+                                includeSelectAllOption: true,
+                                selectAllName: 'Select-All',
+                                maxHeight: 200,
+                                numberDisplayed: 0,
+                                onInitialized: function (select, container) {
+
+                                },
+                            });
+
+                        }
+                        else {
+                            $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                            $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                                $("#ddlSubAgentName").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                            });
+                        }
+
+                    }
+                    else {
+                        $("#ddlSubAgentName").empty();
+                        $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve SubAgent list. ' + ex, confirm: function () { } }); }
+            });
+            //bindmachineId(nCustomerId);
+            return false;
+        });
+
+
+
+
+        $("#ddlSubAgentName").change(function () {
+            $("#ddlLocationName").empty();
+            var nCustomerId = $("#ddlCustomerName").val();
+            var nSubsidiaryId = $("#ddlSubsidiaryName").val();
+            var nSubAgentId = $("#ddlSubAgentName").val();
+
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+
+            if (nSubsidiaryId == '')
+            { nSubsidiaryId = 0; }
+
+            if (nSubAgentId == '')
+            { nSubAgentId = 0; }
+            var IsSubAgentMultiAvailable = $('#HdnIsSubAgentMultiAvailable').val();
+            if (IsSubAgentMultiAvailable == 'True') {
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetLocationListForMultiSelect")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: nCustomerId, SubsidiaryId: nSubsidiaryId, SubAgentId: nSubAgentId, bActive: true },
+                    success: function (LocationList) {
+                        if (LocationList.length > 0) {
+                            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                            $.each(LocationList, function (i, LocationList) {
+                                $("#ddlLocationName").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                            });
+                        }
+                        else {
+                            $("#ddlLocationName").empty();
+                            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                        }
+                    },
+                    error: function (ex) { $.alert({ content: 'Failed to retrieve Location list. ' + ex, confirm: function () { } }); }
+                });
+
+            }
+            else {
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetLocationList")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: nCustomerId, SubsidiaryId: nSubsidiaryId, SubAgentId: nSubAgentId, bActive: true },
+                    success: function (LocationList) {
+                        if (LocationList.length > 0) {
+                            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                            $.each(LocationList, function (i, LocationList) {
+                                $("#ddlLocationName").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                            });
+                        }
+                        else {
+                            $("#ddlLocationName").empty();
+                            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                        }
+                    },
+                    error: function (ex) { $.alert({ content: 'Failed to retrieve Location list. ' + ex, confirm: function () { } }); }
+                });
+                bindmachineId(nCustomerId, nSubsidiaryId, nSubAgentId);
+                return false;
+
+            }
+
+
+        });
+
+        // Customer dropdown change event
+        $("#ddlLocationName").change(function () {
+            $("#ddlMachineName").empty();
+            var nLocationId = $("#ddlLocationName").val();
+            var nCustomerId = $("#ddlCustomerName").val();
+
+
+            var nSubsidiaryId = $("#ddlSubsidiaryName").val();
+            var nSubAgentId = $("#ddlSubAgentName").val();
+
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+
+            if (nLocationId == '')
+            { nLocationId = 0; }
+
+            if (nSubsidiaryId == '')
+            { nSubsidiaryId = 0; }
+
+            if (nSubAgentId == '')
+            { nSubAgentId = 0; }
+
+
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetShippedMachinesByCustomer")', // Calling json method
+                dataType: 'json',
+                data: { customerId: nCustomerId, subsidiaryId: nSubsidiaryId, subAgentId: nSubAgentId, locationId: nLocationId },
+                success: function (MachineList) {
+                    if (MachineList.length > 0) {
+                        $("#ddlMachineName").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(MachineList, function (i, MachineLst) {
+                            $("#ddlMachineName").append('<option value="' + MachineLst.Id + '">' + MachineLst.Text + '</option>');
+                        });
+                    }
+                    else {
+                        $("#ddlMachineName").empty();
+                        $("#ddlMachineName").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve Machine list. ' + ex, confirm: function () { } }); }
+            });
+            return false;
+        });
+
+
+
+        function bindmachineId(customerId, subsidiaryId, SubAgentId) {
+            $("#ddlMachineName").empty();
+            var nCustomerId = customerId;
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetShippedMachinesByCustomer")', // Calling json method
+                dataType: 'json',
+                data: { customerId: nCustomerId, subsidiaryId: subsidiaryId, subAgentId: SubAgentId, locationId: nLocationId },
+                success: function (machineLst) {
+                    if (machineLst.length > 0) {
+                        $("#ddlMachineName").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(machineLst, function (i, machineLst) {
+                            $("#ddlMachineName").append('<option value="' + machineLst.Id + '">' + machineLst.Text + '</option>');
+                        });
+                    }
+                    else {
+                        $("#ddlMachineName").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve Machine list. ' + ex, confirm: function () { } }); }
+            });
+        }
+
+
+
+
+
+        //Import Membership Modal
+        $('#btnImportUsers').click(function (e) {
+            $('#FileUpload').modal('show');
+            $("#lblFileTitle").text("Upload Users");
+            $('#fileLocationUpdload').val('');
+
+        });
+
+
+
+        //Modal-
+        // Customer dropdown change event
+        // Load Subsidiary on select of Customer
+        $("#CustomerIdModal").change(function () {
+            $("#SubsidiaryIdModal").empty();
+            $("#SubAgentIdModal").empty();
+            var nCustomerId = $("#CustomerIdModal").val();
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetSubsidiaryList")', // Calling json method
+                dataType: 'json',
+                data: { CustomeId: nCustomerId, bActive: true },
+                success: function (subsidiaryLst) {
+                    if (subsidiaryLst.length > 0) {
+                        $("#SubsidiaryIdModal").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                            $("#SubsidiaryIdModal").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                        });
+                    }
+                    else {
+                        $("#SubsidiaryIdModal").append('<option value="">' + "--Select--" + '</option>');
+                        $("#SubAgentIdModal").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve Subsidiary list. ' + ex, confirm: function () { } }); }
+            });
+            //bindmachineId(nCustomerId);
+            return false;
+        });
+
+        // Load Subsidiary on select of Customer (Modal)
+        $("#SubsidiaryIdModal").change(function () {
+            $("#SubAgentIdModal").empty();
+            var nCustomerId = $("#SubsidiaryIdModal").val();
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetSubAgentList")', // Calling json method
+                dataType: 'json',
+                data: { SubsidiaryId: nCustomerId, bActive: true },
+                success: function (subsidiaryLst) {
+                    if (subsidiaryLst.length > 0) {
+                        $("#SubAgentIdModal").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                            $("#SubAgentIdModal").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                        });
+                    }
+                    else {
+                        $("#SubAgentIdModal").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve Agent list. ' + ex, confirm: function () { } }); }
+            });
+            //bindmachineId(nCustomerId);
+            return false;
+        });
+
+
+    });
+
+    function ReportPara() {
+
+        var IsSubAgentMultiAvailable = $('#HdnIsSubAgentMultiAvailable').val();
+        if (IsSubAgentMultiAvailable == 'True') {
+
+            $('#ddlSubAgentName').multiselect({
+                includeSelectAllOption: true,
+                selectAllName: 'Select-All',
+                maxHeight: 200,
+                numberDisplayed: 0,
+                onInitialized: function (select, container) {
+
+                },
+            });
+            //var newString = $('#ddlSubAgentName').val();
+            var subAgentIdMultiArray = $('#ddlSubAgentName').val();
+            //$('#SubAgentIDMultiValue').val();
+            var subAgentIdMultiString = '';
+            if (subAgentIdMultiArray != null) {
+                for (var i = 0 ; i < subAgentIdMultiArray.length; i++) {
+                    subAgentIdMultiString = subAgentIdMultiString + '#' + subAgentIdMultiArray[i];
+                }
+            }
+        }
+
+        var memberStatus = $('input[name=MembershipStatus]:checked').val()
+        if (typeof memberStatus == 'undefined') {
+            memberStatus = 'All';
+        }
+
+        var ReportParameters = {
+            CustomerId: $("#ddlCustomerName").val(),
+            SubsidiaryID: $("#ddlSubsidiaryName").val(),
+            SubAgentID: $("#ddlSubAgentName").val(),
+            LocationId: $("#ddlLocationName").val(),
+            DateFrom: $("#DateFrom").val(),
+            DateTo: $("#DateTo").val(),
+            DateExpire: $("#DateExpire").val(),
+            ModeId: $("#ddlMode").val(),
+            MembershipStatus: memberStatus,
+            SubAgentIDMulti: subAgentIdMultiString,
+            PhoneManufacturerId: $("#ddlPhoneManufacturerName").val(),
+            ManufacturerId: $("#ddlManufacturerName").val(),
+            GroupId: $("#ddlGroupList").val(),
+            MachineId: $("#ddlMachineName").val(),
+            MultiDeviceTypeCode: $("#ddlMultiDeviceLst").val(),
+            ReportStatusCode: $("#ddlReportStatusLst").val()
+
+        };
+        return { objReportConfigM: ReportParameters };
+    }
+    //KDCODE
+
+    function Action(Id, membershipType) {
+
+        //var target = $(this).attr("href");
+
+        // load the url and show modal on success
+        //$("#myModal .modal-body").load(target, function() {
+        //    $("#myModal").modal("show");
+        //});
+
+
+        $('#myModal').modal('show');
+        $("#lblTitle").text("Machine Activity Details");
+        $("#RecordID").val(Id);
+        $("#isMembership").val(membershipType);
+
+        $('#MachineActivityGrid').data().kendoGrid.dataSource.read();
+        $('#CheckinGrid').data().kendoGrid.dataSource.read();
+        $('#MachineActivityDetails').data().kendoGrid.dataSource.read();
+        $('#CheckoutDetails').data().kendoGrid.dataSource.read();
+        $('#myTabs  a:first').tab('show');
+        //$('#myTabs li').removeClass('active');
+        //$('#myTabs li').first().addClass('active');
+
+
+
+    }
+
+    function getProcessId() {
+        var record = $("#RecordID").val();
+        var _isMember = $("#isMembership").val();
+
+        return {
+            id: record, isMember: _isMember
+        };
+
+
+    }
+
+    // Export to Excel Raw Data
+
+    function ExportRawDataToExcel() {
+
+        //e.preventDefault();
+        var gridInstance = $("#grdGeneric").data("kendoGrid");
+        // Define the data to be sent to the server to create the spreadsheet.
+        var gridTitle = 'MachineActivityRawData';//"Customer Locations";
+        var createExcelUrl = "/ExcelExport/ExportToExcel";
+        var downloadExcelUrl = "/ExcelExport/GetExcelFile";
+        var report_Id = $("#hiddReportId").val();
+        //Revive.Redux.Common.ExportToExcel(gridInstance, gridTitle, createExcelUrl, downloadExcelUrl, report_Id);
+        var memberStatus = $('input[name=MembershipStatus]:checked').val();
+        if (typeof memberStatus == 'undefined') {
+            memberStatus = 'All';
+        }
+
+
+        var ReportParametersForExcel = {
+            CustomerId: $("#ddlCustomerName").val(),
+            SubsidiaryID: $("#ddlSubsidiaryName").val(),
+            SubAgentID: $("#ddlSubAgentName").val(),
+            LocationId: $("#ddlLocationName").val(),
+            DateFrom: $("#DateFrom").val(),
+            DateTo: $("#DateTo").val(),
+            ModeId: $("#ddlMode").val(),
+            GridTitle: 'Activity Report Raw Data'
+
+
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("/ReportToExcelRawData")', // Calling json method
+            dataType: 'json',
+            async: false,
+            cache: false,
+            data: { objReportConfigM: ReportParametersForExcel },
+            success: function (data) {
+                if (data == true) {
+                    window.location.replace(kendo.format("{0}?title={1}", downloadExcelUrl, gridTitle))
+                }
+            },
+            error: function (ex) { $.alert({ content: 'Failed to retrieve Report Data. ' + ex.responseText, confirm: function () { } }); }
+        });
+    }
+
+
+    function ExportToExcel() {
+
+
+       // e.preventDefault();
+        var gridInstance = $("#grdGeneric").data("kendoGrid");
+        // Define the data to be sent to the server to create the spreadsheet.
+        var gridTitle = $("#hiddReportTitile").val();//"Customer Locations";
+        var createExcelUrl = "/ExcelExport/ExportToExcel";
+        var downloadExcelUrl = "/ExcelExport/GetExcelFile";
+        var report_Id = $("#hiddReportId").val();
+        //Revive.Redux.Common.ExportToExcel(gridInstance, gridTitle, createExcelUrl, downloadExcelUrl, report_Id);
+        var memberStatus = $('input[name=MembershipStatus]:checked').val();
+        if (typeof memberStatus == 'undefined') {
+            memberStatus = 'All';
+        }
+        // debugger;
+        if (report_Id == 18) {
+            gridInstance.columns.splice(-1, 1);
+        }
+        if (report_Id == 24) {
+            gridInstance.columns = jQuery.grep(gridInstance.columns, function (value) {
+                return value.title != '@ViewColumnName';
+            });
+        }
+
+        var ReportParametersForExcel = {
+            CustomerId: $("#ddlCustomerName").val(),
+            SubsidiaryID: $("#ddlSubsidiaryName").val(),
+            SubAgentID: $("#ddlSubAgentName").val(),
+            LocationId: $("#ddlLocationName").val(),
+            DateFrom: $("#DateFrom").val(),
+            DateTo: $("#DateTo").val(),
+            DateExpire: $("#DateExpire").val(),
+            ModeId: $("#ddlMode").val(),
+            MembershipStatus: memberStatus,
+            GridModel: JSON.stringify(gridInstance.columns),
+            GridTitle: gridTitle,
+            GridReportId: report_Id,
+            GroupId: $("#ddlGroupList").val()
+        };
+ 
+ 
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("/ReportToExcel")', // Calling json method
+            dataType: 'json',
+            async: false,
+            cache: false,
+            data: { objReportConfigM: ReportParametersForExcel },
+            success: function (data) {
+                if (data == true) {
+                  
+                    window.location.replace(kendo.format("{0}?title={1}", downloadExcelUrl, gridTitle))
+                }
+            },
+            error: function (ex) { $.alert({ content: 'Failed to retrieve Report Data. ' + ex.responseText, confirm: function () { } }); }
+        });
+    }
+
+
+    function check_extension(e) {
+        var files = e.files;
+        var Result = true;
+        $.each(files, function () {
+
+            if (this.extension.toLowerCase() != ".xlsx") {
+                if (this.extension.toLowerCase() != ".xls") {
+                    toastr.error("Only .xlsx or .xls files can be uploaded!");
+                    e.preventDefault();
+                    Result = false;
+                }
+            }
+
+            if (this.size / 1024 / 1024 > 5) {
+                toastr.error("Max 5Mb file size is allowed!")
+                e.preventDefault();
+                Result = false;
+            }
+        });
+    }
+
+
+
+    //Button upload (Modal)
+    $('#btnFileUpload').click(function (e) {
+        var Result = true;
+        var nCustomerId = $('#CustomerIdModal').val
+        var nSubsidiaryId = $('#SubsidiaryIdModal').val();
+        var nSubagentId = $('#SubAgentIdModal').val();
+
+        if (nCustomerId == '') {
+            Result = false;
+            toastr.error('Please select customer name!');
+        }
+
+        if (nSubsidiaryId == '') {
+            Result = false;
+            toastr.error('Please select Subsidiary name!');
+        }
+        if (nSubagentId == '') {
+            Result = false;
+            toastr.error('Please select Agent name!');
+        }
+
+        else {
+            var File = $("#files").data("kendoUpload");
+            //if (File.element.context.value == "")
+            var len = File.wrapper.find(".k-file").length;
+            if (len === 0) {
+                Result = false;
+                toastr.error('Please select a file to upload!');
+            }
+        }
+
+        return Result;
+    });
+
+
+</script>
+
+<script>
+    //btnclose of result window(Modal)
+    $("#btnResultClose").click(function (e) {
+        window.location.href = '@Url.Action("Show", "Report", new { id=1002})';
+    });
+</script>
+
+@if (ViewBag.IsModalValid)
+{
+    <script>
+        $(document).ready(function () {
+
+            var IsPostBack = '@ViewBag.IsPostBack';
+            $("#img_loading").hide();
+            $("#export_img_loading").hide();
+            $("#export_img_loading_AllReport").hide();
+
+            if (IsPostBack != null && IsPostBack != '' && IsPostBack == "True" && IsPostBack != "False") {
+                $("#btnCreate").prop('disabled', true);
+                $("#grdGeneric").hide();
+                $("#img_loading").show();
+
+            }
+            // alert(IsPostBack);
+            //if ($("#hdn").val() != null && $("#hdn").val() != '') {
+            var sColName = '@Model.ReportMasterList.FieldName';
+            var arr = sColName.split(',');
+
+            var nColCount = arr.length;
+            var grid = $("#grdGeneric").data("kendoGrid");
+
+            if (grid != null) {
+                $("#divXlsIcon").show();
+
+
+                for (var count = 0; count < nColCount; count++) {
+                    grid.showColumn(count);
+                    $("#grdGeneric thead [data-field=custom" + (count + 1) + "] .k-link").html(arr[count]);
+                }
+            }
+            // }
+        });
+
+        function onDataBound(arg) {
+            $("#btnCreate").prop('disabled', false);
+            $("#img_loading").hide();
+            $("#grdGeneric").show();
+        }
+
+
+        $("#export_data").click(function () {
+            setTimeout(function () { $("#export_img_loading").show(); $("#export_data").prop('disabled', true); }, 1000);
+            setTimeout(function () { ExportRawDataToExcel(); }, 2000);
+            setTimeout(function () { $("#export_img_loading").hide(); $("#export_data").prop('disabled', false); }, 2000);
+        });
+
+        $("#export_data_all").click(function () {
+            setTimeout(function () { $("#export_img_loading").show(); $("#export_data_all").prop('disabled', true); }, 1000);
+            setTimeout(function () { ExportToExcel(); }, 2000);
+            setTimeout(function () { $("#export_img_loading").hide(); $("#export_data_all").prop('disabled', false); }, 2000);
+        });
+
+        
+
+        
+    </script>
+}

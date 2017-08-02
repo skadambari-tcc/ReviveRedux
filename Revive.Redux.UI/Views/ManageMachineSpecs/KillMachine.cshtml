@@ -1,0 +1,422 @@
+﻿@model Revive.Redux.Entities.KillMachineModel
+
+@{
+    ViewBag.Title = "Kill Machine";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@Html.ValidationSummary(true)
+@Html.AntiForgeryToken()
+<input type="hidden" id="RecordID" name="DeactivateRecord" />
+
+<div id="myModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    @Html.Label("Title", htmlAttributes: new { @class = "", @id = "lblTitle" })
+                </div>
+            </div>
+
+            <!-- dialog buttons -->
+
+            <div class="modal-footer footerbtn">
+                <button type="button" id="btnDeactive" class="btn GreenBtn btn-primary" data-dismiss="modal">YES</button>
+                <button type="button" class="btn btn-primary YellowBtn" data-dismiss="modal">NO</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal-body" @*style="padding:0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="contant_page">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>@Html.DisplayFor(model => model.PageHeader)</h2>
+                    </div>
+
+
+                    <!-- Error Panel -->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <span class="field-validation-error"><label id="lblErrorTitle"></label></span>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("Customer", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right " })
+                                <div class="col-sm-6">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.CustomerId, new SelectList(Model.CustomerNameList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName" })
+                                        @Html.ValidationMessageFor(model => model.CustomerId)
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("Subsidiary", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right " })
+                                <div class="col-sm-6">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.SubsidiaryId, new SelectList(Model.SubsidiaryNameList, "Id", "Text"), new { @class = "form-control pull-right topspace selecter", @id = "SubsidiaryId" })
+                                        @Html.ValidationMessageFor(model => model.SubsidiaryId, " ")
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("Agent", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right " })
+                                <div class="col-sm-6">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.SubAgentId, new SelectList(Model.AgentNameList, "Id", "Text"), new { @class = "form-control pull-right topspace selecter", @id = "SubAgentId" })
+                                        @Html.ValidationMessageFor(model => model.SubAgentId, " ")
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("Location", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right " })
+                                <div class="col-sm-6">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.LocationId, new SelectList(Model.CustomerLocationDetails, "Id", "Text"), new { @class = "form-control pull-right topspace selecter", @id = "ddlLocationName" })
+                                        @Html.ValidationMessageFor(model => model.LocationId, " ")
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row spacer1">
+
+                    </div>
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid">
+                            @(Html.Kendo().Grid(Model.MachineLocationDetails)
+                                 .Name("grdMachineKill")
+
+                                    .DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(false)
+                                        .Read(read => read.Action("MachineAjax", "ManageMachineSpecs").Data("GetMachineModel"))
+                                            )
+                                            .Columns(columns =>
+                                            {
+                                                columns.Bound(p => p.Location).Title("Location");
+                                                columns.Bound(p => p.MachineId_Val).Title("Machine ID");
+                                                columns.Bound(p => p.ModifiedDate).Title("Last Run Date").Format("{0:MM/dd/yyyy}");
+                                                columns.Bound(p => p.Status).Title("Machine Status");
+                                                columns.Bound(p => p.ActivityType).Title("Action").ClientTemplate(
+                                                        "# { #<a id=\"action\" runat=\"server\" href='javascript: void(0);' onclick=\"Action('#= JobOrderMachineMappingID#, #= Location#, #= MachineId#, #= Status #, #= CustomerName #');\" " + ">#= ActivityType#</a># } #").Sortable(false).Filterable(false);
+                                            })
+                                            .Pageable(pageable =>
+                                            {
+                                                pageable.Refresh(true);
+                                                pageable.PageSizes(new int[] { 10, 20, 50 });
+                                                pageable.Messages(messages => messages.Empty("No active machine available!"));
+                                            })
+                                                    .HtmlAttributes(new { style = "width:1100px" })
+                                                    .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                                        {
+                                                            fs.Clear().Contains("Contains");
+                                                            fs.DoesNotContain("Does not contain");
+                                                            fs.IsEqualTo("Equal to");
+                                                            fs.IsNotEqualTo("Not equal to");
+                                                            fs.StartsWith("Starts with");
+                                                            fs.EndsWith("Ends with");
+                                                        })))
+                                                    .Sortable()
+                                                            .Scrollable()
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+@Html.HiddenFor(M => M.CustomerId)
+@Html.HiddenFor(M => M.PageMode)
+@Html.HiddenFor(M => M.LocationId)
+@Html.HiddenFor(M => M.Message)
+
+
+<style type="text/css">
+    .k-grid-content {
+        max-height: 400px;
+        overflow: auto;
+    }
+
+    .modal .fade {
+        top: 30%;
+        transition: opacity 0.3s linear;
+    }
+
+        .modal.fade.in {
+            top: 30%;
+        }
+
+    .modal-backdrop {
+        background-color: #000;
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 0 !important;
+    }
+</style>
+
+<script type="text/javascript">
+    var nCount;
+
+    function Action(Id) {
+        var sMessage = $("#Message").val();
+        var arr = Id.split(',');
+        $('#myModal').modal('show');
+        $("#lblTitle").text(sMessage);
+        $("#RecordID").val(arr);
+    }
+
+    //$(function () {
+    //    //$('#RoleGrid div:nth-child(2)').css("height", "auto");
+    //    $('#grdMachineKill div:nth-child(2)').css("max-height", "170px");
+    //    $('#grdMachineKill div:nth-child(2)').css("height", "auto");
+
+
+    //});
+    $('#btnDeactive').click(function (e) {
+
+        var record = $("#RecordID").val();
+        var PageMode = $("#PageMode").val();
+        var arr = record.split(',');
+        recordID = arr[0];
+        Location = arr[1];
+        MachineId = arr[2];
+        Status = arr[3];
+        CustomerName = arr[4];
+        var objMachineModel =
+             {
+                 "JobOrderMachineMappingID": recordID,
+                 "Location": Location,
+                 "MachineId": MachineId,
+                 "Status": Status,
+                 "CustomerName": CustomerName,
+                 "PageMode": PageMode
+             };
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("KillMachine", "ManageMachineSpecs")',
+
+            //Your Action name in the DropDownListConstroller.cs
+            data: JSON.stringify(objMachineModel),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+        }).done(function (data) {
+            //Successfully pass to server and get response
+            $('#grdMachineKill').data().kendoGrid.dataSource.read(); // or
+
+            if (data.Result) {
+                toastr.success(data.Message);
+            }
+            else {
+                toastr.error(data.Message);
+            }
+        })
+    });
+
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        Revive.Redux.Common.SetKendoGridHeight();
+        // Location dropdown change event
+        $("#ddlLocationName").change(function () {
+            var grid = $('#grdMachineKill').data().kendoGrid;
+            grid.dataSource.read();
+            grid.refresh();
+        });
+
+        // Customer dropdown change event
+        $("#ddlCustomerName").change(function () {
+            $("#ddlLocationName").empty();
+            $("#SubAgentId").empty();
+            $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+            $("#SubsidiaryId").empty();
+            var grid = $('#grdMachineKill').data().kendoGrid;
+            grid.dataSource.read();
+            grid.refresh();
+            var nCustomerId = $("#ddlCustomerName").val();
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+                dataType: 'json',
+                data: { CustomerId: nCustomerId },
+                success: function (data) {
+                    $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+                    if (data.length > 0) {
+                        $.each(data, function (i, dataitem) {
+                            $("#SubsidiaryId").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                        });
+                    }
+                },
+                error: function (ex) {
+                    if ($("#Customer_Id").val() != null && $("#Customer_Id").val() != '')
+                        $.alert({ content: 'Failed to retrieve Subsidairy. ' + ex, confirm: function () { } });
+                }
+            });
+            return false;
+        });
+
+        $("#SubsidiaryId").change(function () {
+            $("#ddlLocationName").empty();
+            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+            $("#SubAgentId").empty();
+            if ($("#SubsidiaryId").val() != "") {
+
+                var nCustomerId = $("#ddlCustomerName").val();
+                var grid = $('#grdMachineKill').data().kendoGrid;
+                grid.dataSource.read();
+                grid.refresh();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetAgentBySubsidiary")', // Calling json method
+                    dataType: 'json',
+                    data: { SubsidiaryId: $("#SubsidiaryId").val() },
+                    success: function (AgentList) {
+                        $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                        if (AgentList.length > 0) {
+                            $.each(AgentList, function (i, AgentList) {
+                                $("#SubAgentId").append('<option value="' + AgentList.Id + '">' + AgentList.Text + '</option>');
+                            });
+                        }
+
+                    },
+                    error: function (ex) {
+                        if ($("#SubsidiaryId").val() != null && $("#SubsidiaryId").val() != '')
+                            $.alert({ content: 'Failed to retrieve Agent. ' + ex, confirm: function () { } });
+                    }
+                });
+            }
+            else {
+                $("#SubAgentId").empty();
+                $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            }
+        });
+
+
+        $("#SubAgentId").change(function () {
+            $("#ddlLocationName").empty();
+            var grid = $('#grdMachineKill').data().kendoGrid;
+            grid.dataSource.read();
+            grid.refresh();
+            if ($("#SubAgentId").val() != "") {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetCustomerLocationbyAgent")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: $("#ddlCustomerName").val(), SubsidiaryId: $("#SubsidiaryId").val(), AgentId: $("#SubAgentId").val(), IsActive: true },
+                    success: function (LocationList) {
+                        if (LocationList.length > 0) {
+                            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                            $.each(LocationList, function (i, LocationList) {
+                                $("#ddlLocationName").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                            });
+                        }
+                        else {
+                            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                        }
+                    },
+                    error: function (ex) { $.alert({ content: 'Failed to retrieve Citylist. ' + ex, confirm: function () { } }); }
+                });
+            }
+            else {
+                $("#ddlLocationName").empty();
+                $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+            }
+        });
+    });
+
+    function GetMachineModel() {
+        var nCustomerId = $("#ddlCustomerName").val();
+        var nLocationId = $("#ddlLocationName").val();
+        var nSubsidiaryId = $("#SubsidiaryId").val();
+        var nSubAgentId = $("#SubAgentId").val();
+        var PageMode = $("#PageMode").val();
+
+
+        if (nCustomerId == '--Select--' || nCustomerId == '') {
+            nCustomerId = 0;
+            nLocationId = 0;
+            nSubsidiaryId = 0;
+            nSubAgentId = 0;
+        }
+
+
+        if (nLocationId == '--Select--' || nLocationId == '') {
+            nLocationId = 0;
+        }
+        
+
+
+        if (nSubsidiaryId == '--Select--' || nSubsidiaryId=='') {
+            nSubsidiaryId = 0;
+            nLocationId = 0;
+            nSubAgentId = 0;
+        }
+
+        if (nSubAgentId == '--Select--' || nSubAgentId == '') {
+            nLocationId = 0;
+            nSubAgentId = 0;
+        }
+
+
+        var MachineModel =
+            {
+                "CustomerId": nCustomerId,
+                "LocationId": nLocationId,
+                "PageMode": PageMode,
+                "SubsidiaryId": nSubsidiaryId,
+                "SubAgentId": nSubAgentId
+            };
+
+        return MachineModel;
+    }
+
+
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

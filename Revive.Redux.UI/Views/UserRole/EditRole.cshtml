@@ -1,0 +1,136 @@
+﻿@model Revive.Redux.Entities.User_LevelModel
+
+@{
+    ViewBag.Title = "Edit Role";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("UpdateRole", "UserRole", FormMethod.Post, new { id = "userform", name = "userform", enctype = "multipart/form-data" }))
+{  @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+
+    <div>
+        <div class="col-md-12">
+            <div class="contant_page">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>Edit Role</h2>
+                    </div>
+                </div>
+
+                <!-- Error Panel -->
+                @*<div class="row">
+                        <div class="col-md-8">
+                            @if (!ViewData.ModelState.IsValid)
+                            {
+                                <span class="field-validation-error">@ViewData.ModelState["Name"].Errors[0].ErrorMessage</span>
+                            }
+
+                        </div>
+                    </div>*@
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.Label("Role Name", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                @Html.TextBoxFor(m => m.User_Level_Name, new { @class = "k-textbox form-control CapitalizeWord",  @style = "width:165px;", maxlength = "50" })
+                                @Html.ValidationMessageFor(m => m.User_Level_Name)
+                                <div style="padding-left:15%">
+                                    <span id="RoleValidation" class="field-validation-error" style="display:none">Role Name is required</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("User Type", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-6">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.UserTypeId, new SelectList(Model.UserTypeList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @style = "" })
+                                    @Html.ValidationMessageFor(m=>m.UserTypeId)
+                                </div>
+
+                            </div>
+                            @Html.HiddenFor(m => m.User_Level_ID)
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row spacer1">
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-5 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            <button id="btnCreate" class="btn GreenBtn" type="button">Save</button>
+                            <button id="btnCancel" class="btn YellowBtn" type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row spacer1 spacer1">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Admin');
+
+        // Cancel Button Click event
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("GetRoles", "UserRole")';
+        });
+
+
+        $("#btnCreate").click(function () {
+            $('#userform').validate();
+            if (!$('#userform').valid()) {
+                //{
+                $("#btnCreate").prop('disabled', false);
+                return false;
+            }
+            else if ($("#userform").valid()) {
+                $("#btnCreate").prop('disabled', true);
+                $('#userform').submit();
+            }
+        });
+
+    });
+
+    //$('#User_Level_Name').bind('keypress', function (event) {
+    //    var regex = new RegExp("^[\-_ a-zA-Z0-9)(\b]+$");
+    //    var flag = true;
+    //    if (event.keyCode == 37 || event.keyCode == 38 || event.keyCode == 39 || event.keyCode == 40 || event.keyCode == 35 || event.keyCode == 36 || event.keyCode == 46)
+    //        flag = false;
+    //    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+    //    if (flag == true) {
+    //        if (!regex.test(key)) {
+    //            event.preventDefault();
+    //            return false;
+    //        }
+    //    }
+    //    else {
+    //        return false;
+    //    }
+    //});
+
+    //$('#btnCreate').click(function (e) {
+    //    if ($('#User_Level_Name').val().trim() == "" || $('#User_Level_Name').val().trim() == null) {
+    //        //$('#txtName').css('border-color', 'red');
+    //        $('#RoleValidation').show();
+    //        return false;
+    //    }
+    //});
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+

@@ -1,0 +1,248 @@
+﻿@model Revive.Redux.Entities.MembershipConfigModel
+
+@{
+    ViewBag.Title = "Edit Membership Configuration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Create", "ManageMembershipConfig", FormMethod.Post, new { id = "userform", name = "userform", enctype = "multipart/form-data" }))
+{  @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+
+    <div>
+        <div class="col-md-12">
+            <div class="contant_page">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>@Html.DisplayFor(model => model.PageHeader)</h2>
+                    </div>
+                </div>
+
+                <!-- Error Panel -->
+                <div class="row">
+                    <div class="col-md-8">
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <span class="field-validation-error">@ViewData.ModelState["Name"].Errors[0].ErrorMessage</span>
+                        }
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4" style="width:55%;">
+                        <div class="form-group">
+                            @Html.Label("Membership Duration (In Months)", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(M => M.MembershipDuration, new { @class = "k-textbox form-control CapitalizeWord numericOnly", @style = "width:200px;", maxlength = "9999", @id = "txtMembershipDuration" })
+                                @Html.ValidationMessageFor(model => model.MembershipDuration)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Renew Membership Duration (In Months)", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(M => M.MembershipRenewDuration, new { @class = "k-textbox form-control CapitalizeWord numericOnly", @style = "width:200px;", maxlength = "9999", @id = "txtMembershipRenewDuration" })
+                                @Html.ValidationMessageFor(model => model.MembershipRenewDuration)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Eligibility Wait Period(Days)", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(M => M.eligibiltyWaitPeriod, new { @class = "k-textbox form-control CapitalizeWord numericOnly", @style = "width:200px;" })
+                                @Html.ValidationMessageFor(model => model.eligibiltyWaitPeriod)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Is Multi Device?", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-4">
+                                <label>@Html.RadioButtonFor(x => x.IsMultiDevice, "true", new { onchange = "funMultideviceEnable('Y');" })YES</label>
+                                <label>@Html.RadioButtonFor(x => x.IsMultiDevice, "false", new { onchange = "funMultideviceEnable('N');" }) NO</label>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("No Of Devices:", htmlAttributes: new { @class = "col-md-7  col-sm-3  control-label text-right required" })
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(M => M.NoOfDevices, new { @class = "k-textbox form-control CapitalizeWord numericOnly", @style = "width:200px;", maxlength = "1", @id = "txtNoOfDevicesAllowed" })
+                                    @Html.ValidationMessageFor(model => model.NoOfDevices)
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-4" style="width:45%;">
+                        <div class="form-group">
+                            @Html.Label("Revives Allowed", htmlAttributes: new { @class = "col-md-7  col-sm-3  control-label text-right required" })
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(M => M.TotalReviveAllowed, new { @class = "k-textbox form-control CapitalizeWord numericOnly", @style = "width:200px;", maxlength = "9999", @id = "txtTotalReviveAllowed" })
+                                @Html.ValidationMessageFor(model => model.TotalReviveAllowed)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Revives Allowed In Case of Renewal", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(M => M.TotalRenewedReviveAllowed, new { @class = "k-textbox form-control CapitalizeWord numericOnly", @style = "width:200px;", maxlength = "9999", @id = "txtTotalRenewedReviveAllowed" })
+                                @Html.ValidationMessageFor(model => model.TotalRenewedReviveAllowed)
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            @Html.Label("Void Membership (Days)", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(M => M.VoidMembershipDays, new { @class = "k-textbox form-control CapitalizeWord numericOnly", @style = "width:200px;", maxlength = "9999", @id = "txtTotalVoidMembershipDays" })
+                                @Html.ValidationMessageFor(model => model.VoidMembershipDays)
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                </div>
+                <div class="row spacer1">
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6" style="width:100%;">
+                        <div class="col-md-5 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            <button id="btnCreate" class="btn GreenBtn" type="submit">@Html.DisplayFor(model => model.PageButtonSubmit)</button>
+                            <button id="btnCancel" class="btn YellowBtn" type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1 spacer1">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(M => M.CustomerId);
+    @Html.HiddenFor(M => M.PageMode);
+    @Html.HiddenFor(M => M.NoOfDevices);
+
+
+}
+
+<style type="text/css">
+    .k-grid-content {
+        max-height: 240px;
+    }
+
+    .modal .fade {
+        top: 30%;
+        transition: opacity 0.3s linear;
+    }
+
+        .modal.fade.in {
+            top: 30%;
+        }
+
+    .modal-backdrop {
+        background-color: #000;
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 0 !important;
+    }
+</style>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        // Cancel Button Click event
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("Details", "ManageMembershipConfig")';
+        });
+
+        $("#btnResult").click(function (e) {
+            window.location.href = '@Url.Action("Details", "ManageMembershipConfig")';
+        });
+    });
+
+    @*@if (ViewBag.ViewModel != null && ViewBag.ViewModel)
+    {
+        @window.location.href = @Url.Action("Details", "ManageMembershipConfig")';
+
+    }*@
+
+    @if (ViewBag.ViewModel != null && !ViewBag.ViewModel)
+    {
+        <text>toastr.error('@ViewBag.ViewModelMsg');</text>
+    }
+
+</script>
+<script type="text/javascript">
+    $("#btnCreate").click(function () {
+
+        var _ismultiDevice = $('input[name=IsMultiDevice]:checked').val()
+        if (_ismultiDevice == 'true') {
+
+            var noOfDevices = $("#txtNoOfDevicesAllowed").val();
+            if (noOfDevices >= 2 && noOfDevices<=5) {
+                return true;
+            }
+            else
+            {
+
+                toastr.error("No of Devices must be between 2 and 5.");
+                return false;
+            }
+
+        }
+        if (_ismultiDevice == 'false') {
+
+            var noOfDevices = $("#txtNoOfDevicesAllowed").val();
+            if (noOfDevices != 1) {
+
+                $("#txtNoOfDevicesAllowed").removeAttr("disabled"); // disable textbox for not to edit by user.
+                $("#txtNoOfDevicesAllowed").prop('disabled', false);
+
+                toastr.error("No of Device should be 1 in case of Single Device Membership.");
+                return false;
+            }
+
+        }
+
+
+    });
+
+
+    function funMultideviceEnable(IsYes) {
+        var multideviceSelectedVal = $("#IsMultiDevice").val();
+        var allowedDevice = $("#txtNoOfDevicesAllowed").val();
+
+        if (IsYes == 'Y') {
+
+            $("#txtNoOfDevicesAllowed").removeAttr("disabled"); // disable textbox for not to edit by user.
+            $("#txtNoOfDevicesAllowed").prop('disabled', false);
+        }
+
+
+        if (IsYes == 'N' && allowedDevice==1) {
+
+            $("#txtNoOfDevicesAllowed").prop('disabled', true);
+            $("#txtNoOfDevicesAllowed").attr("disabled", "disabled");// enable textbox for edit
+        }
+        else {
+         
+            $("#txtNoOfDevicesAllowed").removeAttr("disabled"); // disable textbox for not to edit by user.
+            $("#txtNoOfDevicesAllowed").prop('disabled', false);
+        }
+
+    }
+
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

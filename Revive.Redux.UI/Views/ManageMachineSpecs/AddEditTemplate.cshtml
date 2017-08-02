@@ -1,0 +1,122 @@
+﻿@model Revive.Redux.Entities.Debug_Templates_DefinitionModel
+@{
+    ViewBag.Title = "AddEditTemplate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/dual-list-box.js"></script>
+<div class="modal-body" @*style="padding:0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>Add Template</h2>
+                    </div>
+                    <div style="margin-left:0.3%">
+                        <div style="display:inline-block">  @Html.Label("Template Name", htmlAttributes: new { @class = " required" })</div>
+                        <div style="display:inline-block">
+                            @Html.TextBoxFor(M => M.Template_Name, new { @class = " required ", @style = "width:200px;", @id = "txt", @maxlength = "100" })
+                        </div>
+                    </div>
+                    <div id="dual-list-box" class="form-group row" style="padding-left:1%">
+                        <select multiple="multiple" data-title="Parameters" data-selected="false" data-check="false"
+                                id="mySelect" data-value="DebugParameter_Id" data-text="DebugParameterName" data-source="/ManageMachineSpecs/GetParaMeters"></select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div class="col-md-3 col-sm-3"></div>
+                            <div class="col-md-6 col-sm-6 col-lg-offset-1">
+                                <button id="btnSavedata" class="btn GreenBtn" onclick="set()" type="submit">Save</button>
+                                <button type="reset" class="btn YellowBtn" onclick="location.href='@Url.Action("DebugParaTempl", "ManageMachineSpecs")'">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+    });
+    $('select').DualListBox();
+
+    function set() {
+        var templateName = $("#txt").val();
+        var k = 0;
+        var values = [];
+        $('.selected > option').each(function () {
+            var paraId = this.value;
+            var paraName = this.text;
+            values[k] = { 'DebugParameter_Id': paraId, 'DebugParameterName': paraName, 'Template_Name': templateName };
+            k++;
+        });
+        if (templateName == "") {
+            toastr.warning('Please enter template name!');
+        }
+        else if (!(/^[A-Z0-9 ]+$/i.test(templateName))) {
+            toastr.warning('Invalid template name!');
+        }
+        else if ($('.selected > option').length == 0) {
+            toastr.warning('Please select parameters!');
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                datatype: 'json',
+                data: JSON.stringify({ debugTemplatesDefinitions: values, }),
+                url: "/ManageMachineSpecs/AddTemplate",
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    // toastr.success();
+                }
+            }).done(function (data) {
+                if (data) {
+                    window.location.href = '@Url.Action("DebugParaTempl", "ManageMachineSpecs")';
+                    result = true;
+                }
+                else {
+                    // toastr.error('Template update failed.');
+                    toastr.error('Template name already exists!');
+                    result = false;
+                }
+            })
+        }
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

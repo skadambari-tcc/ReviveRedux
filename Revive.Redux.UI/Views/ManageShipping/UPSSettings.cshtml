@@ -1,0 +1,300 @@
+﻿@model Revive.Redux.Entities.UPSSettings
+
+@{
+    ViewBag.Title = "UPSSettings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("SubmitUPSSettings", "ManageShipping", FormMethod.Post, new { id = "UPSform", name = "UPSform", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 nomargin nopadding">
+                <div class="contant_page">
+                    <!-- tittle -->
+                    <div class="row">
+
+                        <div class="col-md-4 nopadding Account_display">
+                            <h4 class="" style="margin-right:4%">UPS Settings</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.HiddenFor(m=>m.Id)
+
+                                @Html.LabelFor(M => M.UserName, htmlAttributes: new { @class = " required col-md-5  col-sm-3 control-label text-right required" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    <div class="select-icon">
+                                        @Html.TextBoxFor(M => M.UserName, new { @class = "form-control", @id = "txtUserName", maxlength = "100" })
+                                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Psw", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right required" })
+
+                                <div class="col-md-7 col-sm-9">
+
+                                   @Html.TextBoxFor(M => M.Psw, new { @class = "form-control", @id = "txtPsw", maxlength = "100" })
+                                    <div>
+
+                                        @Html.ValidationMessageFor(model => model.Psw, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+
+
+                                @Html.Label("Shipment Description", htmlAttributes: new { @class = "col-md-5  col-sm-3 required  control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipmentDescription, new { @class = " form-control ", maxlength = "50", @id = "ShipmentDescription" })
+                                    @Html.ValidationMessageFor(model => model.ShipmentDescription, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+
+                                @Html.Label("Shipper Number", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipperNumber, new { @class = "form-control  ", @id = "txtShipperNumber" })
+                                    @Html.ValidationMessageFor(M => M.ShipperNumber, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Account Number", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.AccountNumber, new { @class = "form-control  ", @id = "txtAccountNumber" })
+                                    @Html.ValidationMessageFor(M => M.AccountNumber, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+
+                                @Html.Label("Shipper PostalCode", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipperPostalCode, new { @class = "form-control numericOnly ", @id = "txtShipperPostalCode" })
+                                    @Html.ValidationMessageFor(M => M.ShipperPostalCode, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+
+                                @Html.Label("Shipper StateProvince Code", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipperStateProvinceCode, new { @class = "form-control ",  @id = "txtShipperStateProvinceCode" })
+                                    @Html.ValidationMessageFor(M => M.ShipperStateProvinceCode, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+
+                                @Html.Label("Shipper CountryCode", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipperCountryCode, new { @class = "form-control  ",@id = "txtShipperCountryCode" })
+                                    @Html.ValidationMessageFor(M => M.ShipperCountryCode, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+
+                                @Html.Label("Shipper Name", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipperName, new { @class = "form-control  ",  @id = "txtShipperName" })
+                                    @Html.ValidationMessageFor(M => M.ShipperName, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Shipper AttentionName", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipperAttentionName, new { @class = "form-control", maxlength = "50", @id = "txtShipperAttentionName" })
+                                    @Html.ValidationMessageFor(model => model.ShipperAttentionName, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Shippment Charge Type", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipmentChargeType, new { @class = "form-control", maxlength = "50", @id = "txtShipmentChargeType" })
+                                    @Html.ValidationMessageFor(model => model.ShipmentChargeType, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                          
+                            <div class="form-group">
+
+
+                                @Html.Label("Shipper Phone", htmlAttributes: new { @class = "required col-md-5   col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipperPhone, new { @class = "form-control  ", @id = "txtShipperPhone" })
+                                    @Html.ValidationMessageFor(model => model.ShipperPhone, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+
+                                @Html.Label("Shipper AddressLine", htmlAttributes: new { @class = "required col-md-5   col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipperAddressLine, new { @class = "form-control", maxlength = "100", @id = "txtShipperAddressLine" })
+                                    @Html.ValidationMessageFor(model => model.ShipperAddressLine, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+
+                                @Html.Label("Shipper City", htmlAttributes: new { @class = "required col-md-5  col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipperCity, new { @class = "form-control", maxlength = "100", @id = "txtShipperCity" })
+                                    @Html.ValidationMessageFor(model => model.ShipperCity, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+
+
+                                @Html.Label("ShipFromAddressLine", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipFromAddressLine, new { @class = "form-control", maxlength = "50", @id = "txtShipFromAddressLine" })
+                                    @Html.ValidationMessageFor(model => model.ShipFromAddressLine, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Ship From City", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipFromCity, new { @class = "form-control", maxlength = "50", @id = "txtShipFromCity" })
+                                    @Html.ValidationMessageFor(model => model.ShipFromCity, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Ship From PostalCode", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipFromPostalCode, new { @class = "form-control", maxlength = "50", @id = "txtShipperAttentionName" })
+                                    @Html.ValidationMessageFor(model => model.ShipFromPostalCode, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Ship From StateProvinceCode", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipFromStateProvinceCode, new { @class = "form-control", maxlength = "50", @id = "txtShipFromStateProvinceCode" })
+                                    @Html.ValidationMessageFor(model => model.ShipFromStateProvinceCode, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+
+                                @Html.Label("Ship From CountryCode", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipFromCountryCode, new { @class = "form-control", maxlength = "50", @id = "txtShipFromCountryCode" })
+                                    @Html.ValidationMessageFor(model => model.ShipFromCountryCode, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Ship From AttentionName", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipFromAttentionName, new { @class = "form-control", maxlength = "50", @id = "txtShipFromAttentionName" })
+                                    @Html.ValidationMessageFor(model => model.ShipFromAttentionName, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Ship From Name", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShipFromName, new { @class = "form-control", maxlength = "50", @id = "txtShipFromName" })
+                                    @Html.ValidationMessageFor(model => model.ShipFromName, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Service Code", htmlAttributes: new { @class = "col-md-5  col-sm-3 required control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ServiceCode, new { @class = "form-control", maxlength = "50", @id = "txtserviceCode" })
+                                    @Html.ValidationMessageFor(model => model.ServiceCode, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="row" style="padding-top: 1%;">
+                        <div class="col-md-6 col-sm-6"></div>
+                        <div class="col-md-6 col-sm-6">
+                            <button class="btn GreenBtn" type="submit">Save</button>
+                            <button type="button" class="YellowBtn" onclick="location.href='@Url.Action("ManageShippingConfiguration", "ManageShipping")'">Cancel</button>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<style type="text/css">
+    .form-group {
+        float: left;
+        margin-bottom: 14px;
+        width: 100%;
+    }
+
+    #body {
+        height: auto;
+    }
+</style>

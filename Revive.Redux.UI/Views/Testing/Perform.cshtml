@@ -1,0 +1,857 @@
+﻿@using Revive.Redux.Entities;
+@model TestingModel
+@using Kendo.Mvc.UI
+@{
+    ViewBag.Title = "MACHINE TESTING";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #body {
+        /*height: 100%;*/
+    }
+
+    .RadioButtonMargin {
+        margin-top: -4px;
+    }
+
+    select#ddlTestStages {
+        font-size: 13px;
+    }
+
+    .col-md-12 > h4 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .control-label {
+        font-size: 13px;
+    }
+
+    .col-sm-4 > input, .col-sm-5 > input, .col-sm-6 > input {
+        margin-top: -3%;
+    }
+</style>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+@using (Html.BeginForm("UpdateMachineTesting", "Testing"))
+{
+    <div class="container">
+        <div class="col-md-12">
+            <div class="contant_page">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2 style="margin-left:-1.6%;padding-top: 15px;">Machine Testing</h2>
+                    </div>
+                </div>
+                <div class="row" style="border:1px solid;margin-left:-2%;margin-right:0.5%">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <strong>
+                                @Html.Label("Order Number", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-left" })
+                            </strong>
+                            <div class="col-sm-6">
+                                @TempData.Peek("JobOrderHeaderID")
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <strong>  @Html.Label("Location", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-left" })</strong>
+                            <div class="col-sm-6">
+                                @ViewBag.Location
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <strong>@Html.Label("Test Stage", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-left" })</strong>
+                            <div class="col-sm-7" style="margin-top: -2%;">
+                                <div class="select-icon">
+                                    <select id="ddlTestStages" name="ddlTestStages" class="form-control pull-right topspace selecter">
+                                        @for (var i = 0; i < Model.TestingStages.Count; i++)
+                                        {
+                                            if ((i + 1) == Model.TestingStages.Count)
+                                            {
+                                                <option selected="selected" value='@(Convert.ToString(Model.TestingStages[i].Id))'>@(Model.TestingStages[i].Text)</option>
+                                            }
+                                            else
+                                            {
+                                                <option value='@(Convert.ToString(Model.TestingStages[i].Id))'>@(Model.TestingStages[i].Text)</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <strong>
+                                @Html.Label("Customer Name", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-left" })
+                            </strong>
+                            <div class="col-sm-6">
+                                @ViewBag.CustomerName
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                @Html.Label("Machine ID", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-left" })
+                            </strong>
+                            <div class="col-sm-6">
+                                @ViewBag.MachineId
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                @Html.Label("Status", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-left" })
+                            </strong>
+                            <div class="col-sm-6">
+                                @Html.DisplayFor(m => m.MachineTestingStatus)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>
+                            <label class="col-md-7  col-sm-3 control-label text-left" for="inputtype1">No. of Machines Delivered</label>
+                        </strong>
+                        <div class="col-sm-5">
+                            @ViewBag.NoOfMachines
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="col-md-12">
+            <div class="contant_page">
+                <!-- Mid-Line Testing Starts-->
+                <div id='@("testingDiv" + Model.MidLineStageId)' class="testingDiv" style="display:none;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Platen Verification*</h4>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Time to setpoint", htmlAttributes: new { @class = "col-sm-4 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-4 RadioButtonMargin" id="PlatenTime">
+                                    @Html.RadioButtonFor(model => model.PlatenTime, true)&nbsp;Pass &nbsp;
+                                    @Html.RadioButtonFor(model => model.PlatenTime, false)&nbsp;Fail
+                                </div>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.PlatenSeconds, new { @class = "numericOnly MaxLenNumeric", @style = "width:60px;" }) &nbsp; seconds
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Temperature Sensor Verified", htmlAttributes: new { @class = "col-md-7  col-sm-4 control-label text-</strong>" })
+                                </strong>
+                                <div class="col-sm-4 RadioButtonMargin" id="PlatenSensor">
+                                    @Html.RadioButtonFor(model => model.PlatenSensor, true)&nbsp;Pass&nbsp;
+                                    @Html.RadioButtonFor(model => model.PlatenSensor, false)&nbsp;Fail
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Temperature Delta", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-</strong>" })
+                                </strong>
+                                <div class="col-sm-5">
+                                    @Html.TextBoxFor(model => model.PlatenDelta, new { @class = "decimalOnly MaxLenDecimal", @style = "width:60px;" })&nbsp; &deg;F
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <h4>Injection Verification*</h4>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Time to setpoint", htmlAttributes: new { @class = "col-sm-4 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-4 RadioButtonMargin" id="InjectionTime">
+                                    @Html.RadioButtonFor(model => model.InjectionTime, true)&nbsp;Pass&nbsp;
+                                    @Html.RadioButtonFor(model => model.InjectionTime, false)&nbsp;Fail
+                                </div>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.InjectionSeconds, new { @class = "numericOnly MaxLenNumeric", @style = "width:60px;" }) &nbsp; seconds
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Temperature Sensor Verified", htmlAttributes: new { @class = "col-md-7  col-sm-4 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-4 RadioButtonMargin" id="InjectionSensor">
+                                    @Html.RadioButtonFor(model => model.InjectionSensor, true)&nbsp;Pass&nbsp;
+                                    @Html.RadioButtonFor(model => model.InjectionSensor, false)&nbsp;Fail
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Temperature Delta", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-5">
+                                    @Html.TextBoxFor(model => model.InjectionDelta, new { @class = "decimalOnly MaxLenDecimal", @style = "width:60px;" }) &nbsp; &deg;F
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <h4>Vaccum Verification*</h4>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Time to -27\"Hg", htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-4 RadioButtonMargin" id="VaccumTime">
+                                    @Html.RadioButtonFor(model => model.VaccumTime, true)&nbsp;Pass&nbsp;
+                                    @Html.RadioButtonFor(model => model.VaccumTime, false)&nbsp;Fail
+                                </div>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.VaccumSeconds, new { @class = "numericOnly MaxLenNumeric", @style = "width:60px;" })&nbsp; seconds
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Vaccum Sensor Verified", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-4 RadioButtonMargin" id="VaccumSensor">
+                                    @Html.RadioButtonFor(model => model.VaccumSensor, true)&nbsp;Pass&nbsp;
+                                    @Html.RadioButtonFor(model => model.VaccumSensor, false)&nbsp;Fail
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Vaccum Delta", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-5">
+                                    @Html.TextBoxFor(model => model.VaccumDelta, new { @class = "decimalOnly MaxLenDecimal", @style = "width:60px;" })&nbsp; &deg;F
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>USB Charging - Internal*</h4>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Charging Sensor Verified", htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-left" })@*col-md-6  col-sm-5*@
+                                </strong>
+                                <div class="col-sm-5 RadioButtonMargin" id="USBInternalSensor">
+                                    @Html.RadioButtonFor(model => model.USBInternalSensor, true)&nbsp;Pass&nbsp;
+                                    @Html.RadioButtonFor(model => model.USBInternalSensor, false)&nbsp;Fail
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Charging Delta", htmlAttributes: new { @class = "col-md-5  col-sm-5 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-6">
+                                    @Html.TextBoxFor(model => model.USBInternalDelta, new { @class = "decimalOnly MaxLenDecimal", @style = "width:60px; margin-left:11%" })&nbsp; mAmps
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <h4>USB Charging - External*</h4>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Charging Sensor Verified", htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-left" })@*col-md-7  col-sm-5*@
+                                </strong>
+                                <div class="col-sm-5 RadioButtonMargin" id="USBExternalSensor">
+                                    @Html.RadioButtonFor(model => model.USBExternalSensor, true)&nbsp;Pass&nbsp;
+                                    @Html.RadioButtonFor(model => model.USBExternalSensor, false)&nbsp;Fail
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Charging Delta", htmlAttributes: new { @class = "col-md-5  col-sm-5 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-6">
+                                    @Html.TextBoxFor(model => model.USBExternalDelta, new { @class = "decimalOnly MaxLenDecimal", @style = "width:60px;margin-left:11%" })&nbsp; mAmps
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <h4>Relative Humidity*</h4>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Relative Humidity Sensor Verified", htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-left" })@*col-md-7  col-sm-5*@
+                                </strong>
+                                <div class="col-sm-5 RadioButtonMargin" id="RelativeSensor">
+                                    @Html.RadioButtonFor(model => model.RelativeSensor, true)&nbsp;Pass&nbsp;
+                                    @Html.RadioButtonFor(model => model.RelativeSensor, false)&nbsp;Fail
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Humidity Delta", htmlAttributes: new { @class = "col-md-5  col-sm-5 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-6">
+                                    @Html.TextBoxFor(model => model.RelativeDelta, new { @class = "decimalOnly MaxLenDecimal", @style = "width:60px;margin-left:11%" })&nbsp; %
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <h4>Drying Process*</h4>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Drying Process Verified", htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-left" })@*col-md-6  col-sm-5*@
+                                </strong>
+                                <div class="col-sm-5 RadioButtonMargin" id="DryingProcess">
+                                    @Html.RadioButtonFor(model => model.DryingProcess, true)&nbsp;Pass&nbsp;
+                                    @Html.RadioButtonFor(model => model.DryingProcess, false)&nbsp;Fail
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Number of Dry Cycles", htmlAttributes: new { @class = "col-md-5  col-sm-5 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-6">
+                                    @Html.TextBoxFor(model => model.DryingCycles, new { @class = "numericOnly MaxLenNumeric", @style = "width:60px;margin-left:11%" })&nbsp; Cycles
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Other Test1</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Name", htmlAttributes: new { @class = "col-md-2  col-sm-2 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-6 RadioButtonMargin" id="Test1Verified">
+                                    @Html.TextBoxFor(model => model.Test1Name, new { @class = "MaxLenTest", @style = "width:160px;margin-top: 0;" })
+                                    @Html.RadioButtonFor(model => model.Test1Verified, true)&nbsp;Pass&nbsp;
+                                    @Html.RadioButtonFor(model => model.Test1Verified, false)&nbsp;Fail
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <h4>Other Test2</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Name", htmlAttributes: new { @class = "col-md-2  col-sm-2 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-6 RadioButtonMargin" id="Test2Verified">
+                                    @Html.TextBoxFor(model => model.Test2Name, new { @class = "MaxLenTest", @style = "width:160px;margin-top: 0;" })
+                                    @Html.RadioButtonFor(model => model.Test2Verified, true)&nbsp;Pass&nbsp;
+                                    @Html.RadioButtonFor(model => model.Test2Verified, false)&nbsp;Fail
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <h4>Other Test3</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <strong>
+                                    @Html.Label("Name", htmlAttributes: new { @class = "col-md-2  col-sm-2 control-label text-left" })
+                                </strong>
+                                <div class="col-sm-6 RadioButtonMargin" id="Test3Verified">
+                                    @Html.TextBoxFor(model => model.Test3Name, new { @class = "MaxLenTest", @style = "width:160px;margin-top: 0;" })
+                                    @Html.RadioButtonFor(model => model.Test3Verified, true)&nbsp;Pass&nbsp;
+                                    @Html.RadioButtonFor(model => model.Test3Verified, false)&nbsp;Fail
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Mid-Line Testing Ends-->
+                <!-- UL Line Testing Starts-->
+                <div id='@("testingDiv" + Model.ULStageId)' class="testingDiv" style="display:none;">
+                    <div class="row">
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-11">
+                            <h4>Dielectric (HiPot) Test*</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-3">
+                                </div>
+                                @Html.Label("Dielectric (HiPot) Test", htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right" })
+                                <div class="col-sm-3 RadioButtonMargin" id="DielectricTest">
+                                    @Html.RadioButtonFor(model => model.DielectricTest, true)&nbsp;Pass &nbsp;
+                                    @Html.RadioButtonFor(model => model.DielectricTest, false)&nbsp;Fail
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-3">
+                                </div>
+                                @Html.Label("Voltage", htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right" })
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(model => model.DielectricVoltage, new { @class = "numericOnly MaxLenNumeric", @style = "width:50px;" })&nbsp; volts
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-3">
+                                </div>
+                                @Html.Label("Leakage Current", htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right" })
+                                <div class="col-sm-3" id="DielectricCurrent">
+                                    @Html.TextBoxFor(model => model.DielectricCurrent, new { @class = "decimalOnly MaxLenDecimal", @style = "width:50px;" })&nbsp; µAmps
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-3">
+                                </div>
+                                @Html.Label("Test Time", htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right" })
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(model => model.DielectricTime, new { @class = "numericOnly MaxLenNumeric", @style = "width:50px;" })&nbsp; seconds
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-11">
+                            <h4>Ground Bond Test*</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-3">
+                                </div>
+                                @Html.Label("Ground Bond Test", htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right" })
+                                <div class="col-sm-3 RadioButtonMargin" id="GroundTest">
+                                    @Html.RadioButtonFor(model => model.GroundTest, true)&nbsp;Pass &nbsp;
+                                    @Html.RadioButtonFor(model => model.GroundTest, false)&nbsp;Fail
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-3">
+                                </div>
+                                @Html.Label("Resistance", htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right" })
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(model => model.GroundResistance, new { @class = "decimalOnly MaxLenDecimal", @style = "width:50px;" }) &nbsp;Ω
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- UL Line Testing Ends-->
+                <!-- Final Testing Starts-->
+                <div id='@("testingDiv" + Model.FinalStageId)' class="testingDiv" style="display:none;">
+                    <div class="row">
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-11">
+                            <h4>Final Assembly Test*</h4>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <div class="col-sm-2">
+                                </div>
+                                @Html.Label("Final Assembly Test", htmlAttributes: new { @class = "col-md-3  col-sm-3 control-label text-right" })
+                                <div class="col-sm-2 RadioButtonMargin" id="FinalAssembly">
+                                    @Html.RadioButtonFor(model => model.FinalAssembly, true)&nbsp;Pass &nbsp;
+                                    @Html.RadioButtonFor(model => model.FinalAssembly, false)&nbsp;Fail
+                                </div>
+                                @Html.Label("Process ID", htmlAttributes: new { @class = "col-md-3  col-sm-2 control-label text-right" })
+                                <div class="col-sm-2">
+                                    @Html.TextBoxFor(model => model.FinalProcessId, new { @class = "alphaNumericOnly", @style = "width:90px;", @maxlength = "10" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- Final Testing Ends-->
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-6">
+                        <div class="col-md-3 col-sm-3"></div>
+                        @if (ViewBag.MachineInShipping == false)
+                        {
+                            <button id="btnSubmit" type="submit" class="btn login_button btn-primary" onclick="return VerifyPage();">Submit</button>
+                        }
+                        <button id="btnCancel" type="button" class="btn login_button btn-primary yellow">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.HiddenFor(m => m.MachineMappingId)
+    <input type="hidden" id="hdnTestStageName" name="hdnTestStageName" value="" />
+    <input type="hidden" id="hdnTestStageID" name="hdnTestStageID" value="" />
+    @Html.Hidden("JobOrderHeaderID", (object)Convert.ToString(ViewBag.JobOrderHeaderID))
+    @Html.Hidden("JobOrderHeaderIDEncoded", (object)Convert.ToString(ViewBag.JobOrderHeaderIDEncoded))
+    @Html.Hidden("JobOrderLocationId", (object)Convert.ToString(ViewBag.JobOrderLocationId))
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Orders');
+        Revive.Redux.Common.SetAutoCompleteOff();
+
+        $(".MaxLenNumeric").attr('maxlength', '3');
+        $(".MaxLenDecimal").attr('maxlength', '6');
+        $(".MaxLenTest").attr('maxlength', '25');
+
+        @if (TempData["MachineTestingUpdated"] != null && (bool)TempData["MachineTestingUpdated"] == true)
+        {
+            <text>toastr.success('You have successfully updated Machine Testing results.');</text>
+        }
+
+        var dropDown = $("#ddlTestStages");
+
+        // By default display div, whose testing stage selected
+        ShowDiv(dropDown);
+
+        dropDown.change(function () {
+            // TODO: Pending. Implement remove selected.
+
+            // Get all DIV's where testing results are defined, and hide them all.
+            var testingDivs = $("div.testingDiv");
+            // Hide all div's
+            if (testingDivs.length > 0) {
+                testingDivs.each(function () { $(this).hide(); });
+            }
+            // Display div, whose testing stage is selected
+            ShowDiv($(this));
+        });
+
+        function ShowDiv(ddl) {
+            var current = $(ddl).val();
+            if (current != null && current != '') {
+                // Bind dropdown selected text and value to hidden vars
+                $("input#hdnTestStageName").val($(ddl).find(":selected").text());
+                $("input#hdnTestStageID").val(current);
+                var displayDiv = $("#testingDiv" + current);
+                if (displayDiv != null && displayDiv.length > 0) {
+                    $(displayDiv).show();
+                }
+            }
+        }
+
+    });
+    function VerifyDecimalVal(control, name) {
+        var currentVal = $.trim($(control).val());
+
+        var decimalRegex = /^\d{0,3}(\.\d{1,2})?$/;
+        if (decimalRegex.test(currentVal)) {
+            return true;
+        }
+        else {
+            $.alert({ content: 'Please enter valid integer or decimal number for ' + name + '!', confirm: function () { } });
+            control.focus();
+            return false;
+        }
+    }
+
+    function locationValidateforMachine(_jobOrderLocId, _jobOrderId) {
+        var returnval = "Valid";
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("/LocationValidByMachineId")',
+            dataType: 'json',
+            data: { jobOrdHeaderId: _jobOrderId, jobOrdLocId: _jobOrderLocId },
+            async:false,
+            success: function (success) {
+                returnval = success;
+                if (returnval != "Valid")
+                {
+                    $.alert({ content: 'You can not map more machines as selected in order!', confirm: function () { } });
+                    return false;
+                }
+               
+            
+            },
+            error: function (ex) {
+                //debugger;
+                returnval = "Not Valid";
+
+            }
+        });
+        return returnval;
+
+    }
+
+    function VerifyPage() {
+        var selddl = $("#ddlTestStages").find(":selected").text();
+        if (selddl != null && selddl != '') {
+            if (selddl.toLowerCase().indexOf("mid-line") >= 0) {
+                return VerifyMidLine();
+            }
+            else if (selddl.toLowerCase().indexOf("ul requirements") >= 0) {
+                return VerifyUL();
+            }
+            else if (selddl.toLowerCase().indexOf("final assembly") >= 0) {
+                // Location map by machineId validated as per no_of_machines selected in Order ,
+                var jobOrderId = $("#JobOrderHeaderID").val();
+                var locationId = $("#JobOrderLocationId").val();
+                if (locationId > 0) {
+                    var result1 = locationValidateforMachine(locationId, jobOrderId);
+                    if (result1 != "Valid") {
+                        return false;
+                    }
+                    else {
+                        return VerifyFinal();
+                    }
+                }
+                
+              
+                
+                
+            }
+            else {
+                $.alert({ content: 'There is some problem updating machine Status. Please try after some time!', confirm: function () { } });
+                return false;
+            }
+        }
+        else {
+            $.alert({ content: 'There is some problem updating machine Status. Please try after some time!', confirm: function () { } });
+            return false;
+        }
+    }
+
+    function VerifyMidLine() {
+        if ($('div#PlatenTime:not(:has(:radio:checked))').length) {
+            $.alert({ content: 'Please select an option of Platen Verification - Time to setpoint!', confirm: function () { } });
+            return false;
+        }
+        if ($.trim($("input#PlatenSeconds").val()) == '') {
+            $.alert({ content: 'Please enter value of Platen Verification - Seconds!', confirm: function () { } });
+            $("input#PlatenSeconds").focus();
+            return false;
+        }
+        if ($('div#PlatenSensor:not(:has(:radio:checked))').length) {
+            $.alert({ content: 'Please select an option of Platen Verification - Temperature Sensor!', confirm: function () { } });
+            return false;
+        }
+        if ($.trim($("input#PlatenDelta").val()) == '') {
+            $.alert({ content: 'Please enter value of Platen Verification - Temperature Delta!', confirm: function () { } });
+            $("input#PlatenDelta").focus();
+            return false;
+        }
+        if (!VerifyDecimalVal($("input#PlatenDelta"), 'Platen Verification - Temperature Delta')) {
+            return false;
+        }
+        if ($('div#InjectionTime:not(:has(:radio:checked))').length) {
+            $.alert({ content: 'Please select an option of Injection  Verification - Time to setpoint!', confirm: function () { } });
+            return false;
+        }
+        if ($.trim($("input#InjectionSeconds").val()) == '') {
+            $.alert({ content: 'Please enter value of Injection Verification - Seconds!', confirm: function () { } });
+            $("input#InjectionSeconds").focus();
+            return false;
+        }
+        if ($('div#InjectionSensor:not(:has(:radio:checked))').length) {
+            $.alert({ content: 'Please select an option of Injection  Verification - Temperature Sensor!', confirm: function () { } });
+            return false;
+        }
+        if ($.trim($("input#InjectionDelta").val()) == '') {
+            $.alert({ content: 'Please enter value of Injection Verification - Temperature Delta!', confirm: function () { } });
+            $("input#InjectionDelta").focus();
+            return false;
+        }
+        if (!VerifyDecimalVal($("input#InjectionDelta"), 'Injection Verification - Temperature Delta')) {
+            return false;
+        }
+        if ($('div#VaccumTime:not(:has(:radio:checked))').length) {
+            $.alert({ content: 'Please select an option of Vaccum Verification - Time to setpoint!', confirm: function () { } });
+            return false;
+        }
+        if ($.trim($("input#VaccumSeconds").val()) == '') {
+            $.alert({ content: 'Please enter value of Vaccum Verification - Seconds!', confirm: function () { } });
+            $("input#VaccumSeconds").focus();
+            return false;
+        }
+        if ($('div#VaccumSensor:not(:has(:radio:checked))').length) {
+            $.alert({ content: 'Please select an option of Vaccum Verification - Vaccum Sensor!', confirm: function () { } });
+            return false;
+        }
+        if ($.trim($("input#VaccumDelta").val()) == '') {
+            $.alert({ content: 'Please enter value of Vaccum Verification - Vaccum Delta!', confirm: function () { } });
+            $("input#VaccumDelta").focus();
+            return false;
+        }
+        if (!VerifyDecimalVal($("input#VaccumDelta"), 'Vaccum Verification - Vaccum Delta')) {
+            return false;
+        }
+        if ($('div#USBInternalSensor:not(:has(:radio:checked))').length) {
+            $.alert({ content: 'Please select an option of USB Charging Internal Sensor!', confirm: function () { } });
+            return false;
+        }
+        if ($.trim($("input#USBInternalDelta").val()) == '') {
+            $.alert({ content: 'Please enter value of USB Charging Internal - Charging Delta!', confirm: function () { } });
+            $("input#USBInternalDelta").focus();
+            return false;
+        }
+        if (!VerifyDecimalVal($("input#USBInternalDelta"), 'USB Charging Internal - Charging Delta')) {
+            return false;
+        }
+        if ($('div#USBExternalSensor:not(:has(:radio:checked))').length) {
+            $.alert({ content: 'Please select an option of USB Charging External Sensor!', confirm: function () { } });
+            return false;
+        }
+        if ($.trim($("input#USBExternalDelta").val()) == '') {
+            $.alert({ content: 'Please enter value of USB Charging External - Charging Delta!', confirm: function () { } });
+            $("input#USBExternalDelta").focus();
+            return false;
+        }
+        if (!VerifyDecimalVal($("input#USBExternalDelta"), 'USB Charging External - Charging Delta')) {
+            return false;
+        }
+        if ($('div#RelativeSensor:not(:has(:radio:checked))').length) {
+            $.alert({ content: 'Please select an option of Relative Humidity Sensor!', confirm: function () { } });
+            return false;
+        }
+        if ($.trim($("input#RelativeDelta").val()) == '') {
+            $.alert({ content: 'Please enter value of Relative Humidity Delta!', confirm: function () { } });
+            $("input#RelativeDelta").focus();
+            return false;
+        }
+        if (!VerifyDecimalVal($("input#RelativeDelta"), 'Relative Humidity Delta')) {
+            return false;
+        }
+        if ($('div#DryingProcess:not(:has(:radio:checked))').length) {
+            $.alert({ content: 'Please select an option of Drying Process!', confirm: function () { } });
+            return false;
+        }
+        if ($.trim($("input#DryingCycles").val()) == '') {
+            $.alert({ content: 'Please enter value of Drying Cycles!', confirm: function () { } });
+            $("input#DryingCycles").focus();
+            return false;
+        }
+        // Other tests Check if textbox not empty, radio must be selected
+        if ($.trim($("input#Test1Name").val()) != '') {
+            if ($('div#Test1Verified:not(:has(:radio:checked))').length) {
+                $.alert({ content: 'Please select an option of Other Test 1!', confirm: function () { } });
+                $("input#Test1Name").focus();
+                return false;
+            }
+        }
+        if ($.trim($("input#Test2Name").val()) != '') {
+            if ($('div#Test2Verified:not(:has(:radio:checked))').length) {
+                $.alert({ content: 'Please select an option of Other Test 2!', confirm: function () { } });
+                $("input#Test2Name").focus();
+                return false;
+            }
+        }
+        if ($.trim($("input#Test3Name").val()) != '') {
+            if ($('div#Test3Verified:not(:has(:radio:checked))').length) {
+                $.alert({ content: 'Please select an option of Other Test 3!', confirm: function () { } });
+                $("input#Test3Name").focus();
+                return false;
+            }
+        }
+        // Other tests Check if radio selected, textbox should not be empty
+        if ($('div#Test1Verified:not(:has(:radio:checked))').length == 0 && $.trim($("input#Test1Name").val()) == '') {
+            $.alert({ content: 'Please enter a value in Test 1!', confirm: function () { } });
+            $("input#Test1Name").focus();
+            return false;
+        }
+        if ($('div#Test2Verified:not(:has(:radio:checked))').length == 0 && $.trim($("input#Test2Name").val()) == '') {
+            $.alert({ content: 'Please enter a value in Test 2!', confirm: function () { } });
+            $("input#Test2Name").focus();
+            return false;
+        }
+        if ($('div#Test3Verified:not(:has(:radio:checked))').length == 0 && $.trim($("input#Test3Name").val()) == '') {
+            $.alert({ content: 'Please enter a value in Test 3!', confirm: function () { } });
+            $("input#Test3Name").focus();
+            return false;
+        }
+        return true;
+    }
+    function VerifyUL() {
+        if ($('div#DielectricTest:not(:has(:radio:checked))').length) {
+            $.alert({ content: 'Please select an option of Dielectric(HiPot) Test!', confirm: function () { } });
+            return false;
+        }
+        if ($.trim($("input#DielectricVoltage").val()) == '') {
+            $.alert({ content: 'Please enter value of Voltage!', confirm: function () { } });
+            $("input#DielectricVoltage").focus();
+            return false;
+        }
+        if ($.trim($("input#DielectricCurrent").val()) == '') {
+            $.alert({ content: 'Please enter value of Current!', confirm: function () { } });
+            $("input#DielectricCurrent").focus();
+            return false;
+        }
+        if (!VerifyDecimalVal($("input#DielectricCurrent"), 'Current')) {
+            return false;
+        }
+        if ($.trim($("input#DielectricTime").val()) == '') {
+            $.alert({ content: 'Please enter value of Test Time!', confirm: function () { } });
+            $("input#DielectricTime").focus();
+            return false;
+        }
+        if ($('div#GroundTest:not(:has(:radio:checked))').length) {
+            $.alert({ content: 'Please select an option of Ground Test!', confirm: function () { } });
+            return false;
+        }
+        if ($.trim($("input#GroundResistance").val()) == '') {
+            $.alert({ content: 'Please enter value of Resistance!', confirm: function () { } });
+            $("input#GroundResistance").focus();
+            return false;
+        }
+        if (!VerifyDecimalVal($("input#GroundResistance"), 'Resistance')) {
+            return false;
+        }
+        return true;
+    }
+
+    
+
+
+    function VerifyFinal() {
+        if ($('div#FinalAssembly:not(:has(:radio:checked))').length) {
+            $.alert({ content: 'Please select an option of Final Assembly Test!', confirm: function () { } });
+            return false;
+        }
+        if ($.trim($("input#FinalProcessId").val()) == '') {
+            $.alert({ content: 'Please enter value of Process Id!', confirm: function () { } });
+            $("input#FinalProcessId").focus();
+            return false;
+        }
+        return true;
+    }
+    // Cancel Button Click event
+    $("#btnCancel").click(function () {
+        if ($("#JobOrderHeaderIDEncoded") != null && $("#JobOrderHeaderIDEncoded").val() != '') {
+            window.location.href = '@Url.Action("MapMachines", "Machine")/' + $("#JobOrderHeaderIDEncoded").val();
+        }
+        else {
+            window.location.href = '@Url.Action("Manage", "Order")';
+        }
+    });
+</script>

@@ -1,0 +1,268 @@
+﻿@model Revive.Redux.Entities.User_LevelModel
+
+@{
+    ViewBag.Title = "Manage Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.UI.Fluent
+<style type="text/css">
+        .modal .fade {
+            top: 30%;
+            transition: opacity 0.3s linear;
+        }
+
+            .modal.fade.in {
+                top: 30%;
+            }
+
+        .modal-backdrop {
+            background-color: #000;
+            bottom: 0;
+            left: 0;
+            position: fixed;
+            right: 0;
+            top: 0;
+            z-index: 0 !important;
+        }
+        .col-md-5{
+            width:17.5%;
+        }
+        /* Used align Add-button to right*/
+        /*.col-md-offset-1 {
+      margin-left: 66%;
+    }*/
+</style>
+
+
+<div id="DeleteModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    @Html.Label("Do you want to delete this role?", htmlAttributes: new { @class = "", @id = "Title" })
+                </div>
+            </div>
+
+            <!-- dialog buttons -->
+            <div class="modal-footer footerbtn">
+                <button type="button" id="Approvebtn" class="btn GreenBtn btn-primary" data-dismiss="modal">YES</button>
+                <button type="button" class="btn btn-primary YellowBtn" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="serviceslist" name="serviceslist" />
+<input type="hidden" id="DeleteRole" name="DeleteRole" />
+
+<div class="modal-body">
+    @*style="padding:0px!important"*@
+<div class="row">
+    <div class="col-md-12">
+        <div class=" contant_page">
+            <div>
+                <div class="row"><div style="margin-left: 0.5%;"><h2>Manage Roles</h2></div></div>
+
+                <div class="row">
+                    <div class="col-md-7"></div>
+                    <div class="col-md-5" style="float: right;">
+                        <div class="col-md-10">
+                            <button id="btnAddRole" type="button" class="GreenBtn">Add Role</button>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="Kendogrid table-responsive" style="margin-left:-0.8%">
+                    @*kendogrid*@
+
+                    @(Html.Kendo().Grid<Revive.Redux.Entities.User_LevelModel>()
+            .Name("RoleGrid")
+                     .DataSource(dataSource => dataSource
+                                    .Ajax().PageSize(10)
+                                                             .Read("GetRolesData", "UserRole")
+                                                                     .ServerOperation(false)
+                            //.Read(read => read.Url("GetRolesData","UserRole"))
+                            //read => read.Action("GetRolesData", "UserRole");
+                            //.Events(events => events.Error("error_handler").Sync("RefreshGrid"))
+                        )
+            .Columns(columns =>
+                {
+                    columns.Bound(c => c.User_Level_Name).Width(250).Title("Role Name");
+                    columns.Bound(c => c.UserType).Width(240).Title("Role Name").Visible(false);
+                    columns.Bound(c => c.User_Level_ID).Width(160).Visible(false);
+                    columns.Bound(c => c.UserType).Width(240).Title("User Type");
+                    columns.Bound(c => c.User_Level_ID).ClientTemplate("<a title='Access Level'  id=\"Menu\"  onclick=\"MenuMapping('#= User_Level_ID#,#= User_Level_Name#');\" " + ">Access Level</a>").Title("Menu Mapping").Filterable(false).Sortable(false).Width(220).HtmlAttributes(new { @style = "cursor:pointer" });
+                    columns.Bound(c => c.User_Level_ID).ClientTemplate("<a href=\"/UserRole/EditRole/#= User_Level_ID#\" id='e_#= User_Level_ID#' " + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>").Title("Edit").Filterable(false).Sortable(false).Width(80).HtmlAttributes(new { @style = "cursor:pointer" });
+                    columns.Bound(c => c.User_Level_ID).ClientTemplate(
+                       " # if (page_access_code ==null){" +
+                        "#<a title='Delete' id=\"Delete\" style=\'Cursor:pointer' onclick=\"DeleteRecord('#= User_Level_ID#,#= User_Level_Name#');\" " + "><img src='" + Url.Content("~/Scripts/images/delite_icon.png") + "' /></a>#"+
+                        "}"+
+                        "else if (page_access_code !=null){" +
+                         //"#<a title='Disable' id=\"Disable\" /></a>#" +
+                        "}"+
+                         "else{}#"
+                        ).Title("Delete").Filterable(false).Sortable(false).Width(80);
+
+                    //columns.Bound(c => c.page_access_code).Title("DeleteNew").ClientTemplate(
+                    //    "# if (PageAccessCode ==null) {" +
+                    //    // Logic as per => 2.36.2.1
+                    //      "<a title='Delete' id=\"Delete\" onclick=\"DeleteRecord('#= User_Level_ID#,#= User_Level_Name#');\" " + "><img src='" + Url.Content("~/Scripts/images/delite_icon.png") + "' /></a>" + "}" +
+                    //    "else{<a title='Delete' id=\"Delete\" onclick=\"DeleteRecord('#= User_Level_ID#,#= User_Level_Name#');\" " + "><img src='" + Url.Content("~/Scripts/images/delite_icon.png") + "' /></a>#}"
+
+
+                   
+                        
+                    //    ).Filterable(false);
+                })
+
+                .HtmlAttributes(new { style = "width: 1063px;" })
+                .Pageable(pageable =>
+                                                {
+                                                    pageable.Refresh(true);
+                                                    pageable.PageSizes(new int[] { 10, 20, 50 });
+                                                    pageable.Messages(messages => messages.Empty("No record found!"));
+                                                })
+                                           .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                                          {
+                                                              fs.Clear().Contains("Contains");
+                                                              fs.DoesNotContain("Does not contain");
+                                                              fs.IsEqualTo("Equal to");
+                                                              fs.IsNotEqualTo("Not equal to");
+                                                              fs.StartsWith("Starts with");
+                                                              fs.EndsWith("Ends with");
+                                                          })))
+                                              .Sortable()
+                                                      .Scrollable()
+                                                      .Mobile()
+
+
+                    )
+
+                </div>
+        </div>
+    </div>
+
+</div>
+</div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function RefreshGrid(e) {
+        Revive.Redux.Common.SetParentMenuSelected('Admin');
+        Revive.Redux.Common.SetKendoGridHeight();
+
+        var grid = $("#RoleGrid").data("kendoGrid");
+        grid.dataSource.read();
+
+    @if (TempData["Success"] != null)
+        {
+            <text>toastr.success("@TempData["Success"]");</text>
+        }
+
+        $(".close").click(function () {
+            location.reload();
+        });
+
+    });
+
+
+    
+
+
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.alert({ content: message, confirm: function () { } });
+        }
+    }
+    
+
+    $('#btnAddRole').click(function () {
+        
+
+        window.location.href = '@Url.Action("AddNewRole", "UserRole")';
+
+    });
+        $('#txtName').on('keypress', function () {
+
+            //$('#txtName').css('border-color', '');
+            $('#RoleValidation').hide();
+        });
+        
+
+
+
+        function MenuMapping(Id) {
+            window.location.href = '/UserRole/MenuMapping' + "/" + Id;
+            @*$.ajax({
+            type: "POST",
+            url: '@Url.Action("MenuMapping", "UserRole")',
+            //Your Action name in the DropDownListConstroller.cs
+            data: JSON.stringify({ id: Id }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                result = true;
+                window.location.href = '@Url.Action("MenuBind", "UserRole")';
+            }
+        })*@
+        }
+        function SuccessCall() {
+
+        }
+        function DeleteRecord(Id) {
+            var arr = Id;
+            $('#DeleteModal').modal('show');
+            $("#DeleteRole").val(arr);
+        }
+        var msgs = $("#HiddenDeletemsgs").val();
+
+        $('#Approvebtn').click(function (e) {
+            var id = $("#DeleteRole").val();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("DeleteRole", "UserRole")',
+
+                //Your Action name in the DropDownListConstroller.cs
+                data: JSON.stringify({ id: id }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+            }).done(function (data) {
+                //Successfully pass to server and get response
+
+                $('#RoleGrid').data().kendoGrid.dataSource.read(data); // or
+                if (data.result = "OK") {
+                    if (data._ErrorMsg!='') {
+                        toastr.error(data._ErrorMsg);
+                    }
+                    else {
+                        toastr.success('@ReviveMessages.Delete');
+                    }
+
+                    result = true;
+                }
+            })
+        });
+
+
+        //alert(msgs);
+
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

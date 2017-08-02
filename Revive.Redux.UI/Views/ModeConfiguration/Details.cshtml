@@ -1,0 +1,683 @@
+﻿@model Revive.Redux.Entities.ModeConfigurationModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    .col-md-5 {
+        /*width: 17.5%;*/
+    }
+</style>
+
+
+
+
+
+<div id="AddDemo" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content" style="min-height: 300px;">
+            <!-- dialog body -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    @Html.Label("Title", htmlAttributes: new { @class = "", @id = "lblModalTitle" })
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.Label("From Date", htmlAttributes: new { @class = "col-sm-3 control-label text-right required" })
+                            <div class="col-sm-6">
+                                @(Html.Kendo().DatePickerFor(model => model.From_Date)
+                                .HtmlAttributes(new { @class = "DisableKeyboardInput", @style = "width:100%" }))
+                                <span id="invalidstartdate" class="field-validation-error" style="display:none">Invalid date</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("To Date", htmlAttributes: new { @class = "col-sm-3 control-label text-right required" })
+                            <div class="col-sm-6">
+                                @(Html.Kendo().DatePickerFor(model => model.To_Date).Events(e => e.Change("endChange"))
+                                .HtmlAttributes(new { @class = "DisableKeyboardInput", @style = "width:100%" }))
+                                <span id="date" class="field-validation-error" style="display:none">To date should be greater than from date</span>
+                                <span id="invalidenddate" class="field-validation-error" style="display:none">Invalid date</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("# of Demos", htmlAttributes: new { @class = "col-sm-3 control-label text-right required" })
+                            <div class="col-sm-6">
+                                @Html.TextBoxFor(model => model.No_of_Activities, htmlAttributes: new { @class = "form-control numericOnly", @style = "width:100%" })
+                                @Html.ValidationMessageFor(m => m.No_of_Activities)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- dialog buttons -->
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8" style="text-align:center">
+                        <button type="submit" id="btnAddDemos" class="btn GreenBtn" data-dismiss="">Add</button>
+                        <button type="button" id="btnCancelDemos" class="btn YellowBtn" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal-body">
+    @*style="padding:0px!important"*@
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div>
+                    <div class="row"><div style="margin-left: 0.5%;"><h2>Manage Machine Demos</h2></div></div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-3  col-sm-3 control-label text-right">Customer</div>
+                                <div class="col-sm-7">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.customerID, new SelectList(Model.CustomerNameList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*<div class="form-group">
+                                    <div class="col-md-6  col-sm-3 control-label text-right"> Subagent </div>
+                                    <div class="col-sm-5">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(M => M.SubAgentId, new SelectList(Model.SubAgentList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubAgentName" })
+                                        </div>
+                                    </div>
+                                </div>*@
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-4  col-sm-3 control-label text-right">Subsidiary</div>
+                                <div class="col-sm-7">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.SubsidiaryId, new SelectList(Model.SubsidiaryList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubsidiaryName" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4  col-sm-3 control-label text-right"> Location </div>
+                                <div class="col-sm-7">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.locationID, new SelectList(Model.LocationList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlLocationName", })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-4  col-sm-3 control-label text-right"> Subagent </div>
+                                <div class="col-sm-7">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.SubAgentId, new SelectList(Model.SubAgentList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubAgentName" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @*<div class="col-md-12  col-sm-12 control-label text-right">*@
+                                @*<button id="btnCreate" type="button" class="GreenBtn">Add</button> </div>*@
+                                @*<div class="col-sm-5">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(M => M.locationID, new SelectList(Model.LocationList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlLocationName", })
+                                        </div>
+                                    </div>*@
+                                @*</div>*@
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            @*<div class="col-md-7"></div>
+                                <div class="col-md-5" style="float: right;">
+                                    <div class="col-md-10">
+                            *@
+                            <div class="lable-align-top" style="float:right;padding-right: 4.5%;">
+                                <div class="col-md-12 col-sm-7">
+                                    <button id="btnCreate" type="button" class="GreenBtn">Add Demos</button>
+                                </div>
+                            </div>
+                            @*
+                                    </div>
+                                </div>*@
+                        </div>
+                        <br />
+                        <div class="Kendogrid table-responsive" style="margin-left:-0.8%">
+                            @(Html.Kendo().Grid<Revive.Redux.Entities.ModeConfigurationModel>
+                            ()
+                            .Name("grdForm")
+                                    //.DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(false)
+                                    //.Read(read => read.Action("FormAjax", "ManageForm").Data("GetCustomerId"))
+                                    //)
+                            .Columns(columns =>
+                            {
+                                columns.Bound(p => p.CustomerName).Title("Customer Name").Width(100);
+                                columns.Bound(p => p.SubAgentName).Title("Agent").Width(100);
+                                columns.Bound(p => p.locationName).Title("Location Name").Width(100);
+                                columns.Bound(p => p.StoreNumber).Title("Store #").Width(80);
+                                columns.Bound(p => p.No_of_Activities).Title("#. of Demos").Width(70);
+                                columns.Bound(p => p.No_of_Consumed).Title("# of Consumed").Width(80);
+                                columns.Bound(p => p.From_Date).Title("From Date").Width(80).ClientTemplate("#if(From_Date!=null){# #: kendo.toString(kendo.parseDate(From_Date, 'yyyy-MM-dd'), 'MM-dd-yyyy') #  #}else{#  #}#");
+                                columns.Bound(p => p.To_Date).Title("To Date").Width(80).ClientTemplate("#if(To_Date!=null){# #: kendo.toString(kendo.parseDate(To_Date, 'yyyy-MM-dd'), 'MM-dd-yyyy') #  #}else{#  #}#");
+                                columns.Bound(p => p.Config_Id).Title("Edit").ClientTemplate(
+                                 "#if(Config_Id!=0){# <a href='" + Url.Action("EditModeConfig", "ModeConfiguration") + "/#= Config_Id #'" + "><i class='fa fa-pencil fa-lg icon-color' , style='align:center'></i></a> #}else{#  #}#").Sortable(false).Filterable(false).Width(45);
+                                //columns.Command(command => command.Destroy()).Width(50).Title("Delete");
+                                columns.Bound(c => c.Config_Id).ClientTemplate("#if(Config_Id!=0){# <a title='Delete' id=\"Delete\" onclick=\"DeleteRecord('#=Config_Id #');\" " + "><img src='" + Url.Content("~/Scripts/images/delite_icon.png") + "' /></a> #}else{#  #}#").Title("Delete").Filterable(false).Sortable(false).Width(45).HtmlAttributes(new { @style = "cursor:pointer" });
+                                columns.Bound(p => p.isSelected).Title("All").ClientTemplate("<input type='checkbox' #= isSelected ? checked='checked':'' # class='inpchk' ></input>").HeaderTemplate("<input type='checkbox' id='chkSelectAll' class='chicher2' onchange='SelectAll(this)'/><span class='order_tittle' style='margin-top: 1px;'>All</span>").Filterable(false).Width(50);
+                            })
+                            .HtmlAttributes(new { style = "width: 100%;" })
+                            .Pageable(pageable =>
+                            {
+                                pageable.Refresh(true);
+                                pageable.PageSizes(new int[] { 10, 20, 50 });
+                                pageable.Messages(messages => messages.Empty("No custom field available!"));
+                            })
+                            .Filterable(f => f.Operators(o => o.ForString(fs =>
+                            {
+                                fs.Clear().Contains("Contains");
+                                fs.DoesNotContain("Does not contain");
+                                fs.IsEqualTo("Equal to");
+                                fs.IsNotEqualTo("Not equal to");
+                                fs.StartsWith("Starts with");
+                                fs.EndsWith("Ends with");
+                            })))
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                                     .ServerOperation(false)
+                            .Model(model => model.Id(p => p.Config_Id))
+                                    .Read(read => read.Action("ModeConfig_Read", "ModeConfiguration").Data("ReportPara"))
+                                    //.Destroy("ModeConfig_Delete", "ModeConfiguration")
+                            )
+                                    //.Sortable()
+                            .Scrollable()
+                            .ColumnResizeHandleWidth(900)
+
+                            )
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="DeleteModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <!-- dialog body -->
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div>
+                        @Html.Label("Do you want to delete this mode configuration?", htmlAttributes: new { @class = "", @id = "Title" })
+                    </div>
+                </div>
+
+                <!-- dialog buttons -->
+                <div class="modal-footer footerbtn">
+                    <button type="button" id="btnNotificationDelete" class="btn GreenBtn btn-primary" data-dismiss="modal">YES</button>
+                    <button type="button" class="btn btn-primary YellowBtn" data-dismiss="modal">NO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="DeleteNotifincationId" name="DeleteNotifincationId" />
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+            Revive.Redux.Common.SetKendoGridHeight();
+
+            @if (TempData["Success"] != null)
+        {
+            <text>toastr.success("@TempData["Success"]");</text>
+        }
+
+            // Customer dropdown change event
+            if ($("select#locationID") != null && $("select#locationID").length > 0 && $("select#locationID").val() == 0)
+                $("select#locationID").find(":selected").val('');
+
+
+
+            $("#customerID").change(function () {
+                if ($("#customerID").val() != "") {
+                    $("#locationID").empty();
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("/GetLocationList")', // Calling json method
+                        dataType: 'json',
+                        data: { Customer_Id: $("#customerID").val() },
+                        success: function (LocationList) {
+                            $("#locationID").append('<option value="">' + "--Select--" + '</option>');
+                            if (LocationList.length > 0) {
+                                $.each(LocationList, function (i, LocationList) {
+                                    $("#locationID").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                                });
+                            }
+
+                        },
+                        error: function (ex) {
+                            if ($("#customerID").val() != null && $("#customerID").val() != '')
+                                $.alert({ content: 'Failed to retrieve Locations. ' + ex, confirm: function () { } });
+                        }
+                    });
+                }
+                else {
+                    $("#locationID").empty();
+                    $("#locationID").append('<option value="">' + "--Select--" + '</option>');
+                }
+                return false;
+            });
+        });
+
+
+        function ReportPara() {
+
+            var ModeConfigDetails = {
+                CustomerId: $("#ddlCustomerName").val(),
+                SubsidiaryID: $("#ddlSubsidiaryName").val(),
+                SubAgentID: $("#ddlSubAgentName").val(),
+                LocationId: $("#ddlLocationName").val(),
+                DateFrom: $("#DateFrom").val(),
+                DateTo: $("#DateTo").val()
+
+            };
+            return { objModeConfigDetails: ModeConfigDetails };
+        }
+
+
+        // Customer dropdown change event
+        // Load Subsidiary on select of Customer
+        $("#ddlCustomerName").change(function () {
+            $("#ddlSubsidiaryName").empty();
+            $("#ddlSubAgentName").empty();
+            $("#ddlLocationName").empty();
+            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+            $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+            var nCustomerId = $("#ddlCustomerName").val();
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetSubsidiaryList")', // Calling json method
+                dataType: 'json',
+                data: { CustomeId: nCustomerId, bActive: true },
+                success: function (subsidiaryLst) {
+                    if (subsidiaryLst.length > 0) {
+                        $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                            $("#ddlSubsidiaryName").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                        });
+                    }
+                    else {
+                        $("#ddlSubsidiaryName").empty();
+                        $("#ddlSubAgentName").empty();
+                        $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+                        $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve Subsidiary list. ' + ex, confirm: function () { } }); }
+            });
+            return false;
+        });
+
+        // Subsidiary dropdown change event
+        // Load Subagent on select of Subsidiary
+        $("#ddlSubsidiaryName").change(function () {
+            $("#ddlSubAgentName").empty();
+            $("#ddlLocationName").empty();
+            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+            var nCustomerId = $("#ddlSubsidiaryName").val();
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetSubAgentList")', // Calling json method
+                dataType: 'json',
+                data: { SubsidiaryId: nCustomerId, bActive: true },
+                success: function (subsidiaryLst) {
+                    if (subsidiaryLst.length > 0) {
+                        $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                            $("#ddlSubAgentName").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                        });
+                    }
+                    else {
+                        $("#ddlSubAgentName").empty();
+                        $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve SubAgent list. ' + ex, confirm: function () { } }); }
+            });
+            return false;
+        });
+
+
+        // SubAgent dropdown change event
+        // Load Location on select of SubAgent
+        $("#ddlSubAgentName").change(function () {
+            $("#ddlLocationName").empty();
+            var nCustomerId = $("#ddlCustomerName").val();
+            var nSubsidiaryId = $("#ddlSubsidiaryName").val();
+            var nSubAgentId = $("#ddlSubAgentName").val();
+
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+
+            if (nSubsidiaryId == '')
+            { nSubsidiaryId = 0; }
+
+            if (nSubAgentId == '')
+            { nSubAgentId = 0; }
+
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetLocationListByCus_Subsidary_SubAgent")', // Calling json method
+                dataType: 'json',
+                data: { CustomerId: nCustomerId, SubsidiaryId: nSubsidiaryId, SubAgentId: nSubAgentId, bActive: true },
+                success: function (LocationList) {
+                    if (LocationList.length > 0) {
+                        $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(LocationList, function (i, LocationList) {
+                            $("#ddlLocationName").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                        });
+                    }
+                    else {
+                        $("#ddlLocationName").empty();
+                        $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve Location list. ' + ex.error, confirm: function () { } }); }
+            });
+            return false;
+        });
+
+        $("#ddlLocationName").change(function () {
+            $("#grdForm").data("kendoGrid").dataSource.read();
+            return false;
+        });
+
+        function DeleteRecord(Id) {
+            var arr = Id;
+            $('#DeleteModal').modal('show');
+            $("#DeleteNotifincationId").val(arr);
+
+        }
+
+        $('#btnNotificationDelete').click(function (e) {
+            var id = $("#DeleteNotifincationId").val();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ModeConfig_Delete", "ModeConfiguration")',
+
+                //Your Action name in the DropDownListConstroller.cs
+                data: JSON.stringify({ modeID: id }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+            }).done(function (data) {
+                //Successfully pass to server and get response
+
+                //$('#grdForm').data().kendoGrid.dataSource.read(data); // or
+                $("#grdForm").data("kendoGrid").dataSource.read(); //or
+                //if (data.result = "OK") {
+                var _errormsg = 'Deleted successfully!';
+                toastr.success(_errormsg);
+                result = true;
+                //}
+            })
+        });
+
+        $('#btnCreate').click(function () {
+            $("#From_Date").data("kendoDatePicker").value('');
+            $("#To_Date").data("kendoDatePicker").value('');
+            $('#No_of_Activities').val('');
+            var grid = $('#grdForm').data().kendoGrid;
+            var items = $("#grdForm").data("kendoGrid").dataSource.data();
+            var st = 0;
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                if (item.isSelected == false) {
+                    st = st + 1;
+                }
+            }
+
+            var NoofDemos = $('#No_of_Activities').val();
+            if (st == items.length) {
+                toastr.warning('Please select customer to add demos!');
+            }
+            else {
+                $('#AddDemo').modal('show');
+                $("#lblModalTitle").text("Demo Try Details");
+                @*window.location.href = '@Url.Action("AddNewModeConfiguration", "ModeConfiguration")';*@
+            }
+        });
+
+        $('#btnAddDemos').click(function () {
+            $("#invalidstartdate").hide();
+            $("#invalidenddate").hide();
+            var startPicker = $("#From_Date").data("kendoDatePicker");
+            var endDate = $("#To_Date").data("kendoDatePicker");
+            var sDate = Date.parse(startPicker.value());
+            var eDate = Date.parse(endDate.value());
+            $("#invalidstartdate").text("Invalid Date");
+            $("#invalidenddate").text("Invalid Date");
+
+            if ($("#From_Date").val() == "") {
+                $("#invalidstartdate").text("Required");
+                $("#invalidstartdate").show();
+                return false;
+            }
+            if ($("#To_Date").val() == "") {
+                $("#invalidenddate").text("Required");
+                $("#invalidenddate").show();
+                return false;
+            }
+            if ($("#From_Date").val() != "" && $("#To_Date").val() != "") {
+                if (!sDate && !eDate) {
+                    $("#invalidstartdate").show();
+                    $("#invalidenddate").show();
+                    //validateflag = false;
+                    return false;
+                }
+            }
+            if ($("#From_Date").val() != "") {
+                if (!sDate) {
+                    $("#invalidstartdate").show();
+                    //validateflag = false;
+                    return false;
+                }
+            }
+            if ($("#To_Date").val() != "") {
+                if (!eDate) {
+                    $("#invalidenddate").show();
+                    //validateflag = false;
+                    return false;
+                }
+            }
+            else { }
+
+            if (startPicker.value() != null && endDate.value() != null) {
+                if (endDate.value() < startPicker.value()) {
+                    $("#date").show();
+                    //validateflag = false;
+                    return false;
+                }
+            }
+
+            var grid = $('#grdForm').data().kendoGrid;
+            var items = $("#grdForm").data("kendoGrid").dataSource.data();
+            var st = 0;
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                if (item.isSelected == false) {
+                    st = st + 1;
+                }
+            }
+
+            var NoofDemos = $('#No_of_Activities').val();
+
+            if (NoofDemos == "") {
+                toastr.warning('Please add no of demos!');
+            }
+            else if (st == items.length) {
+                toastr.warning('Please select customer to add demos!');
+            }
+            else {
+
+                var grid = $('#grdForm').data("kendoGrid");
+                var dat = grid.dataSource.data();
+
+                var newModeConfig = {
+                    From_Date: $("#From_Date").val(),
+                    To_Date: $("#To_Date").val(),
+                    No_of_Activities: $('#No_of_Activities').val()
+                }
+
+                $('#btnAddDemos').prop('disabled', true);
+              
+
+
+                $.ajax({
+                    type: "POST",
+                    datatype: 'json',
+                    url: "/ModeConfiguration/AddMultipleDemos",
+                    data: JSON.stringify({ data: dat, newModeConfig: newModeConfig }),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (result) {
+                        //if (result.length > 0) {
+                        //    if ($("#grdGeneric").length > 0) {
+                        //        $("#grdForm").data("kendoGrid").dataSource.read();
+                        //    }
+                        //    //toastr.success(result);
+                        //}
+                        //else {
+                        //    toastr.error('Demos not Added.');
+                        //}
+                        // toastr.success();
+                    }
+                }).done(function (data) {
+                    //Successfully pass to server and get response
+                    $('#AddDemo').modal('hide');
+                    $('#btnAddDemos').prop('disabled', false);
+                    //$('#grdForm').kendoGrid();
+                  //  $('#grdForm').data().kendoGrid.dataSource.read(data);
+                  //  $('#grdForm').data('kendoGrid').refresh();// or
+                    $("#grdForm").data("kendoGrid").dataSource.read();
+                    if (data.result = "OK") {
+                        toastr.success('Demos Added Successfully');
+                        result = true;
+                        $("#chkSelectAll").removeAttr('checked')
+                    }
+                    else {
+                        toastr.error('Demos not Added.');
+                    }
+                })
+
+            }
+
+
+
+        });
+
+        @*$("#btnCreate").click(function (e) {
+        var nCustomerId = GetCustomerOnlyId();
+        var locID = GetLocationID();
+        location.href = '@Url.Action("AddNewModeConfiguration", "ModeConfiguration")' + '?custID=' + nCustomerId + '&loCID=' + locID;
+        return true;
+    });
+
+    function GetCustomerOnlyId() {
+        var nCustomerId = $("#customerID").val();
+        if (nCustomerId == '--Select--' || nCustomerId == '')
+            nCustomerId = 0;
+
+        return nCustomerId;
+    }
+
+    function GetLocationID() {
+        var locID = $("#locationID").val();
+        if (locID == '--Select--' || locID == '')
+            locID = 0;
+
+        return locID;
+    }*@
+
+
+        function endChange() {
+            var startPicker = $("#From_Date").data("kendoDatePicker"),
+                end = this.value();
+            var endDate = $("#To_Date").data("kendoDatePicker");
+            var eDate = Date.parse(endDate._value);
+
+            if (!eDate) {
+                $("#invalidenddate").show();
+                return false;
+            }
+            $("#date").hide();
+            if (startPicker._value != "") {
+                if (endDate._value < startPicker._value) {
+                    $("#date").show();
+
+                }
+            }
+            $("#invalidenddate").hide();
+        }
+
+
+        //select all checkbox function
+        function SelectAll(e) {
+
+            var state = $(e).is(':checked');
+            if (state == true) {
+                var grid = $('#grdForm').data("kendoGrid");
+                $.each(grid.dataSource.data(), function () {
+                    $(".inpchk").prop('checked', 'checked');
+                    if (this['isSelected'] != state)
+                        this['isSelected'] = state;
+                })
+            }
+            else {
+                $(".inpchk").removeAttr('checked');
+                var grid = $('#grdForm').data("kendoGrid");
+                $.each(grid.dataSource.data(), function () {
+                    this['isSelected'] = false;
+                })
+            }
+        }
+
+        //select selected checkboxes
+        $(function () {
+            $('#grdForm').on('change', '.inpchk', function () {
+                var checked = $(this).is(':checked');
+                $("#chkSelectAll").removeAttr('checked');
+                if ($('.inpchk:checked').length == $('.inpchk').length) {
+                    $("#chkSelectAll").prop('checked', 'checked');
+                }
+                var grid = $('#grdForm').data().kendoGrid;
+                var dataItem = grid.dataItem($(this).closest('tr'));
+                dataItem.set('isSelected', checked);
+
+            })
+        })
+
+        $('#btnCancelDemos').click(function () {
+            $("#From_Date").data("kendoDatePicker").value('');
+            $("#To_Date").data("kendoDatePicker").value('');
+            $('#No_of_Activities').val('');
+        });
+    </script>

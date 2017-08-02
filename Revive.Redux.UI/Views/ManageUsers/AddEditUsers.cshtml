@@ -1,0 +1,699 @@
+﻿@model Revive.Redux.Entities.UserModels
+
+@{
+    ViewBag.Title = "Add/Edit User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*@using (Html.BeginForm("RegisterUser", "ManageUsers"))*@
+
+
+@using (Html.BeginForm("AddStoreUserByXLSFile", "ManageUsers", FormMethod.Post))
+{
+    if (ViewData.ModelState.IsValid)
+    {
+        <div id="FileUpload" class="modal fade" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content" style="min-height: 300px;">
+                    <!-- dialog body -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <div>
+                            @Html.Label("Title", htmlAttributes: new { @class = "", @id = "lblFileTitle" })
+                        </div>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+
+                                    @Html.Label("Customer", htmlAttributes: new { @class = "col-sm-3 control-label text-right required" })
+
+                                    <div class="col-sm-6">
+                                        <div class="select-icon">
+
+                                            @Html.DropDownListFor(model => model.Customer_Id, new SelectList(ViewBag.CustomerLst, "Id", "Text"), "--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName" })
+                                            @Html.ValidationMessageFor(model => model.Customer_Id, "", new { @class = "text-danger" })
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    @Html.Label("Subsidiary", htmlAttributes: new { @class = "col-sm-3 control-label text-right required" })
+
+                                    <div class="col-sm-6">
+                                        <div class="select-icon">
+
+                                            @Html.DropDownListFor(model => model.SubsidiaryId, new SelectList(ViewBag.SubsidiaryLst, "Id", "Text"), "--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @id = "SubsidiaryId" })
+                                            @Html.ValidationMessageFor(model => model.SubsidiaryId, "", new { @class = "text-danger" })
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    @Html.Label("Agent", htmlAttributes: new { @class = "col-sm-3 control-label text-right required" })
+
+                                    <div class="col-sm-6">
+                                        <div class="select-icon">
+
+                                            @Html.DropDownListFor(model => model.SubAgentId, new SelectList(ViewBag.AgentLst, "Id", "Text"), "--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @id = "SubAgentId" })
+                                            @Html.ValidationMessageFor(model => model.SubAgentId, "", new { @class = "text-danger" })
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("File Upload", htmlAttributes: new { @class = "col-sm-3 control-label text-right required", style = "padding-top: 10px;" })
+                                    <div>
+                                        @*<input type="file" name="files" id="fileLocationUpdload" onchange="check_extension(this.value);">*@
+                                        @(Html.Kendo().Upload()
+                                                                    .Name("files")
+                                                                    .Multiple(false)
+                                                .Messages(m => m.Select("Select file"))
+                                    .HtmlAttributes(new { @accept = ".xlsx,.xls", @class = "" })
+                                    .Events(events => events.Select("check_extension"))
+
+
+                                        )
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- dialog buttons -->
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8" style="text-align:center">
+
+                                <button type="submit" id="btnFileUpload" class="btn GreenBtn" data-dismiss="">Import</button>
+                                <button type="button" class="btn YellowBtn" data-dismiss="modal" onclick="ModelCancelBtn();">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+@if (!ViewData.ModelState.IsValid)
+{
+    <div id="FileUploadResult" class="modal fade in" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- dialog body -->
+                <div class="modal-body">
+                    <button type="button" class="close" id="btnResult" data-dismiss="modal">&times;</button>
+                    <div>
+                        @Html.Label("Result Summary", htmlAttributes: new { @class = "", @id = "lblResultTitle" })
+                    </div>
+                </div>
+
+                <div class="k-grid-content">
+                    @(Html.Kendo().Grid(Model.UserResult)
+    .Name("LocationResultGrid")
+.DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(false)
+                    .Read(read => read.Action("UserResultAjax", "ManageUsers")))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.LineNumber).Title("Line Name").Filterable(true).Width(120);
+        columns.Bound(p => p.Message).Title("Result").Filterable(true);
+    })
+             .Pageable(pageable =>
+                        {
+                            pageable.Refresh(true);
+                            pageable.PageSizes(new int[] { 10, 20, 50 });
+                            pageable.Messages(messages => messages.Empty("No location available!"));
+                        })
+                        .Sortable()
+                        .Filterable()
+                        .HtmlAttributes(new { style = "width:575px" })
+                    )
+                </div>
+
+
+                <!-- dialog buttons -->
+                @*<div class="modal-footer">
+                        <button type="button" id="btnResult" class="btn btn-primary">Ok</button>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("RegisterUser", "ManageUsers", FormMethod.Post, new { id = "userform", name = "userform", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="contant_page">
+                    <div class="row">
+                        <div class="lable-align-top">
+                            @if (ViewBag.isUpdateMode == null)
+                            {
+                                <h2>Add User</h2>
+                            }
+                            else
+                            {
+                                <h2>Edit User</h2>
+                            }
+                        </div>
+                        @*<div class="col-md-8 nomargin nopadding"></div>*@
+
+
+                        <!-- tittle -->
+                        <div class="row col-md-offset-4">
+                            <div class="">
+                                <div class="form-group">
+
+                                    @Html.HiddenFor(model => model.UserType)
+                                    @Html.HiddenFor(model => model.PageAccessCode)
+                                    @Html.HiddenFor(model => model.Status)
+                                    @Html.HiddenFor(model => model.UserId)
+
+
+                                    @Html.LabelFor(model => model.User_Level_Id, htmlAttributes: new { @class = "control-label col-md-2 col-sm-4 required" })
+                                    <div class="col-md-3 col-sm-4">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.User_Level_Id, new SelectList(ViewBag.UserTypeLst, "Id", "Text"), "--Select--", htmlAttributes: new { @id = "ddlUserType", @class = "form-control pull-right topspace selecter" })
+                                        </div>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.User_Level_Id, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+
+
+                                    @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-4 text-right required" })
+
+                                    <div class="col-sm-5">
+                                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", maxlength = "100", @tabindex = 1 } })
+                                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+
+
+                                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-4 text-right required" })
+
+                                    <div class="col-sm-5">
+                                        @if (ViewBag.isUpdateMode == true)
+                                        {
+                                            @Html.TextBoxFor(model => model.emailEdit, new { @id = "editUserEmail", @class = "form-control", @tabindex = 3 })
+                                            @Html.ValidationMessageFor(model => model.emailEdit, "", new { @class = "red" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(model => model.Email, new { @class = " form-control", @id = "userEmail", @tabindex = 3 })
+                                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "red" })
+                                        }
+
+
+                                    </div>
+                                </div>
+
+                                @*@if (Model.UserType == "Customer" || Model.UserType == null )
+                                    {*@
+                                <div id="divCustomer" class="form-group">
+
+
+                                    @Html.LabelFor(model => model.Customer_Id, htmlAttributes: new { @class = "control-label col-md-4 text-right required" })
+
+                                    <div class="col-sm-5">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.Customer_Id, new SelectList(ViewBag.CustomerLst, "Id", "Text"), "--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @tabindex = 5, @id = "Customer_Id" })
+                                            @Html.ValidationMessageFor(model => model.Customer_Id, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="divManufacturer" class="form-group">
+                                    @Html.LabelFor(model => model.Manufacturer_Id, htmlAttributes: new { @class = "control-label col-md-4 text-right required" })
+                                    <div class="col-sm-5">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.Manufacturer_Id, new SelectList(ViewBag.ManufacturerLst, "Id", "Text"), "--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @tabindex = 7 })
+                                            @Html.ValidationMessageFor(model => model.Manufacturer_Id, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="divAgent" class="form-group ">
+                                   @Html.LabelFor(model => model.SubAgentId, htmlAttributes: new { @class = "control-label col-md-4 text-right required" })
+                                    <div class="col-sm-5">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.SubAgentId, new SelectList(ViewBag.AgentLst, "Id", "Text"), "--Select--",htmlAttributes: new { @class = "form-control pull-right topspace selecter", @tabindex = 7, @id = "SubAgentIdUser" })
+                                            @Html.ValidationMessageFor(model => model.SubAgentId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                @*}*@
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <div class="form-group ">
+
+
+                                    @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-4 text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control ", maxlength = "100", @tabindex = 2 } })
+                                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+
+                                    @Html.LabelFor(model => model.UserMobile, htmlAttributes: new { @class = "control-label col-md-4 text-right required" })
+
+                                    <div class="col-sm-5">
+                                        @Html.EditorFor(model => model.UserMobile, new { htmlAttributes = new { @class = "form-control", @id = "txtUserMobile", @tabindex = 4 } })
+                                        @Html.ValidationMessageFor(model => model.UserMobile, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                @*@if (Model.UserType == "Customer" || Model.UserType == null)
+                                    {*@
+
+                                <div class="form-group " id="divSubsidiary">
+
+
+                                    @Html.LabelFor(model => model.SubsidiaryId, htmlAttributes: new { @class = "control-label col-md-4 text-right required" })
+
+                                    <div class="col-sm-5">
+                                        <div class="select-icon">
+                                           @Html.DropDownListFor(model => model.SubsidiaryId, new SelectList(ViewBag.SubsidiaryLst, "Id", "Text"),"--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @tabindex = 6, @id = "SubsidiaryIdUser" })
+                                            @Html.ValidationMessageFor(model => model.SubsidiaryId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group " id="divLocation">
+
+
+                                    @Html.LabelFor(model => model.Location_Id, htmlAttributes: new { @class = "control-label col-md-4 text-right required" })
+
+                                    <div class="col-sm-5">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.Location_Id, new SelectList(ViewBag.LocationLst, "Id", "Text"),"--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @tabindex = 8, @id = "Location_Id" })
+                                            @Html.ValidationMessageFor(model => model.Location_Id, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                @*}*@
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="row" style="padding-top: 1%;">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-8">
+                                <div class="col-md-3 col-sm-3"></div>
+                                <div class="col-md-6 col-sm-6">
+                                    @if (ViewBag.isUpdateMode == true)
+                                    {
+                                        <input type="submit" value="Update" class="GreenBtn" />
+                                    }
+                                    else
+                                    {
+                                        <input type="submit" value="Add" class="GreenBtn" />
+                                    }
+
+                                    <input type="button" value="Cancel" class="YellowBtn" onclick="location.href='@Url.Action("ManageUser", "ManageUsers", new { uid = "00000000-0000-0000-0000-000000000000" })'" />
+
+                                    <input type="button" title="ImportUsers" class="GreenBtn" value="Import Store Users" id="btnImportUsers" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+}
+<script type="text/javascript">
+
+    function ModelCancelBtn() {
+
+        $("#ddlCustomerName").val('');
+        $("#SubsidiaryId").empty();
+        $("#SubAgentId").empty();
+        $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+        $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+    }
+
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Admin');
+
+        // Customer dropdown change event
+        if ($("#User_Level_Id").val() == "" || typeof $("#User_Level_Id").val() == 'undefined') {
+            $("#divCustomer").hide();
+            $("#divLocation").hide();
+            $("#divAgent").hide();
+            $("#divSubsidiary").hide();
+            $("#divManufacturer").hide();
+        }
+        if ($("#UserType").val() != '') {
+            VisibleCustomerLocation($("#UserType").val(), $("#PageAccessCode").val());
+        }
+
+        $("#Customer_Id").change(function () {
+            $("#Location_Id").empty();
+            $("#SubsidiaryIdUser").empty();
+            $("#SubAgentIdUser").empty();
+            $("#SubAgentIdUser").append('<option value="">' + "--Select--" + '</option>');
+            $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+            var cust_id = 0;
+            if ($("#Customer_Id").val() != null && $("#Customer_Id").val() != '') {
+                cust_id = $("#Customer_Id").val();               
+
+                if ($("#Customer_Id").val() != "") {
+                    $("#SubsidiaryIdUser").empty();
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+                        dataType: 'json',
+                        data: { CustomerId: $("#Customer_Id").val() },
+                        success: function (data) {
+                            $("#SubsidiaryIdUser").append('<option value="">' + "--Select--" + '</option>');
+                            if (data.length > 0) {
+                                $.each(data, function (i, dataitem) {
+                                    $("#SubsidiaryIdUser").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                                });
+                            }
+                        },
+                        error: function (ex) {
+                            if ($("#Customer_Id").val() != null && $("#Customer_Id").val() != '')
+                                $.alert({ content: 'Failed to retrieve Subsidairy. ' + ex, confirm: function () { } });
+                        }
+                    });
+                }
+                else {
+                    $("#SubsidiaryIdUser").empty();
+                    $("#SubsidiaryIdUser").append('<option value="">' + "--Select--" + '</option>');
+                }
+            }
+            else {
+                $("#SubsidiaryIdUser").empty();
+                $("#SubsidiaryIdUser").append('<option value="">' + "--Select--" + '</option>');
+            }
+        });
+
+        $("#ddlCustomerName").change(function () {
+            $("#SubsidiaryId").empty();
+            $("#SubAgentId").empty();
+            $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            if ($("#ddlCustomerName").val() != "") {
+               
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: $("#ddlCustomerName").val() },
+                    success: function (data) {
+                        $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+                        if (data.length > 0) {
+                            $.each(data, function (i, dataitem) {
+                                $("#SubsidiaryId").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                            });
+                        }
+                    },
+                    error: function (ex) {
+                        if ($("#ddlCustomerName").val() != null && $("#ddlCustomerName").val() != '')
+                            $.alert({ content: 'Failed to retrieve Subsidairy. ' + ex, confirm: function () { } });
+                    }
+                });
+            }
+            else {
+                $("#SubsidiaryId").empty();
+                $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+            }
+            return false;
+        });
+
+        // Get User Type Name Customer or Admin Or Any Other
+
+        $(function () {
+            $("#txtUserMobile").mask("(999) 999-9999", { autoclear: false });
+        });
+
+
+        $("#ddlUserType").change(function () {
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetUserType")', // Calling json method
+                dataType: 'json',
+                data: { User_Level_Id: $("#ddlUserType").val() },
+                success: function (UserTypeData) {
+                    if (UserTypeData.length == 1) {
+                        VisibleCustomerLocation(UserTypeData[0].Text, UserTypeData[0].otherStrVal);
+                    }
+                },
+                error: function (ex) {
+                    //Changes Made By Sandeep to solve Bug #6626
+                    //Previous Code Is
+                    ///$("#divCustomer").show();
+                    // $("#divLocation").show();
+                    $("#divCustomer").hide();
+                    $("#divLocation").hide();
+                    $("#divAgent").hide();
+                    $("#divSubsidiary").hide();
+                    $("#divManufacturer").hide();
+                }
+            });
+            return false;
+
+        });
+
+
+        $('#btnImportUsers').click(function (e) {
+            $('#FileUpload').modal('show');
+            $("#lblFileTitle").text("Upload Users");
+            $('#fileLocationUpdload').val('');
+
+        });
+
+        $("#btnResult").click(function (e) {
+            window.location.href = '@Url.Action("AddEditUsers", "ManageUsers")';
+        });
+
+        $('#btnFileUpload').click(function (e) {
+            var Result = true;
+            var nCustomerId = $('#ddlCustomerName').val();
+            var nSubsidiaryId = $('#SubsidiaryId').val();
+            var nSubAgentId = $('#SubAgentId').val();
+
+            if (nCustomerId == '') {
+                Result = false;
+                toastr.error('Please select customer name!');
+            }
+            else if(nSubsidiaryId=='')
+            {
+                Result = false;
+                toastr.error('Please select Subsidiary!');
+            }
+            else if (nSubAgentId == '') {
+                Result = false;
+                toastr.error('Please select Agent!');
+            }
+            else {
+                var File = $("#files").data("kendoUpload");
+                //if (File.element.context.value == "")
+                var len = File.wrapper.find(".k-file").length;
+                if (len === 0) {
+                    Result = false;
+                    toastr.error('Please select a file to upload!');
+                }
+            }
+
+            return Result;
+        });
+
+        $("#SubsidiaryIdUser").change(function () {
+            $("#Location_Id").empty();
+            $("#SubAgentIdUser").empty();
+            $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+            if ($("#SubsidiaryIdUser").val() != "") {
+                
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetAgentBySubsidiary")', // Calling json method
+                    dataType: 'json',
+                    data: { SubsidiaryId: $("#SubsidiaryIdUser").val() },
+                    success: function (data) {
+                        $("#SubAgentIdUser").append('<option value="">' + "--Select--" + '</option>');
+                        if (data.length > 0) {
+                            $.each(data, function (i, dataitem) {
+                                $("#SubAgentIdUser").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                            });
+                        }
+
+                    },
+                    error: function (ex) {
+                        if ($("#SubsidiaryIdUser").val() != null && $("#SubsidiaryIdUser").val() != '')
+                            $.alert({ content: 'Failed to retrieve Agent. ' + ex, confirm: function () { } });
+                    }
+                });                
+            }
+            else {
+                $("#SubAgentIdUser").empty();
+                $("#SubAgentIdUser").append('<option value="">' + "--Select--" + '</option>');
+            }
+            return false;
+        });
+
+
+        $("#SubAgentIdUser").change(function () {
+            $("#Location_Id").empty();
+            if ($("#SubAgentIdUser").val() != "") {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetCustomerLocationbyAgent")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: $("#Customer_Id").val(), SubsidiaryId: $("#SubsidiaryIdUser").val(), AgentId: $("#SubAgentIdUser").val(), IsActive: true },
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+                            $.each(data, function (i, dataitem) {
+                                $("#Location_Id").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                            });
+                        }
+                        else {
+                            $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+                        }
+                    },
+                    error: function (ex) { $.alert({ content: 'Failed to retrieve Location. ' + ex, confirm: function () { } }); }
+                });
+            }
+            else
+            {
+                $("#Location_Id").empty();
+                $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+            }
+
+        });
+
+        //For Modal
+        $("#SubsidiaryId").change(function () {
+            if ($("#SubsidiaryId").val() != "") {
+                $("#SubAgentId").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetAgentBySubsidiary")', // Calling json method
+                    dataType: 'json',
+                    data: { SubsidiaryId: $("#SubsidiaryId").val() },
+                    success: function (data) {
+                        $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                        if (data.length > 0) {
+                            $.each(data, function (i, dataitem) {
+                                $("#SubAgentId").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                            });
+                        }
+
+                    },
+                    error: function (ex) {
+                        if ($("#SubsidiaryId").val() != null && $("#SubsidiaryId").val() != '')
+                            $.alert({ content: 'Failed to retrieve Agent. ' + ex, confirm: function () { } });
+                    }
+                });
+
+
+            }
+            else {
+                $("#SubAgentId").empty();
+                $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            }
+            return false;
+        });
+
+    });
+    function check_extension(e) {
+        var files = e.files;
+        var Result = true;
+        $.each(files, function () {
+
+            if (this.extension.toLowerCase() != ".xlsx") {
+                if (this.extension.toLowerCase() != ".xls") {
+                    toastr.error("Only .xlsx or .xls files can be uploaded!");
+                    e.preventDefault();
+                    Result = false;
+                }
+            }
+
+            if (this.size / 1024 / 1024 > 5) {
+                toastr.error("Max 5Mb file size is allowed!")
+                e.preventDefault();
+                Result = false;
+            }
+        });
+
+        return Result;
+    }
+
+    function VisibleCustomerLocation(usrType, pageAccessCode) {
+
+        $("#divCustomer").hide();
+        $("#divLocation").hide();
+        $("#divAgent").hide();
+        $("#divSubsidiary").hide();
+        $("#divManufacturer").hide();
+        // Customer Admin
+        if (usrType == "Customer" && pageAccessCode == "CUSTOMERADMIN") {
+            $("#divCustomer").show();
+        }//Subsidiary
+        else if (usrType == "Customer" && pageAccessCode == "SUBSIDIARYADMIN") {           
+            $("#divCustomer").show();
+            $("#divSubsidiary").show();
+        }// SUB Agent
+        else if (usrType == "Customer" && pageAccessCode == "SUBAGENTADMIN") {
+            $("#divCustomer").show();
+            $("#divAgent").show();
+            $("#divSubsidiary").show();
+        }// Store User
+        else if (usrType == "Customer" && pageAccessCode != "CUSTOMERADMIN") {
+            $("#divCustomer").show();
+            $("#divAgent").show();
+            $("#divSubsidiary").show();
+            $("#divLocation").show();
+
+        }
+        else if (usrType == "Manufacturer") {
+            $("#divManufacturer").show();
+        }
+
+        
+    }
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<style type="text/css">
+    .form-group {
+        float: left;
+        margin-bottom: 14px;
+        width: 100%;
+    }
+
+    #body {
+        height: auto;
+    }
+</style>

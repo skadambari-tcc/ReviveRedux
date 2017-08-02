@@ -1,0 +1,326 @@
+﻿@model Revive.Redux.Entities.MenuMappingLocalModel
+@{
+    ViewBag.Title = "Menu Mapping";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    .MenuAndFeatureTable th {
+        border-bottom: 2px solid #DDD;
+    }
+
+    .FeatureTable th {
+        border-bottom: 1px solid #DDD;
+    }
+
+    .MenuTable th {
+        border-bottom: 1px solid #DDD;
+    }
+
+    .MenuAndFeatureTable td input {
+        padding-left: 5px;
+    }
+
+    .MenuAndFeatureTable td label {
+        padding-left: 5px;
+    }
+
+    .MenuAndFeatureTableTd {
+        border-right: 1px solid #DDD;
+    }
+
+    #topTableForUserLevelDD {
+        border-bottom: 2px solid #DDD;
+    }
+
+    .bottomborder {
+        border-bottom: 1px solid #DDD;
+    }
+
+    .topborder {
+        border-top: 1px solid #DDD;
+    }
+
+    #tableForMenuListDisplay table {
+        border: none;
+    }
+
+        #tableForMenuListDisplay table td, table th {
+            border-left: none;
+            border-top: none;
+            padding: 5px;
+        }
+
+    table {
+        table-layout: auto;
+    }
+
+    .clear-floats {
+        clear: both;
+        height: 1px;
+    }
+
+    ul.manage-users-menus {
+        margin: 5px 5px 5px 13px;
+        /*padding: 0;*/
+    }
+
+    label {
+        display: inline-block;
+        font-size: 12px;
+        margin-bottom: 5px;
+        max-width: 100%;
+        padding-left: 2%;
+    }
+
+    ul.manage-users-menus li {
+        float: left;
+        list-style: none;
+        /*margin: 0;*/
+        padding: 0 12px; /* indentation + 2 */
+        width: 215px;
+        /*font-weight: bold;*/
+        line-height: 25px; /* default list item `line-height` */
+        border-left: 0px solid #ddd;
+        position: relative;
+        /*margin: 0 0 0 -1%;*/
+    }
+
+    .manage-users-menus > li {
+        font-weight: bold;
+    }
+
+        .manage-users-menus > li > ul > li {
+            font-weight: normal;
+        }
+
+    ul.manage-users-menus ul {
+        /* margin-left: 10px;  indentation */
+        margin-left: -9px;
+        padding: 0;
+        position: relative;
+    }
+    /*.manage-users-menus li ul li ul
+        {
+            margin: 0;
+            padding:6px 7px 2px 4px;
+        }
+        .manage-users-menus li li
+        {
+            font-weight: normal;
+            height: auto;
+            border: none;
+            padding: 0;
+            margin: 0;
+        }*/
+    /*content-overflow {
+        width: 670px;
+        height: auto;
+        overflow: scroll;
+        border: 1px solid #ddd;
+    }*/
+    .parent {
+        overflow: hidden;
+        display: table;
+        margin-left: 10px;
+    }
+
+    .subMenudiv {
+        float: left;
+    }
+
+    .labeldiv {
+        display: block;
+        overflow: hidden;
+        padding-top: 2px;
+    }
+
+    #body {
+        height: auto;
+    }
+</style>
+<script type="text/javascript">
+
+    var roleId = '@ViewBag.RoleId';
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Admin');
+
+
+
+        @if (TempData["MenuError"] != null && (bool)TempData["MenuError"] == true)
+            {
+
+                <text>toastr.error('You cannot change menu mapping for your own role!');</text>
+            }
+        @if (TempData["isSuccess"] != null && (bool)TempData["isSuccess"] == true)
+            {
+
+            @*<text>toastr.options.onHidden = CancelMenuMapping();</text>*@
+
+                <text>toastr.success('@ReviveMessages.Update');</text>
+
+            }
+        @if (TempData["isFailure"] != null && (bool)TempData["isFailure"] == true)
+            {
+
+                <text>toastr.error('Please select at least one menu to save!');</text>
+            }
+
+        //   var count = 0;
+        $(document).on('click', ".headerCheckBox", function () {
+
+            if ($(this).val()) {
+
+                if ($(this).prop('checked') == true) {
+                    $(this).parents("li:first").find("input.subMenuFeatureCheckBox").prop('checked', true);
+                }
+                else {
+                    $(this).parents("li:first").find("input.subMenuFeatureCheckBox").prop('checked', false);
+                }
+            }
+            else {
+                toastr.error("You cannot change menu mapping for administration!");
+                return false;
+            }
+        });
+        $(document).on("click", ".subMenuFeatureCheckBox", function () {
+            var allChecked = false;
+            if ($(this).val()) {
+                if ($(this).prop('checked') == true) {
+                    //this.parentNode.parentNode.parentNode.firstChild.checked = true;
+                    // this.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild.checked = true;
+                    $(this).parents("li:first").find("input.subMenuFeatureCheckBox").prop('checked', true);
+
+                }
+                else {
+                    $(this).parents("li:first").find("input.subMenuFeatureCheckBox").prop('checked', false);
+                    $(this).parent().parent().parent().parent().find(".headerCheckBox").prop('checked', false);
+                    //$(this).parents("li:first").parents().find(".headerCheckBox").prop('checked', false);
+
+                    //  var listOfChkBox = this.parentNode.parentNode;
+                    //$.each(listOfChkBox, function (index, elem) {
+                    //    //if ($(this).find("input.subMenuFeatureCheckBox").attr("checked") == "checked") {
+                    //     //   count++;
+                    //  //  }
+                    //});
+
+                    //  if(count == 0)
+                    //    this.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild.checked = false;
+                }
+            }
+            else {
+                toastr.error("You cannot change menu mapping for administration!");
+                return false;
+            }
+
+
+        });
+        $("#User_Level_ID").change(function () {
+            //window.location.href = '@Url.Action("MenuMapping", "UserRole")';
+            var selsectedUserLevelId = $("#User_Level_ID").val() + "," + $("#User_Level_ID option:selected").text();
+            //window.location.href = '/UserRole/MenuMapping' +"/"+ selsectedUserLevelId;
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("MenuBind", "UserRole")',
+
+                //Your Action name in the DropDownListConstroller.cs
+                data: JSON.stringify({ id: selsectedUserLevelId }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+            }).done(function (data) {
+                if (data != null) {
+                    if (data != null) {
+
+                        $("#menuTd").html(data.Menus);
+                        //ViewBag.RoleName=data.RoleName;
+                        $('#name').html("Menu Mapping For Role" + " " + data.RoleName);
+
+                    }
+                }
+            })
+        });
+    });
+
+    function SaveData() {
+
+        $('#FrmMenuMapping').submit();
+        // var value = '@Session["BackUrl"]';
+        // redirectPage(value);
+    }
+    function CancelMenuMapping() {
+        var value = '@Session["BackUrl"]';
+        redirectPage(value);
+
+
+    }
+    function redirectPage(flag) {
+        if (flag == "RedirectToHomePageMyTask") {
+            window.location.href = "@Url.Action("Index", "Home")";
+        }
+        else if (flag == "RedisrectToRolePage") {
+            window.location.href = "@Url.Action("GetRoles", "UserRole")";
+        }
+        else {
+            window.location.href = "@Url.Action("Index", "Home")";
+        }
+    }
+
+
+</script>
+<div class="modal-body" @*style="padding: 0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2 id="name">Menu Mapping For Role @ViewBag.RoleName</h2>
+                    </div>
+                </div>
+
+                <p />
+                @using (Html.BeginForm("SaveMenuMapping", "UserRole", FormMethod.Post, new { id = "FrmMenuMapping", enctype = "multipart/form-data", style = "margin-left: -5.7%;" }))
+                {
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-7">
+                                <div class="select-icon">
+                                    @*@Html.ValidationMessageFor(m => m.User_Level_ID, "", new { @class = "red" })*@
+                                    @Html.DropDownListFor(m => m.User_Level_ID, new SelectList(ViewBag.UserTypelst, "Id", "Text"), new { @style = "width: 200px;", @class = "form-control pull-right topspace selecter" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+                    <table style="width:100%">
+                        <tr>
+                            <td id="menuTd" style="width:100%">
+                                @Html.Raw(Model.Menus)
+
+
+                            </td>
+                        </tr>
+
+
+                    </table>
+                    <table style="width: 100%; margin-top: 4%;">
+                        <tr>
+                            <td align="center">
+                                <button id="btnSave" onclick="SaveData()" class="GreenBtn">
+                                    Save
+                                </button>
+
+                                <button type="button" id="btnClose" onclick="CancelMenuMapping()" class="YellowBtn">
+                                    Back
+                                </button>
+
+                            </td>
+                        </tr>
+                    </table>
+
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

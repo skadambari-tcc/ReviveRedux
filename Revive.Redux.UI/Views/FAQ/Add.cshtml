@@ -1,0 +1,371 @@
+﻿@using Revive.Redux.Entities;
+@model FAQModel
+@{
+    ViewBag.Title = "FAQ Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #body {
+        /*height: 550px;*/
+    }
+
+    .k-grid-content {
+        overflow-y: auto;
+        overflow-x: auto;
+        position: sticky;
+    }
+
+    .Title {
+        text-align: left;
+        font-size: larger;
+        color: #7c0000;
+    }
+
+    .k-grid tbody tr:hover {
+        background: #faecc1;
+    }
+
+    #body {
+        /*height: auto;*/
+    }
+
+    .k-grid table {
+        table-layout: fixed;
+    }
+
+    .k-grid td {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    #container {
+        width: 70%;
+        /*margin: 5px;
+        padding: 5px;*/
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+    }
+
+    .box-cont {
+        border-bottom-left-radius: 5px;
+        -moz-border-radius-bottomleft: 5px;
+        -webkit-border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        -moz-border-radius-bottomright: 5px;
+        -webkit-border-bottom-right-radius: 5px;
+        /*padding: 2px 5px;
+        margin: 0;*/
+    }
+
+        .box-cont textarea {
+            width: 100%;
+            /*height: 40px;*/
+            resize: none;
+        }
+    .text-right {
+        line-height: 20px;
+    }
+    .modal-header {
+        padding:0 10px 0 5px;
+    }
+    .modal-footer{
+        border:0;
+    }
+</style>
+
+@using (Html.BeginForm("UpdateFAQ", "FAQ"))
+{
+    <div class="modal-body" >
+        <div class="row">
+            <div class="col-md-12">
+                <div class=" contant_page">
+                    <div class="row">
+                        <div class="lable-align-top">
+                            <h2>Manage FAQ's</h2>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-md-2  col-sm-2 control-label text-right required" for="inputtype1">User Group</label>
+                                    <div class="col-md-2">
+                                        <div class="select-icon">
+                                            <select id="ddlUserGrp" class="form-control pull-right topspace selecter">
+                                                @foreach (var elem in ViewBag.UserGroup)
+                                                {
+                                                    <option value="@elem.Id">@elem.Text</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2  col-sm-2 control-label text-right required" for="inputtype1">Question</label>
+                                    <div class="col-md-10 col-sm-10">
+                                        <div id='container'>
+                                            <div class='box-cont'>
+                                                <textarea id="txtQuestion" name="txtQuestion" rows="3" cols="80" maxlength="1000"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2  col-sm-2 control-label text-right required" for="inputtype2">Answer</label>
+                                    <div class="col-sm-10 col-md-10">
+                                        <div id='container'>
+                                            <div class='box-cont'>
+                                                <textarea id="txtAnswer" name="txtAnswer" rows="3" cols="80" maxlength="5000"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <input type="button" style="float:right" class="btn login_button btn-primary" onclick="return addRow()" value="Add" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1 "></div>
+                            <div class="col-md-11 table-responsive Kendogrid">
+                                @(Html.Kendo().Grid<FAQModel>
+        ()
+        .Name("FAQList")
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.UserGrpId).Title("UserGrpId").Visible(false);
+            columns.Bound(p => p.UserGrpName).Title("Group").Visible(true);
+            columns.Bound(p => p.Question).Title("FAQ's");
+            columns.Bound(p => p.Answer).Title("Answer").Visible(false);
+            columns.Bound(p => p.CreatedDate).Title("CreatedDate").Visible(false);
+            columns.Bound(p => p.UserGrpId).Title("Align").ClientTemplate(
+                "<a class='moveUpBtn' onclick='moveUp(\"#=uid#\")' href='javascript:void(0);'><i class='fa fa-angle-up' title='Move Up'></i></a>&nbsp;" +
+            "<a class='moveDownBtn' onclick='moveDown(\"#=uid#\")' href='javascript:void(0);'><i class='fa fa-angle-down' title='Move Down'></i></a>").Filterable(false);
+            columns.Bound(p => p.UserGrpId).Title("Edit").ClientTemplate(
+                "<a class='editBtn' onclick='editRow(\"#=uid#\")' href='javascript:void(0);'><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>");
+            columns.Bound(p => p.UserGrpId).Title("Delete").ClientTemplate(
+                "<a class='removeBtn' onclick='deleteRow(\"#=uid#\")' href='javascript:void(0);'><img src='" + Url.Content("~/Scripts/images/delite_icon.png") + "' /></a>");
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Refresh(true);
+            pageable.PageSizes(new int[] { 10, 20, 50 });
+            pageable.Messages(messages => messages.Empty("No records available!"));
+        })
+        .Scrollable()
+        .Events(events => { events.DataBound("onDataBound"); })
+                .HtmlAttributes(new { style = "width:91%;height:215px;" })
+        .DataSource(dataSource => dataSource.Ajax()
+                        .ServerOperation(false)
+                        .Read("ManageFAQAjax", "FAQ")
+                        )
+                                )
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12  col-sm-12">
+                                <div class=" col-md-5  col-sm-4"></div>
+                                <div class="col-md-7 col-sm-8" style="margin-top:10px;">
+                                    <button id="btnUpdate" type="submit" onclick="return UpdateFAQ();" class="btn login_button btn-primary">Update</button>
+                                    <button id="btnCancel" type="button" class="btn login_button btn-primary yellow">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                        <textarea id="JsonPostbackVal" name="JsonPostbackVal" style="display:none;"></textarea>
+                        <br /><br />
+                        <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Update FAQ</h4>
+                                    </div>
+                                    <div class="modal-body" style="height:275px">
+                                        <input type="hidden" id="hdnRowUId" value="" />
+                                        <div class="form-group">
+                                            <label class="col-md-2  col-sm-3 control-label text-right required" for="inputtype1">User Group</label>
+                                            <div class="col-md-3">
+                                                <div class="select-icon">
+                                                    <select id="ddlUserGrpEdit" class="form-control pull-right topspace selecter">
+                                                        @foreach (var elem in ViewBag.UserGroup)
+                                                        {
+                                                            <option value="@elem.Id">@elem.Text</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2  col-sm-3 control-label text-right required" for="inputtype1">Question</label>
+                    <div class="col-sm-4">
+                        <textarea id="txtQuestionEdit" name="txtQuestion" rows="3" cols="45" maxlength="1000"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2  col-sm-3 control-label text-right required" for="inputtype1">Answer</label>
+                    <div class="col-sm-4">
+                        <textarea id="txtAnswerEdit" name="txtQuestion" rows="3" cols="45" maxlength="5000"></textarea>
+                    </div>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default YellowBtn" data-dismiss="modal">Close</button>
+                    <a id="btnUpdate" class="btn btn-primary GreenBtn" onclick="return updateRow();">Update</a>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('KnowledgeCenter');
+
+        @if (TempData["FAQUpdated"] != null && (bool)TempData["FAQUpdated"] == true)
+        {
+
+            <text>toastr.success('FAQ\'s updated successfully.');</text>
+        }
+        
+        // Cancel Button Click event
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("Index", "Home")';
+        });
+        $("#JsonPostbackVal").val('');
+    });
+        function UpdateFAQ() {
+            var grid = $("#FAQList").data("kendoGrid");
+            //var data = grid.dataSource.view();
+            var data = grid.dataSource._data;
+            if (grid.dataSource._data.length == 0) {
+                $("#JsonPostbackVal").val('EMPTY');
+            }
+            else {
+                var faqs = JSON.stringify(data);
+                faqs = faqs.replace(/</g, "&lt;");
+                faqs = faqs.replace(/>/g, "&gt;");
+                $("#JsonPostbackVal").val(faqs);
+            }
+            return true;
+        }
+        function onDataBound(e) {
+            var grid = $("#FAQList").data("kendoGrid");
+            if (grid != null && grid._data != null && grid._data.length > 0) {
+                var first = this.element.find('tbody tr:first').find('td a.moveUpBtn');
+                var last = this.element.find('tbody tr:last').find('td a.moveDownBtn');
+                if (first.length > 0)
+                    first.hide();
+                if (last.length > 0)
+                    last.hide();
+            }
+        }
+        function addRow() {
+            var userGrp = $("select#ddlUserGrp").val();
+            var qstn = $("#txtQuestion").val();
+            var answer = $("#txtAnswer").val();
+            if (userGrp == "0") {
+                $.alert({ content: 'Please select User Group!', confirm: function () { } });
+                return false;
+            }
+            if ($.trim(qstn) == '') {
+                $.alert({ content: 'Please enter a Question!', confirm: function () { } });
+                return false;
+            }
+            if ($.trim(answer) == '') {
+                $.alert({ content: 'Please enter an Answer!', confirm: function () { } });
+                return false;
+            }
+            var grid = $("#FAQList").data("kendoGrid");
+            var datasource = grid.dataSource;
+            datasource.insert({ UserGrpId: userGrp, Question: qstn, Answer: answer, UserGrpName: $("select#ddlUserGrp").find(":selected").text() });
+            $("select#ddlUserGrp").val('0');
+            $("#txtQuestion").val('');
+            $("#txtAnswer").val('');
+            toastr.success('FAQ has been added successfully to the grid.<br/><br/>Please click Update before leaving the page.');
+            return true;
+        }
+        function deleteRow(uid) {
+            $.confirm({
+                content: 'Are you sure want to delete this FAQ?',
+                confirm: function () {
+                    var grid = $("#FAQList").data("kendoGrid");
+                    var dataItem = grid.dataSource.getByUid(uid);
+                    grid.dataSource.remove(dataItem);
+                    toastr.success('FAQ has been removed successfully from the grid.<br/><br/>Please click Update before leaving the page.');
+                },
+                cancel: function () {
+                    //return false;
+                }
+            });
+        }
+        function editRow(uid) {
+            $('#myModal').modal('show');
+            $("#hdnRowUId").val(uid);
+            var grid = $("#FAQList").data("kendoGrid");
+            var dataItem = grid.dataSource.getByUid(uid);
+            $("select#ddlUserGrpEdit").val(dataItem.UserGrpId);
+            $("#txtQuestionEdit").val(dataItem.Question);
+            $("#txtAnswerEdit").val(dataItem.Answer);
+        }
+        function updateRow() {
+            var userGrp = $("select#ddlUserGrpEdit").val();
+            var qstn = $("#txtQuestionEdit").val();
+            var answer = $("#txtAnswerEdit").val();
+            if (userGrp == "0") {
+                $.alert({ content: 'Please select User Group!', confirm: function () { } });
+                return false;
+            }
+            if ($.trim(qstn) == '') {
+                $.alert({ content: 'Please enter a Question!', confirm: function () { } });
+                return false;
+            }
+            if ($.trim(answer) == '') {
+                $.alert({ content: 'Please enter an Answer!', confirm: function () { } });
+                return false;
+            }
+            var uid = $("#hdnRowUId").val();
+            var grid = $("#FAQList").data("kendoGrid");
+            var dataItem = grid.dataSource.getByUid(uid);
+            dataItem.set("UserGrpId", userGrp);
+            dataItem.set("UserGrpName", $("select#ddlUserGrpEdit").find(":selected").text())
+            dataItem.set("Question", qstn);
+            dataItem.set("Answer", answer);
+            $('#myModal').modal('hide');
+            $("#hdnRowUId").val('');
+            $("select#ddlUserGrpEdit").val('0');
+            $("#txtQuestionEdit").val('');
+            $("#txtAnswerEdit").val('');
+            toastr.success('FAQ has been updated successfully.<br/><br/>Please click Update before leaving the page.');
+        }
+        function moveUp(uid) {
+            var grid = $("#FAQList").data("kendoGrid");
+            var dataItem = grid.dataSource.getByUid(uid);
+            var index = grid.dataSource.indexOf(dataItem);
+            var newIndex = Math.max(0, index - 1);
+
+            if (newIndex != index) {
+                grid.dataSource.remove(dataItem);
+                grid.dataSource.insert(newIndex, dataItem);
+            }
+            return false;
+        }
+        function moveDown(uid) {
+            var grid = $("#FAQList").data("kendoGrid");
+            var dataItem = grid.dataSource.getByUid(uid);
+            var index = grid.dataSource.indexOf(dataItem);
+            var newIndex = Math.min(grid.dataSource.total() - 1, index + 1);
+
+            if (newIndex != index) {
+                grid.dataSource.remove(dataItem);
+                grid.dataSource.insert(newIndex, dataItem);
+            }
+            return false;
+        }
+</script>

@@ -1,0 +1,438 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model OrderModel
+<style>
+    .LableTextMargin {
+        margin-top: 3px;
+    }
+</style>
+<style>
+    table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        align-content: center;
+        box-sizing: content-box;
+        width: 100%;
+    }
+
+    thead, tbody {
+        display: block;
+    }
+
+    th, td {
+        height: 1em;
+        text-align: center;
+    }
+
+    .c1 {
+        width: 10em;
+    }
+    .cb {
+        float:left;
+    }
+
+    .c12 {
+        width: 11.40em;
+    }
+   
+    tbody, thead {
+        overflow-y: scroll;
+    }
+
+    tbody {
+        height: 9em;
+        box-sizing: border-box;
+    }
+</style>
+
+
+@{
+    ViewBag.Title = "Update Order Locations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script src="~/Scripts/knockout-3.2.0.js"></script>
+
+@using (Html.BeginForm("UpdateOrderLocations", "Order", FormMethod.Post, new { @ID = "UpdateLocationsForm" }))
+{
+<div class="modal-body" style="padding:15px 15px 0;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>Update ORDER LOCATIONS</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="col-md-12">
+        <div class="contant_page">
+            <div class="row">
+                <!-- collun1 -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.Label("Customer", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.CustomerName) @Html.HiddenFor(order => order.JobOrderHeaderId)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Expected Date</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.ExpectedOrderDate)
+                        </div>
+                    </div>
+                </div>
+                <!-- collun2 -->
+                <div class="col-md-4">
+
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Customer PO</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.CustomerDocName)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Machine Specs</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.MachineSpecs)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- collun3 -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">No. of Machines</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.NoOfMachines) @Html.HiddenFor(order => order.NoOfMachines)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Current Status</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.StatusName)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- collun4 -->
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <label style="float:right;" class="col-md-6  col-sm-3 control-label text-right" for="inputtype2">Notes</label>
+                    </div>
+                    <div class="col-sm-6" style="padding: 0 1.3% 0 0.3%;">
+                        @Html.TextAreaFor(model => model.ClientExecComments, 2, 20, new { @class = "form-control", @placeholder = "Add notes here", @id = "txtComments" })
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2  col-sm-12 control-label text-right">Order locations</div>
+                <div class="col-md-6  col-sm-12">
+                    <div class="table-responsive scroller scrollerMapMachine" data-bind="visible: locList().length > 0">
+                        <div id="divCustLocations">
+                            <table style="width:100%; max-width: 99.99%"  data-bind="visible: locList().length > 0" class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="c1"><span class="order_tittle">Locations</span></th>
+                                        <th class="c1"><span class="order_tittle">Priority</span></th>
+                                        <th class="c1"><span class="order_tittle">No. of Machines</span></th>
+                                        <th class="c1"><input data-bind="checked: selectAll" class="chicher2" type="checkbox" /><span class="order_tittle">Select </span></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: locList">
+                                    <tr data-bind="attr: {id:LocationId}">
+                                        <td class="c12">
+                                            <label data-bind='text: LocationName' />
+                                            <label data-bind='text: LocationId' style="display:none;" />
+                                        </td>
+                                        <td class="c12">
+                                            <div class="select-icon">
+                                                <select data-bind='value: Priority, enable:IsChecked' class="priorityDDL form-control pull-right topspace selecter">
+                                                    <option value="1">P1</option>
+                                                    <option value="2">P2</option>
+                                                    <option value="3">P3</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td class="c12" data-bind="visible:!IsMapped()"><input data-bind="value: NumberOfMachines, valueUpdate: 'afterkeydown', enable: IsChecked" class="NumOfMachTxt form-control bar1 numericOnly" maxlength="4" /></td>
+                                        <td class="c12" data-bind="visible:IsMapped()"><input data-bind="value: NumberOfMachines,  enable: false" class="NumOfMachTxt form-control bar1 numericOnly" maxlength="4" /></td>
+
+
+                                        <td  class="c12" data-bind="visible:IsMapped()"><input class="cb" type="checkbox" data-bind="checked: IsChecked,enable:false " /></td>
+                                        <td  class="c12" data-bind="visible:!IsMapped()"><input class="cb" type="checkbox" data-bind="checked: IsChecked,click: $root.OnRowSelected" /></td>
+
+
+
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table data-bind="visible: locList().length == 0" class="LableTextMargin">
+                                <tr>
+                                    <td><b>No locations have been added for this order!</b></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-top: 2%">
+                <div class="col-md-3"></div>
+                <div class="col-md-8">
+                    <div class="col-md-3 col-sm-3"></div>
+                    <div class="col-md-6 col-sm-6">
+                        @if (Model.PageAccessCode == "ACCNTMGR" || Model.PageAccessCode == "CLIENTEXEC")
+                        {
+                        <a id="btnUpdate" href="#" data-bind='click:save,visible: locList().length > 0' class="btn login_button btn-primary">Update</a>
+                        }
+                        <button id="btnCancel" type="button" class="btn login_button btn-primary yellow">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <table>
+        <tr>
+            <td colspan="6"></td>
+        </tr>
+        <tr>
+            <td>
+                @Html.TextAreaFor(model => model.JsonPostbackVal, new Dictionary<string, object> { { "data-bind", "value: lastSavedJson" }, { "id", "JsonPostbackVal" }, { "style", "display:none;" } })
+            </td>
+        </tr>
+    </table>
+</div>
+}
+<script type="text/javascript">
+    var Locations = [];
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Orders');
+
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("Manage", "Order")';
+        });
+        function ApplyNumericOnly() {
+            $(".numericOnly").on("keypress keyup blur", function (e) {
+                $(this).val($(this).val().replace(/[^\d].+/, ""));
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    return false;
+                }
+            });
+        }
+
+        var LocationsModel = function () {
+            var self = this;
+            self.locList = ko.observableArray();
+            self.LocationObject = function (location) {
+                var self1 = {};
+                self1.LocationId = ko.observable(location.LocationId);
+                self1.LocationName = ko.observable(location.LocationName);
+                self1.Priority = ko.observable(location.Priority);
+                self1.NumberOfMachines = ko.observable(location.NumberOfMachines);
+                self1.IsChecked = ko.observable(location.IsChecked);
+                self1.IsMapped = ko.observable(location.IsMapped);
+                self1.TotalShipped_Inshpping = ko.observable(location.TotalShipped_Inshpping);
+                return self1;
+            };
+            self.OnRowSelected = function () {
+                self.EnableDisableRow(this, this.IsChecked());
+                return true;
+            };
+            self.TotalMachines = ko.computed(function () {
+                var total = 0;
+                $.each(self.locList(), function (i, location1) {
+                    if (location1.NumberOfMachines() != null) {
+                        total += parseFloat(ko.utils.unwrapObservable(location1.NumberOfMachines));
+                    }
+                });
+                return total;
+            });
+
+
+
+
+
+            self.save = function () {
+                var isValid = true;
+                var machinesOrder = $("input#NoOfMachines").val();
+                if (machinesOrder != '') {
+                    if (self.TotalMachines() > 0) {
+                        // SR32.9
+                        $.each(self.locList(), function (i, location1) {
+                            if (location1.NumberOfMachines() != null && location1.NumberOfMachines() > 1000) {
+                                $.alert({ content: 'Number of machines per location cannot be greater than 1000!', confirm: function () { } });
+                                isValid = false;
+                                return isValid;
+                            }
+                        });
+                        // Added by KD on dated : 05-Aug-2015 as per discussion with Testing team Amit & Vishal sir
+                        if (isValid == true) {
+
+                            $.each(self.locList(), function (i, location1) {
+                                if (location1.NumberOfMachines() != null && location1.TotalShipped_Inshpping() != null && location1.NumberOfMachines() < location1.TotalShipped_Inshpping()) {
+                                    $.alert({ content: location1.TotalShipped_Inshpping() + ' Machines has been shipped or in shipping.Please enter more than ' + location1.TotalShipped_Inshpping(), confirm: function () { } });
+                                    //$.alert({ content: 'Machines has been shipped or in shipping', confirm: function () { } });
+
+                                    isValid = false;
+                                    return isValid;
+                                }
+                            });
+                        }
+
+                        // SR32.4
+                        if (self.TotalMachines() > machinesOrder && isValid == true) {
+                            $.alert({ content: 'Number of machines at selected locations can\'t be greater than total number of machines being ordered!', confirm: function () { } });
+                            isValid = false;
+                            return false;
+                        }
+
+                            //// Added by KD on dated : 05-Aug-2015 as per discussion with Testing team Amit & Vishal sir
+                            //else if (isValid == true) {
+                            //    alert('in');
+                            //    $.each(self.locList(), function (i, location1) {
+                            //        if (location1.NumberOfMachines() != null && location1.TotalShipped_Inshpping() != null && location1.NumberOfMachines() < location1.TotalShipped_Inshpping()) {
+                            //            $.alert({ content: 'It can not less than shipped or in-shipping machines', confirm: function () { } });
+                            //            isValid = false;
+                            //            return isValid;
+                            //        }
+                            //    });
+                            //}
+                            // SR32.6
+                        else if (self.TotalMachines() < machinesOrder && isValid == true) {
+                            $.confirm({
+                                content: 'Number of machines at selected locations is less than total number of machines being ordered. Would you like to continue?',
+                                confirm: function () {
+                                    //isValid = true;
+                                    self.lastSavedJson(JSON.stringify(ko.toJS(self.locList), null, 2));
+                                    $("#UpdateLocationsForm").submit();
+                                },
+                                cancel: function () {
+                                    isValid = false;
+                                }
+                            });
+                        }
+                        else if (isValid == true) {
+                            self.lastSavedJson(JSON.stringify(ko.toJS(self.locList), null, 2));
+                            $("#UpdateLocationsForm").submit();
+                        }
+                    }
+                    else {
+                        // SR32.10
+                        var _isValid = true;
+                        // Added by KD on dated : 05-Aug-2015 as per discussion with Testing team Amit & Vishal sir
+                        if (_isValid == true) {
+                            $.each(self.locList(), function (i, location1) {
+                                if (location1.NumberOfMachines() != null && location1.TotalShipped_Inshpping() != null && location1.NumberOfMachines() < location1.TotalShipped_Inshpping()) {
+                                    $.alert({ content: location1.TotalShipped_Inshpping() + ' Machines has been shipped or in shipping.Please enter more than ' + location1.TotalShipped_Inshpping(), confirm: function () { } });
+                                    //$.alert({ content: 'Machines has been shipped or in shipping', confirm: function () { } });
+
+                                    _isValid = false;
+                                    return _isValid;
+                                }
+                            });
+                        }
+
+                        if (_isValid == true) {
+                            $.confirm({
+                                content: 'You have not added the customer locations. Do you want to continue?',
+                                confirm: function () {
+                                    //isValid = true;
+                                    self.lastSavedJson(JSON.stringify(ko.toJS(self.locList), null, 2));
+                                    $("#UpdateLocationsForm").submit();
+                                },
+                                cancel: function () {
+                                    isValid = false;
+                                }
+                            });
+                        }
+                    }
+                }
+                //if (isValid == true)
+                //    self.lastSavedJson(JSON.stringify(ko.toJS(self.locList), null, 2));
+                return isValid;
+            };
+            self.GetLocations = function () {
+                GetOrderLocationsByOrderId().done(function (locs) {
+                    // Clear observable array
+                    self.locList([]);
+                    $.each(locs, function (i, location) {
+                        self.locList.push(self.LocationObject(location));
+                    });
+                    ApplyNumericOnly();
+                })
+                .fail(function () {
+                    // Clear observable array
+                    self.locList([]);
+                })
+                .always(function () {
+                });
+            };
+            self.selectAll = ko.computed({
+                read: function () {
+                    var locations = self.locList();
+                    for (var i = 0, l = locations.length; i < l; i++) {
+                        if (!locations[i].IsMapped()) {
+                            if (!locations[i].IsChecked())
+                                return false;
+                        }
+                    }
+                    return true;
+                },
+                write: function (value) {
+                    $.each(self.locList(), function (i, location1) {
+                        if (!location1.IsMapped()) {
+                            location1.IsChecked(value);
+                            self.EnableDisableRow(location1, value);
+                        }
+                    });
+                }
+            });
+            self.EnableDisableRow = function (location1, ischecked) {
+                var row = $("tr#" + location1.LocationId());
+                if (ischecked) {
+                    //if (location1.NumberOfMachines() == null)
+                    location1.NumberOfMachines(1);
+                }
+                else {
+                    location1.Priority(1);
+                    location1.NumberOfMachines(null);
+                }
+            };
+            self.GetLocations();
+            self.lastSavedJson = ko.observable("");
+        };
+
+        ko.applyBindings(new LocationsModel(Locations));
+
+        function GetOrderLocationsByOrderId() {
+            var deferredObj = $.Deferred();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetOrderLocationsByOrderId")', // Calling json method
+                dataType: 'json',
+                data: { id: $("input#JobOrderHeaderId").val(), Pagemode: 2 },
+                success: function (Locs) {
+                    deferredObj.resolve(Locs);
+                },
+                error: function (ex) {
+                    $.alert({ content: 'Failed to retrieve order locations. ' + ex, confirm: function () { } });
+                    deferredObj.reject(ex);
+                }
+            });
+            return deferredObj.promise();
+        }
+    });
+</script>

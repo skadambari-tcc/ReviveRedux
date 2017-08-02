@@ -1,0 +1,240 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model UserModels
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Manage Users";
+
+}
+
+<style type="text/css">
+    .col-md-10 {
+        width: 73.3333%;
+    }
+    .col-md-8 {
+        padding-right: 37px;
+        width: 73.3333%;
+    }
+    .col-md-4 {
+        width: 19.333%;
+    }
+</style>
+<input type="hidden" id="RecordID" name="DeactivateRecord" />
+<div id="myModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body ">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    @Html.Label("Title", htmlAttributes: new { @class = "", @id = "Title" })
+                </div>
+            </div>
+
+            <!-- dialog buttons -->
+            <div class="modal-footer footerbtn">
+                <button type="button" id="Deactivatebtn" class="btn GreenBtn btn-primary" data-dismiss="modal">YES</button>
+                <button type="button" class="btn btn-primary YellowBtn" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div style="margin-left:0.5%">
+                        <h2>Manage Users</h2>
+                    </div>
+                    <div style="text-align:center;margin-top: -5%;">
+                        <div class="col-md-8 col-sm-8">
+                            @Html.ValidationMessageFor(m => m.User_Level_Id, "", new { @class = "red " })
+                            <div class="select-icon">
+                                @Html.DropDownListFor(m => m.User_Level_Id, new SelectList(ViewBag.UserTypeLst, "Id", "Text", "1"), "All", new { @style = "width: 200px;", @class = "form-control pull-right topspace selecter", @id = "ddlUserLevelId", onchange = "refreshGrid();" })
+                            </div>
+                        </div>
+                        <div class="col-md-4  col-sm-4">
+                            <input type="button" title="AddCustomer" class="GreenBtn" value="Add User" onclick="location.href='@Url.Action("AddEditUsers", "ManageUsers", new { uid = "00000000-0000-0000-0000-000000000000" })'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4  col-sm-4" style="float:right">
+                        
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="table-responsive Kendogrid col-md-10" style=" margin-top: 3%;">
+                        @(Html.Kendo().Grid<DtoUser>()
+                  .Name("ManageUsersGrid")
+                  .Columns(columns =>
+                  {
+                      columns.Bound(p => p.FullName).Title("User Name");
+                      columns.Bound(p => p.User_Level_Name).Title("Role");
+                      columns.Bound(p => p.UserName).Title("Email");
+                      columns.Bound(p => p.Cell_Phone).Title("Phone No.");
+                      columns.Bound(p => p.User_ID).Title("User_ID").Visible(false);
+                      columns.Bound(p => p.User_ID).ClientTemplate("<a  title='Edit' href='" + Url.Action("AddEditUsers", "ManageUsers") + "?uid=#= User_ID #''  " + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>").Title("Edit").Filterable(false).Sortable(false);
+                      columns.Bound(p => p.status).ClientTemplate(
+                       "# if (status == true) { #<a id=\"activate\" runat=\"server\" href='javascript: void(0);' onclick=\"Action(this,'#= User_ID#,#= status#');\" " + "><img src='" + Url.Content("~/Scripts/images/activate_icon.png") + "' /></a># }else{#<a id=\"deactivate\" runat=\"server\" href='javascript: void(0);' onclick=\"Action(this,'#= User_ID#,#= status#');\" " + "><img src='" + Url.Content("~/Scripts/images/disable_icon.png") + "' /></a>#} #").Title("Active").Sortable(false).HtmlAttributes(new { @style = "cursor:pointer" });
+
+
+
+
+                  })
+                                       .Pageable(pageable =>
+                                                    {
+                                                        pageable.Refresh(true);
+                                                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                                                        pageable.Messages(messages => messages.Empty("No user found"));
+                                                    })
+                                                            .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                                          {
+                                                              fs.Clear().Contains("Contains");
+                                                              fs.DoesNotContain("Does not contain");
+                                                              fs.IsEqualTo("Equal to");
+                                                              fs.IsNotEqualTo("Not equal to");
+                                                              fs.StartsWith("Starts with");
+                                                              fs.EndsWith("Ends with");
+                                                          })))
+                                                      .Sortable()
+                                                      .Scrollable()
+                                                    .HtmlAttributes(new { style = "width:800px" })
+                                                  .DataSource(dataSource => dataSource
+                                                     .Ajax().PageSize(10)
+                                                    .ServerOperation(false) // paging, sorting, filtering and grouping will be applied client-side
+                                                      //.Read("ManageUsersAjax", "ManageUsers")
+                                                                  .Read(read => read.Action("ManageUsersAjax", "ManageUsers").Data("UserLevelId"))
+
+                                                  )
+                        )
+
+                    </div>
+                    <div class="kendogrid col-md-2" style=" margin-top: 3%;">
+                        <img src="~/Scripts/images/profile.png" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function refreshGrid(e) {
+        $("#ManageUsersGrid").data('kendoGrid').dataSource.read();
+        //$("#BatchGrid").data('kendoGrid').refresh();
+    }
+    function UserLevelId() {
+        var selsectedUserLevelId = $("#ddlUserLevelId").val();
+        if (selsectedUserLevelId == '-- Select --')
+            selsectedUserLevelId = null;
+
+        return { UserLevel_Id: selsectedUserLevelId };
+    }
+    function Action(e, Id) {
+        var arr = Id;
+        $('#myModal').modal('show');
+        if (e.id == "deactivate") {
+
+            $("#Title").text('@ReviveMessages.ActivateInfo');
+        }
+        else {
+            $("#Title").text('@ReviveMessages.DeactivateInfo');
+        }
+
+        $("#RecordID").val(arr);
+
+    }
+    $('#Deactivatebtn').click(function (e) {
+        var record = $("#RecordID").val();
+        var arr = record.split(',');
+        var recordID = arr[0];
+        var status = arr[1];
+        var objUserModel =
+             {
+                 "UserId": recordID,
+                 "Status": status
+             };
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ActivateDeactivateUser", "ManageUsers")',
+
+            //Your Action name in the DropDownListConstroller.cs
+            data: JSON.stringify(objUserModel),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+        }).done(function (data) {
+            //Successfully pass to server and get response
+            $('#ManageUsersGrid').data().kendoGrid.dataSource.read(data); // or
+          
+            if (data.result = "OK") {
+
+                if (data.Successmsg != "") {
+                    toastr.success(data.Successmsg);
+                }
+                else
+                {
+                    toastr.warning(data.ErrorMsgs);
+                }
+                result = true;
+                
+            }
+           
+        })
+
+    });
+    $(document).ready(function () {
+        Revive.Redux.Common.SetKendoGridHeight();
+        Revive.Redux.Common.SetParentMenuSelected('Admin');
+
+        $("#ManageUsersGrid").data("kendoGrid").dataSource.read();
+        $("#ddlUserLevelId").val('');
+
+        //Tooltip added to email column of storeUserGrid
+        $("#ManageUsersGrid").kendoTooltip({
+            filter: "td:nth-child(3)", //this filter selects the second column's cells
+            position: "top",
+            content: function (e) {
+                var dataItem = $("#ManageUsersGrid").data("kendoGrid").dataItem(e.target.closest("tr"));
+                var content = dataItem.UserName;
+                return content;
+            }
+        }).data("kendoTooltip");
+        //end
+
+
+
+    });
+
+    $(function () {
+        //$('#ManageUsersGrid div:nth-child(2)').css("height", "auto");
+        //$('#ManageUsersGrid div:nth-child(2)').css("max-height", "170px");
+
+
+    });
+
+    @if (TempData["isCreatedSuccess"] != null && (bool)TempData["isCreatedSuccess"] == true)
+        {
+
+
+            //<text>toastr.success('@ReviveMessages.ManageUserSaveInfo');</text>
+            <text>toastr.success('@ReviveMessages.Add');</text>
+        
+        }
+    @if (TempData["isUpdatedSuccess"] != null && (bool)TempData["isUpdatedSuccess"] == true)
+    {
+
+
+        <text>toastr.success('@ReviveMessages.Update');</text>
+    }
+
+
+
+
+
+</script>
+

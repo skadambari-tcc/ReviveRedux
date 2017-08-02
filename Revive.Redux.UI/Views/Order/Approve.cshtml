@@ -1,0 +1,372 @@
+﻿@model Revive.Redux.Entities.OrderModel
+@using Kendo.Mvc.UI
+
+@{
+    ViewBag.Title = "Approve/Reject Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<style>
+    .LableTextMargin {
+        margin-top: 3px;
+    }
+
+    .Title {
+        text-align: left;
+        font-size: larger;
+        color: #7c0000;
+        margin-left: 10px;
+    }
+
+    .k-window-titlebar {
+        height: 35px !important;
+    }
+
+    .k-window div.k-window-content {
+         overflow-x: hidden !important;
+    }
+</style>
+@using (Html.BeginForm("ApproveRejectOrder", "Order", FormMethod.Post, new { id = "submitForm" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body" style="padding:0px!important">
+        <div class="row">
+            <div class="col-md-12">
+                <div class=" contant_page">
+                    <div class="col-md-12">
+                        <h2 style="margin-left:-0.2%">APPROVE/REJECT ORDER</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="contant_page">
+                <div class="row">
+                    <div class="col-md-5">
+
+                        <div class="form-group">
+                            @Html.Label("Customer", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @Html.DisplayFor(model => model.CustomerName)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Customer PO", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                <a href='@Url.Action("DownloadFileActual", "ManageCustomers", new { DocDetails = Model.CustomerId +","+ Model.CustomerDocName})' target="_blank">@Html.DisplayFor(modelItem => modelItem.CustomerDocName)</a>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">No. of Machines</label>
+                            <div class="col-sm-6 LableTextMargin">
+                                @Html.DisplayFor(model => model.NoOfMachines)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Expected Date", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin items-list-container">
+                                @Html.DisplayFor(model => model.ExpectedOrderDate)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Machine Specs", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                <a onclick='return MachineSpecs_View("@Model.MachineSpecsId");' href='javascript:void(0);'>@Html.DisplayFor(modelItem => modelItem.MachineSpecs)</a>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Locations", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                <a href='@Url.Action("ViewLocations", "Order", new { Id = Model.JobOrderHeaderIdEncoded })' target="_blank">View</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- collun2 -->
+                    <div class="col-md-5">
+
+                        <div class="form-group">
+                            @Html.Label("Comments", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @if (@Model.ClientExecComments.Length > 20)
+                                {
+                                    <label>@Model.ClientExecComments.Substring(0, 17)...</label><a id='lnkMoreClientExecComments' class='more' title='@Model.ClientExecComments' href='#'>more</a>
+                                    <input id="ClientExecComments" type="hidden" value='@Model.ClientExecComments' />
+                                }
+                                else
+                                {
+                                    <label>@Model.ClientExecComments</label>
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Approver Comments", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6">
+
+                                @Html.TextAreaFor(model => model.ApproverComments, 3, 20, new { @class = "form-control", @style = "width:200px;", @id = "txtApproverComments" })
+                                @Html.ValidationMessageFor(model => model.ApproverComments)
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- collun4 ends-->
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <div style="float:none; clear:both; text-align:center">
+        <input type="hidden" id="hdnActionTaken" name="hdnActionTaken" value="" />
+        @*Changes done for showing PendingApproval tasks to Admin & SuperAdmin also*@
+        @* @if (@Model.StatusName == "Pending Approval" && Model.PageAccessCode == "APPROVER") *@
+        @if (@Model.StatusName == "Pending Approval" && (Model.PageAccessCode == "APPROVER" || Model.PageAccessCode == "SUPERADMIN" || Model.PageAccessCode == "ADMIN"))
+        {
+            <a id="btnApprove" href="#" class="btn login_button btn-primary">Approve</a>
+            <a id="btnReject" href="#" class="btn login_button btn-primary">Reject</a>
+            <a id="btnCancel" href="#" style="margin-left:0px;" class="btn login_button btn-primary yellow">Cancel</a>
+        }
+        else
+        {
+            <a class="btn login_button btn-primary yellow" href="@Html.Raw(Html.AttributeEncode(ViewBag.ReturnUrl))">Back</a>
+        }
+    </div>
+
+    @Html.HiddenFor(model => model.CustomerId);
+    @Html.HiddenFor(model => model.JobOrderHeaderId);
+    @Html.HiddenFor(model => model.JobOrderHeaderIdEncoded);
+    @Html.HiddenFor(model => model.MachineSpecsId);
+    @Html.HiddenFor(model => model.CustomerName);
+    @Html.HiddenFor(model => model.CreatedByUserId);
+    @Html.HiddenFor(model => model.ManufacturerId);
+}
+
+<div id="MachineWindow">
+    @(Html.Kendo().Window()
+           .Name("MachineSpecsWindow")
+           .Title("View Machine Specs")
+           .Modal(true)
+           .Content(@<text>
+
+        </text>)
+                                                                       .Draggable()
+                                                                       .Resizable()
+                                                                       .Width(600)
+                                                                       .Height(370)
+                                                                       .Actions(actions => actions.Close())
+    )
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Orders');
+
+        $('a#lnkMoreClientExecComments').click(function (e) {
+            $.dialog({
+                title: 'Comments',
+                content: $("input#ClientExecComments").val(),
+            });
+        });
+
+        $(".k-overlay").hide();
+        $(".k-window").hide();
+        $("#btnApprove").click(function () {
+            var isValid = false;
+            if ($('#submitForm') != null) {
+                if ($('#submitForm').valid()) {
+                    $.confirm({
+                        content: 'Are you sure want to Approve this order?',
+                        confirm: function () {
+                            $("input#hdnActionTaken").val("Approve");                            
+                            $("#submitForm").submit();
+                        },
+                        cancel: function () {
+                            isValid = false;
+                        }
+                    });
+                }
+                else {
+                    isValid = false;
+                }
+            }
+            else {
+                isValid = false;
+            }
+            return isValid;
+        });
+        $("#btnReject").click(function () {
+            var isValid = false;
+            if ($('#submitForm') != null) {
+                if ($('#submitForm').valid()) {
+                    var comments = $("#txtApproverComments").val().trim();
+                    if (comments == '') {
+                        $.alert({ content: 'Approver comments are required!', confirm: function () { } });
+                        $("#txtApproverComments").focus();
+                        return false;
+                    }
+                    $.confirm({
+                        content: 'Are you sure want to Reject this order?',
+                        confirm: function () {
+                            $("input#hdnActionTaken").val("Reject");
+                            $("#submitForm").submit();
+                        },
+                        cancel: function () {
+                            isValid = false;
+                        }
+                    });
+                }
+                else {
+                    isValid = false;
+                }
+            }
+            else {
+                isValid = false;
+            }
+        });
+        $("#btnCancel").click(function () {
+            $("input#hdnActionTaken").val("Cancel");
+            $("#submitForm").submit();
+        });
+    });
+</script>
+
+<script type="text/x-kendo-template" id="ViewMachineTemplate">
+    <div id="details-container">
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Generation", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Generation #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("PCB Version", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= PCB_Version #
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Power Supply1(HV)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= PowerSupply_1 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Power Supply1(LV)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= PowerSupply_2 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Valve 1(Vaccum)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Valve_1 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Valve 3(Fresh Air)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Valve_3 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others1", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield1 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others3", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield3 #
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Pump", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Pump #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Injection Heater", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= INjection_Heater #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Platen heater", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Platen_heater #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Valve 2(Injection)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Valve_2 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Firmware Version", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= software_version #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Others2:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield2 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others4", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield4 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others5", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield5 #
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+    function MachineSpecs_View(ID) {
+        var detailsTemplate = kendo.template($("#ViewMachineTemplate").html());
+        $.ajax({
+            dataType: 'json',
+            type: 'Post',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ ID: ID }),
+            url: '/ManageMachineSpecs/ViewMachineSpecs',
+            success: function (result) {
+                var wnd = $("#MachineSpecsWindow").data("kendoWindow");
+                wnd.content(detailsTemplate(result));
+                wnd.center().open();
+                $(".k-overlay").show();
+                $(".k-window").show();
+            },
+            error: function (obj) {
+                $.alert({ content: 'Error While getting Record.', confirm: function () { } });
+            }
+        });
+    }
+</script>

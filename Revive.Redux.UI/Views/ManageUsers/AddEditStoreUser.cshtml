@@ -1,0 +1,363 @@
+﻿@model Revive.Redux.Entities.UserModels
+
+@{
+    ViewBag.Title = "AddEditCustomer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*@using (Html.BeginForm("RegisterUser", "ManageUsers"))*@
+@using (Html.BeginForm("RegisterStoreUser", "ManageUsers", FormMethod.Post, new { id = "userform", name = "userform", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="contant_page">
+                    <div class="row">
+                        @*nomargin nopadding*@
+                        <div class="lable-align-top">
+                            @*col-md-8 nomargin nopadding*@
+
+                            @if (ViewBag.isUpdateMode == null)
+                            {
+                                <h2>Add Store User</h2>
+                            }
+                            else
+                            {
+                                <h2>Edit Store User</h2>
+                            }
+                        </div>
+                    </div>
+                    @Html.HiddenFor(model => model.Status)
+                    @Html.HiddenFor(model => model.UserId)
+                    <!-- tittle -->
+
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                @Html.HiddenFor(model => model.Status)
+                                @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "required control-label col-md-4 text-right" })
+
+                                <div class="col-sm-5">
+                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", @tabindex = 1 } })
+                                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "required control-label col-md-4 text-right" })
+
+                                <div class="col-sm-5">
+                                    @if (ViewBag.isUpdateMode == true)
+                                    {
+                                        @Html.TextBoxFor(model => model.emailEdit, new { @id = "editUserEmail", @class = "form-control", @tabindex = 3 })
+                                        @Html.ValidationMessageFor(model => model.emailEdit, "", new { @class = "red" })
+
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.Email, new { @class = " form-control", @id = "userEmail", @tabindex = 3 })
+
+                                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "red" })
+                                    }
+
+
+
+
+
+                                </div>
+                            </div>
+
+                            <div id="divCustomer" class="form-group">
+
+                                @Html.LabelFor(model => model.Customer_Id, htmlAttributes: new { @class = "required control-label col-md-4 text-right" })
+
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(model => model.Customer_Id, new SelectList(ViewBag.CustomerLst, "Id", "Text"), "--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @tabindex = 5 })
+                                        @Html.ValidationMessageFor(model => model.Customer_Id, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="divAgent" class="form-group">
+
+                                @Html.LabelFor(model => model.SubAgentId, htmlAttributes: new { @class = "required control-label col-md-4 text-right" })
+
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(model => model.SubAgentId, new SelectList(ViewBag.SubAgentLst, "Id", "Text"),"--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @tabindex = 7 })
+                                        @Html.ValidationMessageFor(model => model.SubAgentId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="form-group ">
+
+
+                                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-4 text-right" })
+
+                                <div class="col-sm-5">
+                                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", @tabindex = 2 } })
+                                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.LabelFor(model => model.UserMobile, htmlAttributes: new { @class = "required control-label col-md-4 text-right" })
+
+                                <div class="col-sm-5">
+                                    @Html.EditorFor(model => model.UserMobile, new { htmlAttributes = new { @class = "form-control", @id = "txtUserMobile", @tabindex = 4 } })
+                                    @Html.ValidationMessageFor(model => model.UserMobile, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div id="divSubsidiary" class="form-group">
+
+                                @Html.LabelFor(model => model.SubsidiaryId, htmlAttributes: new { @class = "required control-label col-md-4 text-right" })
+
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(model => model.SubsidiaryId, new SelectList(ViewBag.SubsidiaryLst, "Id", "Text"),"--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @tabindex = 6 })
+                                        @Html.ValidationMessageFor(model => model.SubsidiaryId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group " id="divLocation">
+
+
+                                @Html.LabelFor(model => model.Location_Id, htmlAttributes: new { @class = " required control-label col-md-4 text-right" })
+
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(model => model.Location_Id, new SelectList(ViewBag.LocationLst, "Id", "Text"),"--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @tabindex = 8 })
+                                        @Html.ValidationMessageFor(model => model.Location_Id, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="row" style="padding-top: 5%;">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-8">
+                            <div class="col-md-3 col-sm-3"></div>
+                            <div class="col-md-6 col-sm-6">
+                                @if (ViewBag.isUpdateMode == true)
+                                {
+                                    <input type="submit" value="Update User" class="GreenBtn" />
+                                }
+                                else
+                                {
+                                    <input type="submit" value="Add User" class="GreenBtn" />
+                                }
+
+                                <input type="button" value="Cancel" class="YellowBtn" onclick="location.href='@Url.Action("ViewUser", "ManageUsers", new { uid = "00000000-0000-0000-0000-000000000000" })'" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Stores');
+
+        // Customer dropdown change event
+        if ($("select#Location_Id") != null && $("select#Location_Id").length > 0 && $("select#Location_Id").val() == 0)
+            $("select#Location_Id").find(":selected").val('');
+       
+        $("#Customer_Id").change(function () {
+            $("#Location_Id").empty();
+            $("#SubAgentId").empty();
+            $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+            $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            //Subsidiary Changes
+            if ($("#Customer_Id").val() != "") {
+                $("#SubsidiaryId").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: $("#Customer_Id").val() },
+                    success: function (data) {
+                        $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+                        if (data.length > 0) {
+                            $.each(data, function (i, dataitem) {
+                                $("#SubsidiaryId").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                            });
+                        }
+                    },
+                    error: function (ex) {
+                        if ($("#Customer_Id").val() != null && $("#Customer_Id").val() != '')
+                            $.alert({ content: 'Failed to retrieve Subsidairy. ' + ex, confirm: function () { } });
+                    }
+                });
+            }
+            else {
+                $("#SubsidiaryId").empty();
+                $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+            }
+            return false;
+        });
+
+        // Get User Type Name Customer or Admin Or Any Other
+        $(function () {
+            $("#txtUserMobile").mask("(999) 999-9999", { autoclear: false });
+        });
+
+        $("#User_Level_Id").change(function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetUserType")', // Calling json method
+                dataType: 'json',
+                data: { User_Level_Id: $("#User_Level_Id").val() },
+                success: function (UserTypeData) {
+                    if (UserTypeData.length == 1) {
+                        if (UserTypeData[0].Text == "Customer") {
+
+                            $("#divCustomer").show();
+                            $("#divLocation").show();
+                            $("#divAgent").show();
+                            $("#divSubsidiary").show();
+                        }
+                        else {
+                            $("#divCustomer").hide();
+                            $("#divLocation").hide();
+                            $("#divAgent").hide();
+                            $("#divSubsidiary").hide();
+                        }
+                    }
+                },
+                error: function (ex) {
+                    $("#divCustomer").show();
+                    $("#divLocation").show();
+                    $("#divAgent").show();
+                    $("#divSubsidiary").show();
+                }
+            });
+            return false;
+        });
+
+
+        //Subsidairy Changes
+        $("#SubsidiaryId").change(function () {
+            $("#Location_Id").empty();
+            $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+            if ($("#SubsidiaryId").val() != "") {
+                $("#SubAgentId").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetAgentBySubsidiary")', // Calling json method
+                    dataType: 'json',
+                    data: { SubsidiaryId: $("#SubsidiaryId").val() },
+                    success: function (AgentList) {
+                        $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                        if (AgentList.length > 0) {
+                            $.each(AgentList, function (i, AgentList) {
+                                $("#SubAgentId").append('<option value="' + AgentList.Id + '">' + AgentList.Text + '</option>');
+                            });
+                        }
+                    },
+                    error: function (ex) {
+                        if ($("#SubsidiaryId").val() != null && $("#SubsidiaryId").val() != '')
+                            $.alert({ content: 'Failed to retrieve Agent. ' + ex, confirm: function () { } });
+                    }
+                });
+                
+            }
+            else {
+                $("#SubAgentId").empty();
+                $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            }
+            return false;
+        });
+
+        $("#SubAgentId").change(function () {
+            $("#Location_Id").empty();
+            if ($("#SubAgentId").val() != "") {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetCustomerLocationbyAgent")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: $("#Customer_Id").val(), SubsidiaryId: $("#SubsidiaryId").val(), AgentId: $("#SubAgentId").val(), IsActive: true },
+                    success: function (LocationList) {
+                        if (LocationList.length > 0) {
+                            $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+                            $.each(LocationList, function (i, LocationList) {
+                                $("#Location_Id").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                            });
+                        }
+                        else {
+                            $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+                        }
+                    },
+                    error: function (ex) { $.alert({ content: 'Failed to retrieve Location. ' + ex, confirm: function () { } }); }
+                });
+            }
+            else {
+                $("#Location_Id").empty();
+                $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+            }
+        });
+
+    });
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<style type="text/css">
+        .form-group {
+            float: left;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        /*select {
+
+    background-repeat:no-repeat;
+    background-position:300px;
+    border-radius:5px;
+    -webkit-appearance:caret;
+    box-shadow:inset 0 0 10px 0 rgba(0,0,0,0.6);
+    outline:none
+    }*/
+        .drop {
+            /* I actually don't know how this works, but arrow is not visible. */
+            border: 0; /* If there is any border, arrow is displayed. */
+            /* display: flex;
+             You can set any background (color/image) and replace firefox arrow with that. */
+            -moz-appearance: none;
+            text-indent: 0.01px;
+            text-overflow: '';
+            box-shadow: inset 0 0 3px 0 rgba(0,0,0,0.6);
+            border-left: 0 none;
+            border-top: 0 none;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            box-shadow: 1px 1px 1px 1px;
+        }
+        /*select:hover {
+    color:#00ff7f
+    }*/
+</style>

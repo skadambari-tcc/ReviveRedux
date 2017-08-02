@@ -1,0 +1,63 @@
+﻿@model Revive.Redux.Entities.ManageGroupShippingQueueModel
+@{
+    ViewBag.Title = "View Group Shipping Queue";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    .ButtonBottom {
+        height: 200px;
+    }
+</style>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="contant_page">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>Add Group Shipping Queue</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.GroupId, htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-8">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.GroupId, new SelectList(Model.GroupList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @style = "" })
+                                    @Html.ValidationMessageFor(m => m.GroupId)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.BeginShippingDate, htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-8">
+                                @(Html.Kendo().DatePickerFor(m => m.BeginShippingDate).Value(DateTime.Now.Date.AddDays(-60))
+                         .HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "DateFrom", @style = "width: 220px;" }))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1 ButtonBottom">
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            <button id="btnAddtoQueue" class="btn GreenBtn" type="button">Add to Shipping Queue</button>
+                            <button id="btnCancel" class="btn YellowBtn" type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+</script>

@@ -1,0 +1,180 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model OrderModel
+@{
+    ViewBag.Title = "Manage Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #body {
+        /*height: 550px;*/
+    }
+    .k-grid tbody tr:hover {
+        background: #faecc1;
+    }
+    .col-md-4 {
+        width: 30%;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Orders');
+        @if (TempData["OrderCreated"] != null && (bool)TempData["OrderCreated"] == true)
+        {
+
+            <text>toastr.success('Order Created Successfully.');</text>
+        }
+        @if (TempData["OrderApproved"] != null && (bool)TempData["OrderApproved"] == true)
+        {
+
+            <text>toastr.success('Order Approved Successfully.');</text>
+        }
+        @if (TempData["OrderRejected"] != null && (bool)TempData["OrderRejected"] == true)
+        {
+
+            <text>toastr.success('Order Rejected Successfully.');</text>
+        }
+        @if (TempData["OrderAssigned"] != null && (bool)TempData["OrderAssigned"] == true)
+        {
+
+            <text>toastr.success('Order Assigned Successfully.');</text>
+        }
+        @if (TempData["OrderLocationsUpdated"] != null && (bool)TempData["OrderLocationsUpdated"] == true)
+        {
+
+            <text>toastr.success('Order locations updated successfully.');</text>
+        }
+        
+        Revive.Redux.Common.SetKendoGridHeight();
+    });
+</script>
+<div class="modal-body" @*style="padding:0px!important"*@>
+    <input type="hidden" id="PageAccessCode" name="PageAccessCode" value="@Model.PageAccessCode" />
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>MANAGE ORDERS</h2>
+                    </div>                 
+                    @*@if (@Model.PageAccessCode == "CLIENTEXEC" || @Model.PageAccessCode == "ACCNTMGR")
+                    {*@
+                    <div class="row">
+                        <div class="col-md-8 col-sm-8"></div>
+                        <div class="col-md-4 col-sm-4" style="float: right;">
+                            <div class="col-md-5 col-sm-5 "></div>
+                            <div class="col-md-7 col-sm-7 ">                                
+                                <a class="btn login_button btn-primary" href='@Url.Action("CreateMachineOrder", "Order")'>New Order</a>                                
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    @*}*@
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid">
+                            @(Html.Kendo().Grid<OrderModel>()
+                .Name("ManageOrders")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.OrderId).Title("Order Number");            
+                    columns.Bound(p => p.NoOfMachines).Title("No of Mc's");
+                    columns.Bound(p => p.CreatedDate).Title("Order Date").ClientTemplate("#= kendo.toString(kendo.parseDate(CreatedDate, 'yyyy-MM-dd'), 'MM-dd-yyyy') #");
+                    columns.Bound(p => p.CreatedDate).Title("Created Date").ClientTemplate("#= kendo.toString(kendo.parseDate(CreatedDate, 'yyyy-MM-dd'), 'MM-dd-yyyy') #");
+                    columns.Bound(p => p.ManufacturerName).Title("Manufacturer");
+                    columns.Bound(p => p.OrderId).Title("Remove").ClientTemplate(
+                       "<a id=\"Delete\" runat=\"server\" href='javascript: void(0);' onclick=\"Action(this,'#= OrderId#');\" " + "><img src='" + Url.Content("~/Scripts/images/delite_icon.png") + "' /></a>").Title("Remove").Sortable(false).Width(80).HtmlAttributes(new { @style = "cursor:pointer" });
+                  
+                    //columns.Bound(p => p.OrderId).Title("View").ClientTemplate(
+                    //    "<a title='View Order' href='" + Url.Action("ViewMachineOrder", "Order") + "/#= OrderId #'" + "><i class='fa fa-eye fa-lg icon-color'></i></a>"
+                    //).Filterable(false).Sortable(false);
+                    //columns.Bound(p => p.OrderId).Title("Edit").ClientTemplate(
+                    //    "<a title='Edit Order' href='" + Url.Action("EditMachineOrder", "Order") + "/#= OrderId #'" + "><i class='fa fa-eye fa-lg icon-color'></i></a>"
+                    //).Filterable(false).Sortable(false).Filterable(false).Sortable(false);
+                })
+                .Pageable(pageable =>
+                {
+                    pageable.Refresh(true);
+                    pageable.PageSizes(new int[] { 10, 20, 50 });
+                    pageable.Messages(messages => messages.Empty("No records available!"));
+                })
+                        .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                       {
+                                           fs.Clear().Contains("Contains");
+                                           fs.DoesNotContain("Does not contain");
+                                           fs.IsEqualTo("Equal to");
+                                           fs.IsNotEqualTo("Not equal to");
+                                           fs.StartsWith("Starts with");
+                                           fs.EndsWith("Ends with");
+                                       })))
+                .Sortable()
+                .Scrollable()
+                .ColumnResizeHandleWidth(900)
+                .HtmlAttributes(new { style = "width:91%;" })
+                .DataSource(dataSource => dataSource.Ajax().PageSize(10)
+                .ServerOperation(false) // paging, sorting, filtering and grouping will be applied client-side
+                                .Read("ManageMachineOrdersAjax", "Order")
+                        //.Events(events => events.RequestEnd("onRequestEnd"))
+                )
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    @Html.Label("Do you want to remove this order", htmlAttributes: new { @class = "", @id = "Title" })
+                </div>
+            </div>
+
+            <!-- dialog buttons -->
+            <div class="modal-footer footerbtn">
+                <button type="button" id="Deactivatebtn" class="btn GreenBtn btn-primary" data-dismiss="modal">YES</button>
+                <button type="button" class="btn btn-primary YellowBtn" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="RecordID" name="DeactivateRecord" />
+<script type="text/javascript">
+    function Action(e, Id) {
+        //alert(e.id);
+        var arr = Id;
+        $('#myModal').modal('show');        
+       
+        $("#RecordID").val(arr);
+    }
+    $('#Deactivatebtn').click(function (e) {
+        var record = $("#RecordID").val();      
+        var OrderModel =
+             {
+                 "OrderId": record,                
+             };
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("RemoveOrder", "Order")',
+
+            //Your Action name in the DropDownListConstroller.cs
+            data: JSON.stringify(OrderModel),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+        }).done(function (data) {
+            //Successfully pass to server and get response
+            $('#ManageOrders').data().kendoGrid.dataSource.read(data); // or
+            if (data.result = true) {
+                toastr.success(data.SuccessMsg);
+                result = true;
+            }
+        })
+    });
+  
+</script>

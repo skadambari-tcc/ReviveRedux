@@ -1,0 +1,193 @@
+﻿@model Revive.Redux.Entities.ManufacturersModel
+
+@{
+    ViewBag.Title = "Manage Manufacturers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .k-grid td.Address {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    /*.k-animation-container{
+        width:290px!important;
+    }*/
+</style>
+<input type="hidden" id="RecordID" name="DeactivateRecord" />
+<div id="myModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm" style="width: 25%;">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    @Html.Label("Title", htmlAttributes: new { @class = "", @id = "Title" })
+                </div>
+            </div>
+            <!-- dialog buttons -->
+            <div class="modal-footer footerbtn">
+                <button type="button" id="Deactivatebtn" class="btn GreenBtn btn-primary" data-dismiss="modal">YES</button>
+                <button type="button" class="btn btn-primary YellowBtn" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-body" @*style="padding:0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>Manage Manufacturers</h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 col-sm-8"></div>
+                        <div class="col-md-4 col-sm-4" style="float: right;margin-right: 3.5%;">
+                            <div class="col-md-5 col-sm-5 "></div>
+                            <div class="col-md-7 col-sm-7 ">
+                                @*@if (Model.PageAccessCode != "ACCNTMGR")
+                                    {*@
+                                <button id="btnAddCustomer" type="submit" class="GreenBtn" onclick="location.href='@Url.Action("Create", "Manufacturers")'">Add Manufacturer</button>
+                                @*}*@
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid">
+
+                            @(Html.Kendo().Grid<Revive.Redux.Entities.ManufacturersModel>()
+            .Name("ManufacturerGrid")
+                     .DataSource(dataSource => dataSource
+                                                    .Ajax().PageSize(10)
+                                                            .ServerOperation(false)
+                                                           .Read("ManageManufacturersAjax", "Manufacturers")
+                        )
+            .Columns(columns =>
+                {
+                    columns.Bound(c => c.Manufacturer_Name).Title("Manufacturer Name");
+                    columns.Bound(c => c.Address).Title("Address").HtmlAttributes(new { @class = "Address" });
+                    columns.Bound(c => c.Phone_Number).Title("Contact Number");
+                    columns.Bound(c => c.PM_Name).Title("Project Manager");
+                    columns.Bound(c => c.Status).Visible(false);
+                    columns.Bound(c => c.Manufacturer_Id).ClientTemplate("<a title='View Details' onclick=\"\" href='" + Url.Action("ViewMF", "Manufacturers") + "?Id=#= Manufacturer_Id #' ' " + "><i class='fa fa-eye fa-lg icon-color'></i></a>").Title("Details").Filterable(false).Sortable(false).Width(60).HtmlAttributes(new { @style = "cursor:pointer" });
+                    columns.Bound(c => c.Manufacturer_Id).ClientTemplate("<a title='Edit' href='" + Url.Action("Edit", "Manufacturers") + "?Id=#= Manufacturer_Id #' ' " + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>").Title("Edit").Filterable(false).Sortable(false).Width(40).HtmlAttributes(new { @style = "cursor:pointer" });
+                    //if (Model.PageAccessCode != "ACCNTMGR")
+                    //{
+                    columns.Bound(c => c.Status).ClientTemplate(
+                   "# if (Status == false) { #<a id=\"deactivate\" runat=\"server\" href='javascript: void(0);' onclick=\"Action(this,'#= Manufacturer_Id#,#= Status#');\" " + "><img src='" + Url.Content("~/Scripts/images/disable_icon.png") + "' /></a># }else{#<a id=\"activate\" runat=\"server\" href='javascript: void(0);' onclick=\"Action(this,'#= Manufacturer_Id#,#= Status#');\" " + "><img src='" + Url.Content("~/Scripts/images/activate_icon.png") + "' /></a>#} #").Title("Active").Sortable(false).Width(60).HtmlAttributes(new { @style = "cursor:pointer" });
+                    //}
+                })
+
+                .HtmlAttributes(new { style = "width:91%;" })
+                .Pageable(pageable =>
+                {
+                    pageable.Refresh(true);
+                    pageable.PageSizes(new int[] { 10, 20, 50 });
+                    pageable.Messages(messages => messages.Empty("No customer found!"));
+                })
+                .Filterable(f => f.Operators(o => o.ForString(fs =>
+                            {
+                                fs.Clear().Contains("Contains");
+                                fs.DoesNotContain("Does not contain");
+                                fs.IsEqualTo("Equal to");
+                                fs.IsNotEqualTo("Not equal to");
+                                fs.StartsWith("Starts with");
+                                fs.EndsWith("Ends with");
+                            })))
+                .Sortable()
+                .Scrollable()
+                .ColumnResizeHandleWidth(900)
+
+                            )
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    function Action(e, Id) {
+        var arr = Id;
+        $('#myModal').modal('show');
+        if (e.id == "deactivate") {
+
+            $("#Title").text("Do you want to activate this Manufacturer?");
+        }
+        else {
+            $("#Title").text("Do you want to deactivate this Manufacturer?");
+        }
+
+        $("#RecordID").val(arr);
+    }
+    $('#Deactivatebtn').click(function (e) {
+        var record = $("#RecordID").val();
+        var arr = record.split(',');
+        var recordID = arr[0];
+        var status = arr[1];
+        var ManufacturersModel =
+             {
+                 "Manufacturer_Id": recordID,
+                 "Status": status
+             };
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateMFStatus", "Manufacturers")',
+
+            data: JSON.stringify(ManufacturersModel),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+        }).done(function (data) {
+            //Successfully pass to server and get response
+            $('#ManufacturerGrid').data().kendoGrid.dataSource.read(data); // or
+            if (data.result = "OK") {
+                toastr.success(data.Successmsg);
+                result = true;
+            }
+        })
+    });
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Admin');
+        Revive.Redux.Common.SetKendoGridHeight();
+
+        $("#ManufacturerGrid").data("kendoGrid").dataSource.read();
+
+        //Tooltip added to email column of storeUserGrid
+        $("#ManufacturerGrid").kendoTooltip({
+            filter: "td:nth-child(2)", //this filter selects the second column's cells
+            position: "top",
+            content: function (e) {
+                var dataItem = $("#ManufacturerGrid").data("kendoGrid").dataItem(e.target.closest("tr"));
+                var content = dataItem.Address;
+                return content;
+            }
+        }).data("kendoTooltip");
+        //end
+    });
+    @if (TempData["MFCreatedSuccess"] != null && (bool)TempData["MFCreatedSuccess"] == true)
+    {
+        //<text>toastr.success('Manufacturer has been created successfully.');</text>
+        <text>toastr.success('@ReviveMessages.Add');</text>
+        
+    }
+    @if (TempData["MFCreatedFailure"] != null && (bool)TempData["MFCreatedFailure"] == true)
+    {
+        <text>toastr.error('There was some error creating the Manufacturer!');</text>
+    }
+    @if (TempData["MFUpdatedSuccess"] != null && (bool)TempData["MFUpdatedSuccess"] == true)
+    {
+       // <text>toastr.success('Manufacturer details have been updated successfully.');</text>
+        <text>toastr.success('@ReviveMessages.Update');</text>
+        
+    }
+    @if (TempData["MFUpdatedFailure"] != null && (bool)TempData["MFUpdatedFailure"] == true)
+    {
+        <text>toastr.error('There was some error updating the Manufacturer details!');</text>
+    }
+</script>

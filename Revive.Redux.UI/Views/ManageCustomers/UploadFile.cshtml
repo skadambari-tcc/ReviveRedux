@@ -1,0 +1,64 @@
+﻿@model Revive.Redux.Entities.ManageCustomersModel
+@{
+    ViewBag.Title = "UploadFile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-12">
+    <div class="contant_page">
+        <!-- tittle -->
+        <div class="row">
+           <div class="col-md-8">
+               @*<div class="form-group">
+
+                   @Html.Label("Select File to Upload:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                   <div class="col-sm-5">
+                       <div>
+                           @Html.TextBoxFor(x => x.File, new { type = "file", multiple = "true", @id = "fileUpload" })
+                           @Html.TextBoxFor(x => x.Acct_manager_Primary_Zip, htmlAttributes: new { @id="xx"})
+                           <input id="btnUploadFile" type="submit" onclick="location.href='@Url.Action("Upload", "ManageCustomers")'" value="Upload" />
+                       </div>
+
+                   </div>
+               </div>*@
+               <form method="post" action='@Url.Action("Upload")' style="width:45%">
+                   <div class="demo-section">
+                       @(Html.Kendo().Upload()
+                    .Name("files")
+                    .HtmlAttributes(new { accept = ".pdf" })
+                                    .Events(events => events.Select("onUpload"))
+                           
+                       )
+                       <p>
+                           <input type="submit" value="Submit" class="k-button" />
+                       </p>
+                   </div>
+               </form>
+            </div>            
+            </div>
+        </div>
+    </div>
+<script>
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Customers');
+    });
+
+    function onUpload(e) {
+        var files = e.files;
+
+        $.each(files, function () {
+
+            if (this.extension.toLowerCase() != ".pdf") {
+                $.alert({ content: 'Only .pdf files can be uploaded!', confirm: function () { } });
+                e.preventDefault();
+            }
+
+            if (this.size / 1024 / 1024 > 5) {
+                $.alert({ content: 'Max 5Mb file size is allowed!', confirm: function () { } });
+                e.preventDefault();
+            }
+        });
+    }
+    
+</script>
+

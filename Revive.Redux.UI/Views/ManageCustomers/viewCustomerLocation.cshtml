@@ -1,0 +1,292 @@
+﻿@model LocationModel
+
+@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+
+@{
+    ViewBag.Title = "Customer Location";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <title></title>
+</head>
+
+
+
+<input type="hidden" id="RecordID" name="DeactivateRecord" />
+
+@using (Html.BeginForm("CustomerFileUpload", "ManageCustomers", FormMethod.Post))
+{
+    <div id="FileUpload" class="modal fade" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content" style="height: 300px;">
+                <!-- dialog body -->
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div>
+                        @Html.Label("Title", htmlAttributes: new { @class = "", @id = "lblFileTitle" })
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        @Html.Label("Customer", htmlAttributes: new { @class = "col-sm-3 control-label text-right required" })
+                        <div>
+                            @Html.DropDownListFor(M => M.CustomerId, new SelectList(Model.CustomerNameList, "Id", "Text"), "--Select--", new { @class = "form-control", @style = "width: 200px;", @id = "ddlCustomerName" })
+                            @Html.ValidationMessageFor(model => model.CustomerId)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("File Upload", htmlAttributes: new { @class = "col-sm-3 control-label text-right required" })
+                        <div>
+                            @*<input type="file" name="files" id="fileLocationUpdload" onchange="check_extension(this.value);">*@
+                            @(Html.Kendo().Upload()
+                                                                    .Name("files")
+                                    .HtmlAttributes(new { @accept = ".xlsx,.xls", @class = "" })
+                                    .Events(events => events.Select("check_extension"))
+
+
+                            )
+                        </div>
+                    </div>
+                </div>
+                <!-- dialog buttons -->
+                <div class="modal-footer">
+                    <button type="submit" id="btnFileUpload" class="btn GreenBtn" data-dismiss="">Yes</button>
+                    <button type="button" class="btn YellowBtn" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+
+    <div id="FileUploadResult" class="modal fade in" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- dialog body -->
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div>
+                        @Html.Label("Result Summary", htmlAttributes: new { @class = "", @id = "lblResultTitle" })
+                    </div>
+                </div>
+
+                <div class="k-grid-content">
+                    @(Html.Kendo().Grid(Model.LocationResult)
+    .Name("LocationResultGrid")
+.DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(false)
+                                .Read(read => read.Action("LocationResultAjax", "ManageCustomers")))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.LineNumber).Title("Line Name").Filterable(true).Width(120);
+        columns.Bound(p => p.Message).Title("Result").Filterable(true);
+    })
+             .Pageable(pageable =>
+                        {
+                            pageable.Refresh(true);
+                            pageable.PageSizes(new int[] { 10, 20, 50 });
+                            pageable.Messages(messages => messages.Empty("No location available!"));
+                        })
+                        .Sortable()
+                        .Filterable()
+                        .HtmlAttributes(new { style = "width:575px" })
+                    )
+                </div>
+
+
+                <!-- dialog buttons -->
+                <div class="modal-footer">
+                    <button type="button" id="btnResult" class="btn btn-primary">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="modal-body" @*style="padding:0px!important"*@>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    
+                    <div class="lable-align-top">
+                        <h2>View Locations</h2>
+                    </div>                    
+                    <div class="row">
+                        <div class="col-md-8"></div>
+                        <div class="col-md-2" style="float: right;">
+                            <div class="col-md-5 col-sm-5 "></div>
+                            <div class="col-md-7 col-sm-7" style="margin-left:65%;margin-bottom:3%">
+                                <a title="Export to Excel" href="#" onclick="javascript:ExportToExcel(event);"><img src="~/Scripts/images/excel_icon.png" /></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid">
+                            @*class="k-grid-content"*@
+                            @(Html.Kendo().Grid(Model.CustomerLocationDetails)
+    .Name("LocationGrid")
+                                    .DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(false)
+                                                                                        .Read(read => read.Action("LocationAjax", "ManageCustomers").Data("getUrlVars")))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.CustomerName).Title("Customer Name").Filterable(true).Width(140);
+        columns.Bound(p => p.Location_Name).Title("Location Name").Filterable(true).Width(110);
+        columns.Bound(p => p.StoreNumber).Title("Store").Filterable(true).Width(80);
+        columns.Bound(p => p.Address).Title("Address").Filterable(true).Width(110);
+        columns.Bound(p => p.CityName).Title("City").Filterable(true).Width(100);
+        columns.Bound(p => p.StateName).Title("State").Filterable(true).Width(80);
+        columns.Bound(p => p.ZipCode).Title("Zip Code").Filterable(true).Width(80);
+        columns.Bound(p => p.Phone).Title("Phone").Filterable(true).Width(110);
+        columns.Bound(p => p.Created_Date).Title("Date Created").Format("{0:MM/dd/yyyy}").Filterable(true).Width(100);
+
+        columns.Bound(p => p.Location_ID).Title("View").ClientTemplate(
+                        "<a title='View Details' href='" + Url.Action("View", "ManageCustomers") + "/#= Location_ID #'" + "><i class='fa fa-eye fa-lg icon-color'></i></a>").Sortable(false).Filterable(false).Width(60).HtmlAttributes(new { @style = "cursor:pointer" });
+
+    })
+                            .HtmlAttributes(new { style = "width:1130px" })
+             .Pageable(pageable =>
+                        {
+                            pageable.Refresh(true);
+                            pageable.PageSizes(new int[] { 10, 20, 50 });
+                            pageable.Messages(messages => messages.Empty("No location available!"));
+                        })
+                        .Sortable()
+                        .Scrollable()
+                        .Filterable()
+
+                            )
+                        </div>
+                    </div> 
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @if (ViewBag.CustomerLocationBtn == true)
+    {
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-7">
+                <div class="col-md-3 col-sm-3"></div>
+                <div class="col-md-6 col-sm-6  butn-space">
+                    <input type="button" value="Back" class="btn login_button btn-primary yellow" onclick="location.href='@Url.Action("ManageCustomers", "ManageCustomers")'" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style type="text/css">
+    .k-grid-content {
+        max-height: 300px;
+    }
+
+    .modal .fade {
+        top: 30%;
+        transition: opacity 0.3s linear;
+    }
+
+        .modal.fade.in {
+            top: 30%;
+        }
+
+    .modal-backdrop {
+        background-color: #000;
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 0 !important;
+    }
+
+    .col-RV {
+        /*width: 110%;*/
+    }
+</style>
+
+<script type="text/javascript">
+
+    function ExportToExcel(e) {
+        e.preventDefault();
+        var gridInstance = $("#LocationGrid").data("kendoGrid");
+
+        // Define the data to be sent to the server to create the spreadsheet.
+        var gridTitle = "Customer Locations";
+        var createExcelUrl = "/ExcelExport/ExportToExcel";
+        var downloadExcelUrl = "/ExcelExport/GetExcelFile";
+        Revive.Redux.Common.ExportToExcel(gridInstance, gridTitle, createExcelUrl, downloadExcelUrl,"");
+    }
+
+    function getUrlVars() {
+        var vars = 0, hash;
+        var id = 0;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('=');
+        if (hashes[1] != null) {
+            vars = hashes[1];
+            flag = true;
+        }
+        //for (var i = 0; i < hashes.length; i++) {
+        //    hash = hashes[i].split('=');
+        //    vars = hash[0]
+        //    //vars.push(hash[0]);
+        //    //vars[hash[0]] = hash[1];
+        //}
+        return {
+            id: vars
+        };
+    }
+
+
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Stores');
+        $("#btnResult").click(function (e) {
+            window.location.href = '@Url.Action("Locations", "ManageCustomers")';
+        });
+        Revive.Redux.Common.SetKendoGridHeight();
+
+
+    });
+
+
+
+    //File upload JS
+
+    function check_extension(e) {
+        var files = e.files;
+        var Result = true;
+
+        $.each(files, function () {
+
+            if (this.extension.toLowerCase() != ".xlsx") {
+                if (this.extension.toLowerCase() != ".xls") {
+                    toastr.error("Only .xlsx or .xls files can be uploaded!");
+                    e.preventDefault();
+                    Result = false;
+                }
+            }
+
+            if (this.size / 1024 / 1024 > 5) {
+                toastr.error("Max 5Mb file size is allowed!")
+                e.preventDefault();
+                Result = false;
+            }
+        });
+
+        return Result;
+    }
+
+
+    $('#btnImportLocations').click(function (e) {
+        $('#FileUpload').modal('show');
+        $("#lblFileTitle").text("Upload Location File");
+        $('#fileLocationUpdload').val('');
+        $('#ddlCustomerName').val('');
+    });
+
+</script>

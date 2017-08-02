@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e6ce8f9088574074bd5f9ed3a9b8662d" Name="Diagram1" ZoomLevel="43" ShowGrid="true">
+        <EntityTypeShape EntityType="ReviveDBModel.Customer_CustomField" Width="1.5" PointX="3" PointY="21.5" />
+        <EntityTypeShape EntityType="ReviveDBModel.Customer_Documents" Width="1.5" PointX="3" PointY="31.5" />
+        <EntityTypeShape EntityType="ReviveDBModel.Debug_Templates" Width="1.5" PointX="5.75" PointY="1.125" />
+        <EntityTypeShape EntityType="ReviveDBModel.Debug_Templates_Definition" Width="1.5" PointX="8" PointY="1" />
+        <EntityTypeShape EntityType="ReviveDBModel.FAQ_Management" Width="1.5" PointX="3" PointY="59.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.JobOrder_Locations" Width="1.5" PointX="8.25" PointY="29" />
+        <EntityTypeShape EntityType="ReviveDBModel.JobOrder_Machine_activity_detail" Width="1.5" PointX="12.75" PointY="32" />
+        <EntityTypeShape EntityType="ReviveDBModel.JobOrder_Machine_TestResultsFinal" Width="1.5" PointX="12.75" PointY="35.875" />
+        <EntityTypeShape EntityType="ReviveDBModel.JobOrder_Machine_TestResultsMidLine" Width="1.5" PointX="12.75" PointY="19.625" />
+        <EntityTypeShape EntityType="ReviveDBModel.JobOrder_Machine_TestResultsUL" Width="1.5" PointX="12.75" PointY="27.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.JobOrder_Status" Width="1.5" PointX="3.75" PointY="17.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.JobOrder_Testing_Attributes" Width="1.5" PointX="5.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.MachineReplacedHistory" Width="1.5" PointX="12.75" PointY="39.375" />
+        <EntityTypeShape EntityType="ReviveDBModel.MachineSpec" Width="1.5" PointX="7.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.MachineTemplateMapping" Width="1.5" PointX="10.5" PointY="15.625" />
+        <EntityTypeShape EntityType="ReviveDBModel.MapMode_UserType" Width="1.5" PointX="8" PointY="48.375" />
+        <EntityTypeShape EntityType="ReviveDBModel.Membership_Survey" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.Membership_Survey_Results" Width="1.5" PointX="2.75" PointY="8.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.Menu" Width="1.5" PointX="3.75" PointY="64.25" />
+        <EntityTypeShape EntityType="ReviveDBModel.Mode" Width="1.5" PointX="0.75" PointY="41.25" />
+        <EntityTypeShape EntityType="ReviveDBModel.Notification" Width="1.5" PointX="4.75" PointY="8.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.Report_Filter_Type" Width="1.5" PointX="3" PointY="5" />
+        <EntityTypeShape EntityType="ReviveDBModel.Report_Master" Width="1.5" PointX="0.75" PointY="5" />
+        <EntityTypeShape EntityType="ReviveDBModel.State" Width="1.5" PointX="0.75" PointY="1" />
+        <EntityTypeShape EntityType="ReviveDBModel.Store_users" Width="1.5" PointX="9.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.User_Level" Width="1.5" PointX="3" PointY="55" />
+        <EntityTypeShape EntityType="ReviveDBModel.User_Level_Menu_Mapping" Width="1.5" PointX="5.25" PointY="55.5" />
+        <EntityTypeShape EntityType="ReviveDBModel.UserMap_Controller_Action" Width="1.5" PointX="8.25" PointY="55.25" />
+        <EntityTypeShape EntityType="ReviveDBModel.UserType" Width="1.5" PointX="0.75" PointY="55.625" />
+        <EntityTypeShape EntityType="ReviveDBModel.City" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="ReviveDBModel.MachinefaultParameterValue" Width="1.5" PointX="10.5" PointY="20" />
+        <AssociationConnector Association="ReviveDBModel.FK_Debug_Templates_Definition_Template_ID" />
+        <AssociationConnector Association="ReviveDBModel.FK__FAQ_Manag__Userg__0CDAE408" />
+        <AssociationConnector Association="ReviveDBModel.FK__MapMode_U__ModeI__6CC31A31" />
+        <AssociationConnector Association="ReviveDBModel.FK__MapMode_U__UserT__6F9F86DC" />
+        <AssociationConnector Association="ReviveDBModel.FK_Report_Filter_Type_ReportId" />
+        <AssociationConnector Association="ReviveDBModel.FK__Cities__StateId__3A179ED3" />
+        <AssociationConnector Association="ReviveDBModel.FK__UserMap_C__User___35DCF99B" />
+        <AssociationConnector Association="ReviveDBModel.FK_User_Level_Menu_Mapping" />
+        <AssociationConnector Association="ReviveDBModel.FK_User_User_Level_UsetTypeId" />
+        <EntityTypeShape EntityType="ReviveDBModel.Modes_configuration" Width="1.5" PointX="10.5" PointY="43" />
+        <AssociationConnector Association="ReviveDBModel.FK__Modes_con__ModeI__74643BF9" />
+        <EntityTypeShape EntityType="ReviveDBModel.Subsidiary" Width="1.5" PointX="16.75" PointY="11.875" />
+        <AssociationConnector Association="ReviveDBModel.FK_Modes_configuration_Subsidiary_SubsidiaryId" />
+        <EntityTypeShape EntityType="ReviveDBModel.Manufacturer" Width="1.5" PointX="7.375" PointY="11" />
+        <EntityTypeShape EntityType="ReviveDBModel.JobOrder_header" Width="1.5" PointX="17.75" PointY="20.125" />
+        <AssociationConnector Association="ReviveDBModel.FK__JobOrder___Manuf__10416098" />
+        <AssociationConnector Association="ReviveDBModel.FK_JobOrder_header_Subsidiary_SubsidiaryId" />
+        <AssociationConnector Association="ReviveDBModel.FK_JobOrder_Locations_JobOrder_header_JobOrderId" />
+        <AssociationConnector Association="ReviveDBModel.FK_JobOrder_status_JobOrder_Status_Id" />
+        <EntityTypeShape EntityType="ReviveDBModel.JobOrder_Machine_Id" Width="1.5" PointX="0.75" PointY="28.5" />
+        <AssociationConnector Association="ReviveDBModel.FK__MachineTe__Machi__220B0B18" />
+        <EntityTypeShape EntityType="ReviveDBModel.User" Width="1.5" PointX="5.25" PointY="47.5" />
+        <AssociationConnector Association="ReviveDBModel.FK__User__User_Level__53D770D6" />
+        <EntityTypeShape EntityType="ReviveDBModel.TabletAppLogFile" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.MasterData_Config_definitions" Width="1.5" PointX="8.25" PointY="23.5" />
+        <AssociationConnector Association="ReviveDBModel.FK__Machinefa__Fault__39788055" />
+        <EntityTypeShape EntityType="ReviveDBModel.MachineHistory_Configuration" Width="1.5" PointX="3.375" PointY="12.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.MachineMovedHistory" Width="1.5" PointX="10.375" PointY="9.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.GroupsPriority" Width="1.5" PointX="12.375" PointY="6" />
+        <EntityTypeShape EntityType="ReviveDBModel.JobOrder_Machine_Mapping" Width="1.5" PointX="23" PointY="20.5" />
+        <AssociationConnector Association="ReviveDBModel.FK_JobOrder_Machine_Mapping_JobOrderHeader_ID" />
+        <AssociationConnector Association="ReviveDBModel.FK_JobOrder_Machine_Mapping_JobOrder_Location_Id" />
+        <AssociationConnector Association="ReviveDBModel.FK_JobOrder_Machine_activity_detail_JobOrder_Machine_MappingId" />
+        <AssociationConnector Association="ReviveDBModel.FK__JobOrder___Machi__2116E6DF" />
+        <AssociationConnector Association="ReviveDBModel.FK__JobOrder___Final__3AD6B8E2" />
+        <AssociationConnector Association="ReviveDBModel.FK__JobOrder___JobOr__473C8FC7" />
+        <AssociationConnector Association="ReviveDBModel.FK__JobOrder___JobOr__4830B400" />
+        <AssociationConnector Association="ReviveDBModel.FK__JobOrder___JobOr__4924D839" />
+        <AssociationConnector Association="ReviveDBModel.FK__JobOrder___Machi__00750D23" />
+        <AssociationConnector Association="ReviveDBModel.FK__JobOrder___Midli__38EE7070" />
+        <AssociationConnector Association="ReviveDBModel.FK__JobOrder___ULLin__39E294A9" />
+        <AssociationConnector Association="ReviveDBModel.FK__MachineRe__JobOr__4E0988E7" />
+        <AssociationConnector Association="ReviveDBModel.FK_JobOrder_Machine_Mapping_Softwareversion_Id" />
+        <EntityTypeShape EntityType="ReviveDBModel.Customers_Locations" Width="1.5" PointX="20" PointY="15.125" />
+        <AssociationConnector Association="ReviveDBModel.FK_CustomerLocations_Subsidiary_ID" />
+        <AssociationConnector Association="ReviveDBModel.FK_JobOrder_Locations_Location_id" />
+        <EntityTypeShape EntityType="ReviveDBModel.ShippingConfiguration" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.Machine_activity_detail" Width="1.5" PointX="12.75" PointY="57.625" />
+        <EntityTypeShape EntityType="ReviveDBModel.SubAgent" Width="1.5" PointX="17.375" PointY="1.125" />
+        <AssociationConnector Association="ReviveDBModel.FK_Customers_Locations_SubAgents_SubAgentId" />
+        <AssociationConnector Association="ReviveDBModel.FK_JobOrder_header_SubAgents" />
+        <EntityTypeShape EntityType="ReviveDBModel.MachineOrder" Width="1.5" PointX="9.625" PointY="33.625" />
+        <AssociationConnector Association="ReviveDBModel.FK_MachineOrder_Manufacturers" />
+        <EntityTypeShape EntityType="ReviveDBModel.Machine_TestResults" Width="1.5" PointX="19.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.MapLocationByGroup" Width="1.5" PointX="22.25" PointY="12.875" />
+        <AssociationConnector Association="ReviveDBModel.FK__MapLocati__Locat__38EE7070" />
+        <EntityTypeShape EntityType="ReviveDBModel.LocationGroup" Width="1.5" PointX="14.625" PointY="42.5" />
+        <AssociationConnector Association="ReviveDBModel.FK__Customers__Group__56B3DD81" />
+        <AssociationConnector Association="ReviveDBModel.FK_LocationGroups_GroupsPriority" />
+        <AssociationConnector Association="ReviveDBModel.FK__MapLocati__Group__37FA4C37" />
+        <EntityTypeShape EntityType="ReviveDBModel.UPSSetting" Width="1.5" PointX="13.375" PointY="9.75" />
+        <EntityTypeShape EntityType="ReviveDBModel.MachineHistory" Width="1.5" PointX="12.375" PointY="48" />
+        <EntityTypeShape EntityType="ReviveDBModel.Tablet_App_Machine_Activity_Details" Width="1.5" PointX="15.75" PointY="32" />
+        <AssociationConnector Association="ReviveDBModel.FK__Tablet_Ap__ModeI__086B34A6" />
+        <AssociationConnector Association="ReviveDBModel.FK__Tablet_Ap__ModeI__76619304" />
+        <EntityTypeShape EntityType="ReviveDBModel.Machine" Width="1.5" PointX="10.5" PointY="24.25" />
+        <AssociationConnector Association="ReviveDBModel.FK__Machine_a__Machi__2D7CBDC4" />
+        <AssociationConnector Association="ReviveDBModel.FK__Machines__Status__0C1BC9F9" />
+        <AssociationConnector Association="ReviveDBModel.FK_Machines_MachineId" />
+        <EntityTypeShape EntityType="ReviveDBModel.LocationMapMachine" Width="1.5" PointX="25.25" PointY="20.5" />
+        <AssociationConnector Association="ReviveDBModel.FK__LocationM__Locat__1C5231C2" />
+        <AssociationConnector Association="ReviveDBModel.FK__LocationM__Machi__1B5E0D89" />
+        <EntityTypeShape EntityType="ReviveDBModel.Tablet_App_NonMemberActivity_Details" Width="1.5" PointX="18" PointY="33.75" />
+        <AssociationConnector Association="ReviveDBModel.FK_Tablet_App_NonMemberActivity_Details_Machine_Activity_ID" />
+        <EntityTypeShape EntityType="ReviveDBModel.Tablet_App_Machine_Activity_Results" Width="1.5" PointX="18" PointY="39.125" />
+        <AssociationConnector Association="ReviveDBModel.Fk_Tablet_App_Machine_Activity_Results_Machine_Activity_ID" />
+        <EntityTypeShape EntityType="ReviveDBModel.Membership" Width="1.5" PointX="3" PointY="25.375" />
+        <EntityTypeShape EntityType="ReviveDBModel.Memebership_Details" Width="1.5" PointX="5.25" PointY="25.75" />
+        <AssociationConnector Association="ReviveDBModel.FK_Memebership_Details_MembershipId" />
+        <EntityTypeShape EntityType="ReviveDBModel.Tablet_App_MemberActivity_Details" Width="1.5" PointX="18" PointY="28.625" />
+        <AssociationConnector Association="ReviveDBModel.FK_Membership_Membership_Id" />
+        <AssociationConnector Association="ReviveDBModel.FK_Tablet_App_Machine_Activity_Details_Machine_Activity_ID" />
+        <EntityTypeShape EntityType="ReviveDBModel.Customer" Width="1.5" PointX="0.75" PointY="19.875" />
+        <AssociationConnector Association="ReviveDBModel.FK_Customer_CustomField_Customer_ID" />
+        <AssociationConnector Association="ReviveDBModel.FK_Customer_Documents_Customers" />
+        <AssociationConnector Association="ReviveDBModel.FK_Customers_Locations_Customers" />
+        <AssociationConnector Association="ReviveDBModel.FK_JobOrder_header_JobOrder_CustomerId" />
+        <AssociationConnector Association="ReviveDBModel.FK_Membership_CustomerId" />
+        <EntityTypeShape EntityType="ReviveDBModel.Machine_Documents" Width="1.5" PointX="14.625" PointY="48.25" />
+        <AssociationConnector Association="ReviveDBModel.FK_Machine_Documents_MachineHistory" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

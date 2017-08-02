@@ -1,0 +1,149 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model LoggingModel
+@{
+    ViewBag.Title = "ViewLogFile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            @Html.Label("Logging Types", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(m => m.LoggTypeId, new SelectList(ViewBag.ExceptionTypes, "Id", "Text", "dada"),
+                                             new { @class = " form-control pull-right topspace selecter", @id = "ddlType" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12 col-md-offset-1 col-sm-6">
+                            <button id="btnSavedata" class="btn GreenBtn" onclick="download()" type="button">Download File</button>
+                            <button id="btnCancel" class="btn YellowBtn" onclick="cancel()" type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1 spacer1">
+                </div>
+                @*<div class="row">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-6">
+                        @*<div class="col-md-1 col-sm-5"></div>*@
+                        @*<div class="col-md-12 col-md-offset-1 col-sm-6">
+                            <button id="btnSavedata" class="btn GreenBtn" onclick="download()" type="button">Download File</button>
+                            <button id="btnCancel" class="btn YellowBtn" onclick="cancel()" type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>*@
+                <div class="row" style="padding-top:10px;">
+                    <div class="grid-align table-responsive Kendogrid">
+                        @(Html.Kendo().Grid<LoggingTextFile>()
+                      .Name("LoggingFileText")
+                      .Columns(columns =>
+                      {
+                          columns.Bound(c => c.Type).Width(20).Title("Type");
+                          columns.Bound(c => c.TimeStamp).Width(50).Title("Time Stamp");
+                          columns.Bound(c => c.Text).Width(120).Title("Text");
+                      })
+                                    .Pageable(pageable =>
+                                    {
+                                        pageable.Refresh(true);
+                                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                                        pageable.Messages(messages => messages.Empty("No user found"));
+                                    })
+                                        .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                        {
+                                            fs.Clear().Contains("Contains");
+                                            fs.DoesNotContain("Does not contain");
+                                            fs.IsEqualTo("Equal to");
+                                            fs.IsNotEqualTo("Not equal to");
+                                            fs.StartsWith("Starts with");
+                                            fs.EndsWith("Ends with");
+                                        })))
+                                    .Sortable()
+                                    .Scrollable()
+                                    .HtmlAttributes(new { style = "width: 91%;" })
+                                    .DataSource(dataSource => dataSource
+                                    .Ajax().PageSize(10)
+                                    .ServerOperation(false) // paging, sorting, filtering and grouping will be applied client-side                                        
+                                    .Read(read => read.Action("LoggingFileTextAjax", "ManageLogging").Data("FileName"))  
+                                    )
+                        )
+                    </div>
+                </div>
+                <div class="row spacer1 spacer1">
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*<div id="LogDetail" style="background-color:white;height:500px;overflow-y:scroll">
+        @foreach (var item in Model.FileDetails.data)
+        {
+            <span>@item</span>
+            <br/>
+        }
+    </div>*@
+@*<div>@Html.ListBox("SportsList", new SelectList(Model.FileDetails.data), new { @style = "width: 98%;", @size = "30" })</div>*@
+@*<div>@(Html.Kendo().EditorFor(m=>m.FileDetails.FileName))</div>*@
+<script type="text/javascript">
+    $(document).ready(function () {
+       
+        $('#LoggingFileText').data().kendoGrid.dataSource.read();
+
+        //to load on type dropdown change
+        $("#ddlType").change(function () {           
+            $('#LoggingFileText').data().kendoGrid.dataSource.read();
+        });
+
+    });
+
+    function download() {
+        window.location.href = '/ManageLogging/DownloadLogFile?FileName=@Model.FilePath';
+    }
+
+    function cancel() {
+        window.location.href = '/ManageLogging/ManageLogging';
+    }
+
+    function FileName() {
+        var FileName = '@Model.FilePath';
+        Type = $("#ddlType option:selected").text();
+        if (Type != "") {
+            Type = $("#ddlType option:selected").text();
+        }
+        else { Type = null; }
+        return { FileName: FileName, Type: Type };
+    }
+
+    @*//function onExceptionDrpChange() {
+
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("/GetLogByType")', // Calling json method
+            dataType: 'json',
+            data: { FileName: '@Model.FilePath', Type: $("#ddlType option:selected").text() },
+            success: function (data) {
+        
+        //$("#LogDetail").empty();
+        //for (var i = 0; i < data.length; i++) {
+        //    $("#LogDetail").append("<span>" + data[i] + "</span>")
+        //    $("#LogDetail").append("<br/>")// access each item like this. if list is of any complex type the use result[0].Name // say name is a proprty of the complex type
+        //}
+
+        //    },
+        //    error: function (ex) {
+        //    }
+        //});
+        //}*@
+</script>

@@ -1,0 +1,491 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model LoggingModel
+@{
+    ViewBag.Title = "View Logging";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.HiddenFor(M => M.FilePath)
+@if (ViewBag.IsModalValid)
+{
+    
+    
+    <div id="FileUpload" class="modal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="min-height: 300px;">
+                <!-- dialog body -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>                    
+                    <div class="lable-align-top">
+                        <h4>View Log File</h4>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12" style="">
+                            <div class=" contant_page">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            @Html.Label("Logging Types", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                                            <div class="col-sm-5">
+                                                <div class="select-icon">
+                                                    @Html.DropDownListFor(m => m.LoggTypeId, new SelectList(ViewBag.ExceptionTypes, "Id", "Text", "dada"),
+                                                    new { @class = " form-control pull-right topspace selecter", @id = "ddlType" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="col-md-12 col-md-offset-1 col-sm-6">
+                                            <button id="btnSavedata" class="btn GreenBtn" onclick="download()" type="button">Download File</button>
+                                            @*<button id="btnCancel" class="btn YellowBtn" onclick="cancel()" type="button">Cancel</button>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row spacer1 spacer1">
+                                </div>
+
+                                <div class="" style="">
+                                    <div class="k-grid-content table-responsive Kendogrid">
+                                        @(Html.Kendo().Grid<LoggingTextFile>()
+                                      .Name("LoggingFileText")
+                                      .Columns(columns =>
+                                      {
+                                          columns.Bound(c => c.Type).Width(30).Title("Type");
+                                          columns.Bound(c => c.TimeStamp).Width(50).Title("Time Stamp");
+                                          columns.Bound(c => c.Text).Width(180).Title("Text");
+                                      })
+                                                    .Pageable(pageable =>
+                                                    {
+                                                        pageable.Refresh(true);
+                                                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                                                        pageable.Messages(messages => messages.Empty("No user found"));
+                                                    })
+                                                        .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                                        {
+                                                            fs.Clear().Contains("Contains");
+                                                            fs.DoesNotContain("Does not contain");
+                                                            fs.IsEqualTo("Equal to");
+                                                            fs.IsNotEqualTo("Not equal to");
+                                                            fs.StartsWith("Starts with");
+                                                            fs.EndsWith("Ends with");
+                                                        })))
+                                                    .Sortable()
+                                                    .Scrollable()
+                                                    .HtmlAttributes(new { style = "width: 100%;" })
+                                                    .DataSource(dataSource => dataSource
+                                                    .Ajax().PageSize(10)
+                                                    .ServerOperation(false) // paging, sorting, filtering and grouping will be applied client-side
+                                                    .Read(read => read.Action("LoggingFileTextAjax", "ManageLogging").Data("FileName"))
+                                                    )
+                                        )
+                                    </div>
+                                </div>
+                                <div class="row spacer1 spacer1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- dialog buttons -->
+                <div class="modal-footer">
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+<div class="modal-body">
+    <div class="row">
+        <div class=" contant_page">
+            <div class="col-md-12">
+                <!-- tittle -->
+                <div class="lable-align-top">
+                    <h2>Logging</h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right">Customer</div>
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.CustomerId, new SelectList(Model.CustomerNameList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right"> Subagent </div>
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.SubAgentID, new SelectList(Model.SubAgentList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubAgentName" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right"> Date From </div>
+                            <div class="col-sm-5">
+                                @(Html.Kendo().DatePickerFor(m => m.DateFrom)
+                                            .HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "DateFrom", @style = "width: 175px;" })
+                                )
+                                <span id="invalidFromDt" class="field-validation-error" style="display:none">Invalid date</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right">Subsidiary</div>
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.SubsidiaryID, new SelectList(Model.SubsidiaryList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubsidiaryName" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right"> Location </div>
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.LocationId, new SelectList(Model.LocationList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlLocationName", })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right">Date To</div>
+                            <div class="col-sm-5">
+                                @(Html.Kendo().DatePickerFor(m => m.DateTo)
+                                            .HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "DateTo", @style = "width: 175px;" })
+                                )
+                                <span id="invalidToDt" class="field-validation-error" style="display:none">Invalid date</span>
+                                <span id="date" class="field-validation-error" style="display:none">To Date should be Greater than eaual to From Date</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1 spacer1"></div>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="col-md-6 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            <button id="btnSearch" class="btn login_button btn-primary" type="button">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:10px;">
+                    <div class="grid-align table-responsive Kendogrid">
+                        @(Html.Kendo().Grid<Revive.Redux.Entities.LoggingModel>()
+                      .Name("ManageLoggingGrid")
+                      .Columns(columns =>
+                      {
+                          columns.Bound(c => c.LocationName).Width(120).Title("Location Name");
+                          columns.Bound(c => c.LogFileTimeStamp).Format("{0:MM/dd/yyyy hh:mm tt}").Width(120).Title("Time Stamp");
+                          columns.Bound(c => c.UserName).Width(120).Title("User Name");
+                          columns.Bound(c => c.IsFileExists).ClientTemplate("<label onclick='javascript:ViewLogFile(this);' title='View Log' class='btn login_button btn-primary btn-xs' >View Log</label>").Title("View Log").Filterable(false).Sortable(false).Width(80).HtmlAttributes(new { @style = "cursor:pointer" });
+                          columns.Bound(c => c.FilePath).Hidden(true);
+                          columns.Bound(c => c.IsFileExists).Hidden(true);
+                      })
+                                    .Pageable(pageable =>
+                                    {
+                                        pageable.Refresh(true);
+                                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                                        pageable.Messages(messages => messages.Empty("No user found"));
+                                    })
+                                        .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                        {
+                                            fs.Clear().Contains("Contains");
+                                            fs.DoesNotContain("Does not contain");
+                                            fs.IsEqualTo("Equal to");
+                                            fs.IsNotEqualTo("Not equal to");
+                                            fs.StartsWith("Starts with");
+                                            fs.EndsWith("Ends with");
+                                        })))
+                                    .Sortable()
+                                    .Scrollable()
+                                            .HtmlAttributes(new { style = "width: 91%;" })
+                                    .DataSource(dataSource => dataSource
+                                    .Ajax().PageSize(10)
+                                    .ServerOperation(true) // paging, sorting, filtering and grouping will be applied client-side
+                                        //.Read("ManageUsersAjax", "ManageUsers")
+                                                            .Read(read => read.Action("SearchLoggingDetailsAjax", "ManageLogging").Data("ManageLoggingDetails"))
+                                //.PageSize(10)
+
+                                    )
+                        )
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    function FileName() {
+
+        var FileName = $("#FilePath").val();
+        Type = $("#ddlType option:selected").text();
+        if (Type != "") {
+            Type = $("#ddlType option:selected").text();
+        }
+        else { Type = null; }
+        return { FileName: FileName, Type: Type };
+    }
+
+
+    function download() {
+        window.location.href = '/ManageLogging/DownloadLogFile?FileName=' + $("#FilePath").val();
+    }
+
+    function ViewLogFile(Id) {
+
+        var tr = $(Id).parent().parent();
+        var IsFileExists = $(tr).children("td:eq(5)").text();
+        var FilePath = $(tr).children("td:eq(4)").text();
+        $("#FilePath").val(FilePath);
+        if (IsFileExists == 'true') {
+            $('#LoggingFileText').data().kendoGrid.dataSource.read();
+            $("#lblViewLogFileTitle").text("View Log File");
+            $('#FileUpload').modal('show');
+
+            // window.location.href = '/ManageLogging/ViewLogFile?fname=' + FilePath;
+        }
+        else {
+            toastr.error('File not found.');
+        }
+    }
+
+    function ViewLog() {
+        window.location.href = '@Url.Action("ViewLogFile", "ManageLogging")';
+    }
+    function ManageLoggingDetails() {
+        var ManageLogging = {
+            LocationId: $("#ddlLocationName").val(),
+            DateFrom: $("#DateFrom").val(),
+            DateTo: $("#DateTo").val(),
+            CustomerId: $("#ddlCustomerName").val(),
+            SubsidiaryId: $("#ddlSubsidiaryName").val(),
+            SubAgentId: $("#ddlSubAgentName").val()
+
+        };
+        return { objLoggingParameter: ManageLogging };
+    }
+
+    $(document).ready(function () {
+
+        $('.Kendogrid div:nth-child(2)').css("height", "auto");
+        $('.Kendogrid div:nth-child(2)').css("max-height", "300px");
+
+        //to load on type dropdown change
+        $("#ddlType").change(function () {
+            $('#LoggingFileText').data().kendoGrid.dataSource.read();
+        });
+
+        //Search Button Event
+        $("#btnSearch").click(function () {
+            $("#invalidFromDt").hide();
+            $("#invalidToDt").hide();
+            $("#date").hide();
+
+            var startPicker = $("#DateFrom").data("kendoDatePicker");
+            var endDate = $("#DateTo").data("kendoDatePicker");
+
+            var sDate;
+            var eDate;
+            var sDateBlank = false;
+            var eDateBlank = false;
+
+
+            if (typeof startPicker != 'undefined' && startPicker != null) {
+                if ($("#DateFrom").data("kendoDatePicker").element[0].value != "") {
+                    sDate = Date.parse(startPicker.value());
+
+                }
+                else {
+                    sDateBlank = true;
+                }
+            }
+            else {
+                sDateBlank = true;
+            }
+            if (typeof endDate != 'undefined' && endDate != null) {
+                if ($("#DateTo").data("kendoDatePicker").element[0].value != "") {
+                    eDate = Date.parse(endDate.value());
+                }
+                else {
+                    eDateBlank = true;
+                }
+            }
+            else {
+
+                eDateBlank = true;
+            }
+
+            var _error = false;
+
+            if (sDate != "" && sDateBlank == false) {
+                if (!sDate) {
+                    $("#invalidFromDt").show();
+                    _error = true;
+                }
+            }
+            if (eDate != "" && eDateBlank == false) {
+                if (!eDate) {
+                    $("#invalidToDt").show();
+                    //return false;
+                    _error = true;
+                }
+            }
+
+            if (sDateBlank == false && eDateBlank == false) {
+                if (startPicker.value() != null && endDate.value() != null) {
+                    if (endDate.value() < startPicker.value()) {
+                        $("#date").show();
+                        // return false;
+                        _error = true;
+                    }
+                }
+            }
+
+            if (_error == true) {
+                return false;
+            }
+
+            if (_error == false) {
+                $("#ManageLoggingGrid").data("kendoGrid").dataSource.read();
+            }
+
+
+        });
+
+
+        $(".DisableKeyboardInput").keydown(function (e) {
+            if (e.shiftKey || e.ctrlKey || e.altKey) {
+                e.preventDefault();
+            }
+            var key = e.keyCode;
+            if (((key == 32) || (key >= 65 && key <= 90) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105))) {
+                e.preventDefault();
+            }
+            if ((key >= 35 && key <= 40) || (key == 46)) {
+
+            }
+        });
+
+        // Customer dropdown change event
+        // Load Subsidiary on select of Customer
+        $("#ddlCustomerName").change(function () {
+            $("#ddlSubsidiaryName").empty();
+            $("#ddlSubAgentName").empty();
+            $("#ddlLocationName").empty();
+            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+            $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+            var nCustomerId = $("#ddlCustomerName").val();
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetSubsidiaryList")', // Calling json method
+                dataType: 'json',
+                data: { CustomeId: nCustomerId, bActive: true },
+                success: function (subsidiaryLst) {
+                    if (subsidiaryLst.length > 0) {
+                        $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                            $("#ddlSubsidiaryName").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                        });
+                    }
+                    else {
+                        $("#ddlSubsidiaryName").empty();
+                        $("#ddlSubAgentName").empty();
+                        $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+                        $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve Subsidiary list. ' + ex, confirm: function () { } }); }
+            });
+            return false;
+        });
+
+        // Subsidiary dropdown change event
+        // Load Subagent on select of Subsidiary
+        $("#ddlSubsidiaryName").change(function () {
+            $("#ddlSubAgentName").empty();
+            $("#ddlLocationName").empty();
+            $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+            var nCustomerId = $("#ddlSubsidiaryName").val();
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetSubAgentList")', // Calling json method
+                dataType: 'json',
+                data: { SubsidiaryId: nCustomerId, bActive: true },
+                success: function (subsidiaryLst) {
+                    if (subsidiaryLst.length > 0) {
+                        $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                            $("#ddlSubAgentName").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                        });
+                    }
+                    else {
+                        $("#ddlSubAgentName").empty();
+                        $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve SubAgent list. ' + ex, confirm: function () { } }); }
+            });
+            return false;
+        });
+
+
+        // SubAgent dropdown change event
+        // Load Location on select of SubAgent
+        $("#ddlSubAgentName").change(function () {
+            $("#ddlLocationName").empty();
+            var nCustomerId = $("#ddlCustomerName").val();
+            var nSubsidiaryId = $("#ddlSubsidiaryName").val();
+            var nSubAgentId = $("#ddlSubAgentName").val();
+
+            if (nCustomerId == '')
+            { nCustomerId = 0; }
+
+            if (nSubsidiaryId == '')
+            { nSubsidiaryId = 0; }
+
+            if (nSubAgentId == '')
+            { nSubAgentId = 0; }
+
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetLocationList")', // Calling json method
+                dataType: 'json',
+                data: { CustomerId: nCustomerId, SubsidiaryId: nSubsidiaryId, SubAgentId: nSubAgentId, bActive: true },
+                success: function (LocationList) {
+                    if (LocationList.length > 0) {
+                        $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                        $.each(LocationList, function (i, LocationList) {
+                            $("#ddlLocationName").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                        });
+                    }
+                    else {
+                        $("#ddlLocationName").empty();
+                        $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                    }
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve Location list. ' + ex, confirm: function () { } }); }
+            });
+            return false;
+        });
+
+    });
+
+    @if (TempData["IsFileExists"] != null && (bool)TempData["IsFileExists"] == false)
+    {
+        <text>toastr.error('File not found.');</text>
+    }
+
+
+</script>

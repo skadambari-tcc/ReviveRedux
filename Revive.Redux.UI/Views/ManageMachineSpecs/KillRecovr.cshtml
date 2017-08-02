@@ -1,0 +1,89 @@
+﻿
+
+@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@using System.Web.Optimization
+@using Revive.Redux.Repositories
+
+
+
+
+
+@{
+    ViewBag.Title = "KillRecovr";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>KillRecovr</h4>
+
+
+<div>
+
+    <div style="display:inline-block">
+        <p>
+            <label for="customers">Customers:</label><span style="color:red">*</span>
+            @(Html.Kendo().DropDownList()
+              .Name("customers")
+              .HtmlAttributes(new { style = "width:250px" })
+              .OptionLabel("Select Customer")
+              .DataTextField("Text")
+              .DataValueField("Id")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("GetCustomerList", "ManageMachineSpecs");
+                  });
+              })
+            )
+        </p>
+    </div>
+    <script>
+        $("#customers").on("change", function () {
+            $("#ManageDebug").data('kendoGrid').dataSource.read();
+        })
+    </script>
+
+
+
+    <div style="display:inline-block">
+
+
+        <label for="location">Loaction</label>
+        @(Html.Kendo().DropDownList()
+              .Name("location")
+              .HtmlAttributes(new { style = "width:250px" })
+              .OptionLabel("Select Location")
+              .DataTextField("Text")
+              .DataValueField("Id")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("GetLocationList", "ManageMachineSpecs")
+                          .Data("filterlocations");
+                  })
+                  .ServerFiltering(true);
+              })
+              .Enable(false)
+              .AutoBind(false)
+              .CascadeFrom("customers")
+        )
+
+
+        <script>
+            //filter locations based on value selected in customer dropdown
+            function filterlocations() {
+                return {
+                    Id: $("#customers").val()
+                };
+            }
+
+            $("#location").on('change', function () {
+                $("#ManageDebug").data('kendoGrid').dataSource.read();
+            })
+        </script>
+    </div>
+</div>
+
+

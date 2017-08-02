@@ -1,0 +1,510 @@
+﻿@model Revive.Redux.Entities.ReportConfigModel
+
+@{
+    ViewBag.Title = "Activity Report Raw Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<!-- Include the plugin's CSS and JS For Multi Select SubAgent: -->
+<script type="text/javascript" src="~/Scripts/bootstrap-multiselect.js"></script>
+<link rel="stylesheet" href="~/Content/bootstrap-multiselect.css" type="text/css" />
+
+@Html.HiddenFor(m => m.SubAgentIDMultiValue)
+@using (Html.BeginForm("ActivityReportDetails", "Report", FormMethod.Post, new { @id = "ActivtiyReportForm" }))
+{
+    <div class="row">
+        <div class=" contant_page">
+            <div class="col-md-12">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="lable-align-top">
+                        @Html.HiddenFor(model => model.PageHeader, new { @id = "hiddReportTitile" })
+                        @Html.HiddenFor(model => model.ReportId, new { @id = "hiddReportId" })
+
+
+
+                        <h2>Activity report details</h2>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-4  col-sm-3 control-label text-right "> Customers </div>
+                                <div class="col-md-7">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.CustomerId, new SelectList(Model.CustomerNameList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName", @style = "float: left !important ;width: 220px;" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4  col-sm-3 control-label text-right "> SubAgents </div>
+                                <div class="col-md-7">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.SubAgentID, new SelectList(Model.SubAgentList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubAgentName", @style = "float: left !important ;width: 220px;" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4  col-sm-3 control-label text-right required"> From Date </div>
+                                <div class="col-md-7">
+                                    @(Html.Kendo().DatePickerFor(m => m.DateFrom).Value(DateTime.Now.Date.AddDays(-1)).Format("MM/dd/yyyy")
+              .HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "DateFrom", @style = "width: 220px;", @type = "" })
+                                    )
+                                    <span id="invalidFromDt" class="field-validation-error" style="display: none">Required</span>
+                                    <span id="blankFromDt" class="field-validation-error" style="display: none">Invalid date</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4  col-sm-3 control-label text-right "> Mode </div>
+                                <div class="col-md-7">
+                                    <div class="select-icon">
+
+                                        @Html.DropDownListFor(M => M.ModeId, new SelectList(Model.ModeList, "Id", "Text"), new { @class = "form-control pull-right topspace selecter", @id = "ddlMode" })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-6  col-sm-3 control-label text-right "> Subsidiary </div>
+                                <div class="col-md-5">
+                                    <div class="select-icon" style="">
+                                        @Html.DropDownListFor(M => M.SubsidiaryID, new SelectList(Model.SubsidiaryList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubsidiaryName", @style = "" })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6  col-sm-3 control-label text-right "> Locations </div>
+                                <div class="col-md-5">
+                                    <div class="select-icon" style="">
+                                        @Html.DropDownListFor(M => M.LocationId, new SelectList(Model.LocationList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlLocationName", @style = "" })
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-6  col-sm-3 control-label text-right required"> To Date </div>
+                                <div class="col-md-5">
+                                    @(Html.Kendo().DatePickerFor(m => m.DateTo).Value(DateTime.Now.Date.AddDays(-1)).Format("MM/dd/yyyy")
+                                    .HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "DateTo", @style = "width: 220px;", @type = "" })
+                                    )
+                                    <span id="invalidToDt" class="field-validation-error" style="display: none">Required</span>
+                                    <span id="blankToDt" class="field-validation-error" style="display: none">Invalid date</span>
+                                    <span id="date" class="field-validation-error" style="display: none">To Date should be Greater than eaual to From Date</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row spacer1 spacer1"></div>
+                    <div class="row">
+
+                        <div class="col-md-10">
+                            <div class="col-md-6 col-sm-3"></div>
+                            <div class="col-md-6 col-sm-6">
+
+                                <button id="btnCreate" class="btn login_button btn-primary" type="submit">Submit</button>
+
+                            </div>
+                        </div>
+
+                        <div id="divXlsIcon" class="col-md-2 col-sm-2" style="padding-left: 5%;">
+                            <a title="Export to Excel" id="excelexport" href="#" onclick="javascript:ExportToExcel(event);"><img src="~/Scripts/images/excel_icon.png" /></a>
+                        </div>
+
+                    </div>
+
+                    <div class="row" style="padding-top:10px;padding-bottom:20px;" id="gridblock">
+                        <div class="grid-align table-responsive Kendogrid">
+                            @(Html.Kendo().Grid<Revive.Redux.Entities.ActivityReport>()
+                            .Name("ActivityReport")
+
+                            .DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(false)
+        .Read(read => read.Action("Read_ActivityReportDetails", "Report").Data("ReportPara"))
+
+                            )
+
+                            .Columns(columns =>
+                            {
+                                columns.Bound(p => p.ActivityDate).Width(140).Title("Activity Date").Format("{0:MM/dd/yyyy hh:mm tt}");
+                                columns.Bound(p => p.MachineId).Width(100).Title("Machine Id");
+                                columns.Bound(p => p.UserName).Width(100).Title("User Id");
+                                columns.Bound(p => p.MemberName).Width(160).Title("Consumer Name");
+                                columns.Bound(p => p.Email).Width(160).Title("Consumer Email");
+                                columns.Bound(p => p.PhoneNumber).Width(160).Title("Consumer Phone");
+                                columns.Bound(p => p.InvoiceNo).Width(80).Title("Order #");
+                                columns.Bound(p => p.MfrType).Width(100).Title("Mfr Type");
+                                columns.Bound(p => p.PluginYes).Width(100).Title("Plugged In").ClientTemplate("#= PluginYes ? 'Yes' : 'No' #");
+                                columns.Bound(p => p.TimeSincePeril).Width(120).Title("Time Since Peril");
+                                columns.Bound(p => p.ReviveSuccessStatus).Width(120).Title("Success/Failure");
+                                columns.Bound(p => p.CheckOutResults).Width(100).Title("CheckOut results");
+                                columns.Bound(p => p.ActivityResults).Width(100).Title("Activity results");
+                                columns.Bound(p => p.ModeName).Width(100).Title("Mode");
+                                columns.Bound(p => p.ProcessId).Width(140).Title("Process ID");
+                            })
+                            .Pageable(pageable =>
+                            {
+                                pageable.Refresh(true);
+                                pageable.PageSizes(new int[] { 10, 20, 50 });
+                                pageable.Messages(messages => messages.Empty("No records available!"));
+                            })
+                            .Events(e =>
+                            {
+                                e.DataBound("onGridDataBound");
+                            })
+                            .Sortable()
+                            .Scrollable()
+                            .Filterable()
+                            .HtmlAttributes(new { style = "width: 97%;" })
+                            )
+                        </div>
+
+                    </div>
+
+                    <style>
+                        .contant_sector {
+                            height: 100%;
+                        }
+                    </style>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<style type="text/css">
+    .k-grid-content {
+        max-height: 300px;
+    }
+
+    .not-active {
+        pointer-events: none;
+        cursor: default;
+    }
+</style>
+<script type="text/javascript">
+    function onGridDataBound(e) {
+        if (this.dataSource.view().length == 0) {
+            $('#excelexport').addClass("not-active");
+        } else {
+            $('#excelexport').removeClass("not-active");
+        }
+    }
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Reports');
+        Revive.Redux.Common.SetKendoGridHeight();
+
+        //Tooltip added to email column of storeUserGrid
+        $("#ActivityReport").kendoTooltip({
+            filter: "td:nth-child(3)", //this filter selects the second column's cells
+            position: "top",
+            content: function (e) {
+                var dataItem = $("#ActivityReport").data("kendoGrid").dataItem(e.target.closest("tr"));
+                var content = dataItem.LocationName;
+                return content;
+            }
+        }).data("kendoTooltip");
+        $("#ActivityReport").kendoTooltip({
+            filter: "td:nth-child(5)", //this filter selects the second column's cells
+            position: "top",
+            content: function (e) {
+                var dataItem = $("#ActivityReport").data("kendoGrid").dataItem(e.target.closest("tr"));
+                var content = dataItem.MemberName;
+                return content;
+            }
+        }).data("kendoTooltip");
+        $("#ActivityReport").kendoTooltip({
+            filter: "td:nth-child(6)", //this filter selects the second column's cells
+            position: "top",
+            content: function (e) {
+                var dataItem = $("#ActivityReport").data("kendoGrid").dataItem(e.target.closest("tr"));
+                var content = dataItem.Email;
+                return content;
+            }
+        }).data("kendoTooltip");
+        $("#ActivityReport").kendoTooltip({
+            filter: "td:nth-child(9)", //this filter selects the second column's cells
+            position: "top",
+            content: function (e) {
+                var dataItem = $("#ActivityReport").data("kendoGrid").dataItem(e.target.closest("tr"));
+                var content = dataItem.InvoiceNo;
+                return content;
+            }
+        }).data("kendoTooltip");
+    });
+
+
+    $(".DisableKeyboardInput").keydown(function (e) {
+        if (e.shiftKey || e.ctrlKey || e.altKey) {
+            e.preventDefault();
+        }
+        var key = e.keyCode;
+        if (((key == 32) || (key >= 65 && key <= 90) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105))) {
+            e.preventDefault();
+        }
+        if ((key >= 35 && key <= 40) || (key == 46)) {
+
+        }
+    });
+    $("#btnCreate").click(function () {
+        $("#invalidFromDt").hide();
+        $("#invalidToDt").hide();
+        $("#invalidExpire").hide();
+        $("#date").hide();
+
+        var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+        var firstDate = new Date($("#DateFrom").data("kendoDatePicker").element[0].value);
+        var secondDate = new Date($("#DateTo").data("kendoDatePicker").element[0].value);
+
+        var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
+
+
+        var startPicker = $("#DateFrom").data("kendoDatePicker");
+        var endDate = $("#DateTo").data("kendoDatePicker");
+
+        var sDate;
+        var eDate;
+
+        var sDateBlank = false;
+        var eDateBlank = false;
+
+
+        var sDateInvalid = false;
+        var eDateInvalid = false;
+
+
+        if (typeof startPicker != 'undefined' && startPicker != null) {
+            if ($("#DateFrom").data("kendoDatePicker").element[0].value != "") {
+                if (startPicker.value() != null) {
+                    sDate = Date.parse(startPicker.value());
+                }
+                else {
+                    sDateInvalid = true;
+                }
+            }
+            else {
+                sDateBlank = true;
+            }
+        }
+        else {
+            sDateBlank = true;
+        }
+        if (typeof endDate != 'undefined' && endDate != null) {
+            if ($("#DateTo").data("kendoDatePicker").element[0].value != "") {
+                if (endDate.value() != null) {
+                    eDate = Date.parse(endDate.value());
+                }
+                else {
+                    eDateInvalid = true;
+                }
+            }
+            else {
+                eDateBlank = true;
+            }
+        }
+        else {
+
+            eDateBlank = true;
+        }
+
+        var _error = false;
+
+        if (sDate != "" && sDateBlank == true) {
+            if (!sDate) {
+                $("#invalidFromDt").show();
+                $("#blankFromDt").hide();
+                _error = true;
+            }
+        }
+        if (eDate != "" && eDateBlank == true) {
+            if (!eDate) {
+                $("#invalidToDt").show();
+                $("#blankToDt").hide();
+                _error = true;
+            }
+        }
+
+
+        if (sDate != "" && sDateInvalid == true) {
+            if (!sDate) {
+                $("#blankFromDt").show();
+                $("#invalidFromDt").hide();
+                _error = true;
+            }
+        }
+
+        if (eDate != "" && eDateInvalid == true) {
+            if (!eDate) {
+                $("#blankToDt").show();
+                $("#invalidToDt").hide();
+                _error = true;
+            }
+        }
+
+
+        if (sDateBlank == false && eDateBlank == false) {
+            if (startPicker.value() != null && endDate.value() != null) {
+                if (endDate.value() < startPicker.value()) {
+                    $("#date").show();
+                    // return false;
+                    _error = true;
+                }
+            }
+        }
+
+        if (startPicker.value() != null && endDate.value() != null) {
+            if (diffDays > 60) {
+                toastr.error("Date difference greater than 60 days.");
+                return false;
+            }
+        }
+        if (_error == true) {
+            return false;
+        }
+    });
+
+    $("#ddlCustomerName").change(function () {
+        $("#ddlSubsidiaryName").empty();
+        $("#ddlSubAgentName").empty();
+        $("#ddlLocationName").empty();
+
+        $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+        $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+
+        var nCustomerId = $("#ddlCustomerName").val();
+        if (nCustomerId == '')
+        { nCustomerId = 0; }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("/GetSubsidiaryList")', // Calling json method
+            dataType: 'json',
+            data: { CustomeId: nCustomerId, bActive: true },
+            success: function (subsidiaryLst) {
+                if (subsidiaryLst.length > 0) {
+                    $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+                    $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                        $("#ddlSubsidiaryName").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                    });
+                }
+                else {
+
+                    $("#ddlSubsidiaryName").empty();
+                    $("#ddlSubAgentName").empty();
+                    $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+                    $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                }
+            },
+            error: function (ex) { $.alert({ content: 'Failed to retrieve Subsidiary list. ' + ex, confirm: function () { } }); }
+        });
+
+        return false;
+    });
+
+    // Load Subsidiary on select of Customer
+    $("#ddlSubsidiaryName").change(function () {
+        $("#ddlSubAgentName").empty();
+
+        $("#ddlLocationName").empty();
+        $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+        var nCustomerId = $("#ddlSubsidiaryName").val();
+        if (nCustomerId == '')
+        { nCustomerId = 0; }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("/GetSubAgentList")', // Calling json method
+            dataType: 'json',
+            data: { SubsidiaryId: nCustomerId, bActive: true },
+            success: function (subsidiaryLst) {
+                if (subsidiaryLst.length > 0) {
+
+                    $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                    $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                        $("#ddlSubAgentName").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                    });
+
+                } else {
+                    $("#ddlSubAgentName").empty();
+                    $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                }
+            },
+            error: function (ex) { $.alert({ content: 'Failed to retrieve SubAgent list. ' + ex, confirm: function () { } }); }
+        });
+
+        return false;
+    });
+
+
+    $("#ddlSubAgentName").change(function () {
+        $("#ddlLocationName").empty();
+        var nCustomerId = $("#ddlCustomerName").val();
+        var nSubsidiaryId = $("#ddlSubsidiaryName").val();
+        var nSubAgentId = $("#ddlSubAgentName").val();
+
+        if (nCustomerId == '') {
+            nCustomerId = 0;
+        }
+
+        if (nSubsidiaryId == '') {
+            nSubsidiaryId = 0;
+        }
+
+        if (nSubAgentId == '') {
+            nSubAgentId = 0;
+        }
+
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("/GetLocationList")', // Calling json method
+            dataType: 'json',
+            data: { CustomerId: nCustomerId, SubsidiaryId: nSubsidiaryId, SubAgentId: nSubAgentId, bActive: true },
+            success: function (LocationList) {
+                if (LocationList.length > 0) {
+                    $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                    $.each(LocationList, function (i, LocationList) {
+                        $("#ddlLocationName").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                    });
+                } else {
+                    $("#ddlLocationName").empty();
+                    $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                }
+            },
+            error: function (ex) { $.alert({ content: 'Failed to retrieve Location list. ' + ex, confirm: function () { } }); }
+        });
+
+        return false;
+
+    });
+
+    function ReportPara() {
+        var ReportParameters = {
+            CustomerId: $("#ddlCustomerName").val(),
+            SubsidiaryID: $("#ddlSubsidiaryName").val(),
+            SubAgentID: $("#ddlSubAgentName").val(),
+            LocationId: $("#ddlLocationName").val(),
+            DateFrom: $("#DateFrom").val(),
+            DateTo: $("#DateTo").val(),
+            ModeId: $("#ddlMode").val()
+
+        };
+        return { objReportConfigM: ReportParameters };
+    }
+    function ExportToExcel(e) {
+        e.preventDefault();
+        var gridInstance = $("#ActivityReport").data("kendoGrid");
+
+        // Define the data to be sent to the server to create the spreadsheet.
+        var gridTitle = "Activity";
+        var createExcelUrl = "/ExcelExport/ExportToExcel";
+        var downloadExcelUrl = "/ExcelExport/GetExcelFile";
+        Revive.Redux.Common.ExportToExcel(gridInstance, gridTitle, createExcelUrl, downloadExcelUrl, "");
+    }
+</script>

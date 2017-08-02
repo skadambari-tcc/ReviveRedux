@@ -1,0 +1,355 @@
+﻿@model LocationModel
+
+@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+
+@{
+    ViewBag.Title = "Update Location Status";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .btnPosition {
+        position: relative;
+        right: -23px;
+    }
+
+    .text-box {
+        border: 1px solid blue;
+    }
+</style>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="contant_page">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>Update Location Status</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.GroupId, htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-8">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.GroupId, new SelectList(Model.GroupNameList, "Id", "text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @style = "" })
+                                    @Html.ValidationMessageFor(m => m.GroupId)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Status, htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-8">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.Status, new SelectList(Model.StatusList, "Id", "text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @style = "" })
+                                    @Html.ValidationMessageFor(m => m.Status)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1">
+                </div>
+                <div class="row">
+                    <div class="col-md-8 col-sm-8"></div>
+                    <div class="col-md-4 col-sm-4" style="float: right;">
+                        <div class="col-md-4 col-sm-4 "></div>
+                        <div class="col-md-8 col-sm-8 btnPosition">
+                            <input type="button" title="Update Location Status" class="GreenBtn" id="updtLocStatus" value="Update Status" />
+                            <button id="btnback" class="GreenBtn" onclick="location.href='@Url.Action("ManageGroupShippingQueue", "ManageShipping")'">Back</button>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="grid-align table-responsive Kendogrid" style="margin-left:-0.8%">
+                    @(Html.Kendo().Grid<Revive.Redux.Entities.GroupedLocationForShip>()
+                                    .Name("LocationStatusGrid")
+                            .Columns(columns =>
+                            {
+
+
+                                columns.Bound(p => p.GroupName).Title("Group");
+                                columns.Bound(p => p.ShippingStatusId).Title("ShipingStatusId").Visible(false);
+                                columns.Bound(p => p.CustomerName).Title("Customer");
+                                columns.Bound(p => p.NoofMachines).Title("No of Machines");
+                                columns.Bound(p => p.SubsidiaryName).Title("Subsidiary");
+                                columns.Bound(p => p.SubAgentName).Title("Sub Agent");
+                                columns.Bound(p => p.Location_Name).Title("Location Name");
+                                columns.Bound(p => p.StoreNumber).Title("Store #");
+                                columns.Bound(p => p.ShippingStatusName).Title("Status");
+                                columns.Bound(p => p.IsShipped).Title("All").ClientTemplate("#if(IsShipped!=true){# <input  type='checkbox' #= IsSelected ? checked='checked':'' # class='inpchk' ></input> #}else{#  #}#").HeaderTemplate("<input type='checkbox' id='chkSelectAll' class='chicher2' onchange='SelectAll(this)'/><span class='order_tittle' style='margin-top: 1px;'>All</span>").Filterable(false).Sortable(false);
+                            })
+
+                            .HtmlAttributes(new { style = "height: auto;" })
+                            //.Scrollable()
+                            .Sortable()
+                            .Filterable()
+                            .Editable(editable => editable.Mode(GridEditMode.InCell))
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Batch(true)
+                             .ServerOperation(true)
+                             .Model(model =>
+                                 {
+                                     model.Id(p => p.Location_ID);
+                                     model.Field(p => p.GroupName).Editable(false);
+                                     model.Field(p => p.CustomerName).Editable(false);
+                                     model.Field(p => p.SubsidiaryName).Editable(false);
+                                     model.Field(p => p.SubAgentName).Editable(false);
+                                     model.Field(p => p.Location_Name).Editable(false);
+                                     model.Field(p => p.StoreNumber).Editable(false);
+                                     model.Field(p => p.IsShipped).Editable(false);
+                                     model.Field(p => p.ShippingStatusName).Editable(false);
+
+                                 })
+                                                 .Events(events => { events.RequestEnd("onRequestEnd"); })
+                                                            .Read(read => read.Action("LocationStatusAjax", "ManageShipping").Data("GridPara"))
+                                                                            .Update(update => update.Action("Location_Update", "ManageShipping").Data("GridPara"))
+                 )
+                                                   .ToolBar(toolbar =>
+                                                   {
+                                                       toolbar.Save();
+                                                   }).Pageable(pageable => pageable
+
+
+                            .Refresh(true)
+                            )
+                                    .Events(events => { events.DataBound("onDataBound"); })
+                            .DataSource(dataSource => dataSource
+                            .Ajax().Model(model => model.Id(p => p.Location_ID))
+                            .ServerOperation(true)
+                            .PageSize(20)
+                            )
+
+                    )
+                    @*kendogrid*@
+                    @*@(Html.Kendo().Grid<Revive.Redux.Entities.GroupedLocationForShip>()
+                                         .Name("LocationStatusGrid")
+                                         .Columns(columns =>
+                           {
+                               columns.Bound(p => p.GroupName).Title("Group");
+                               columns.Bound(p => p.CustomerName).Title("Customer");
+                               columns.Bound(p => p.NoofMachines).Title("No of Machines");
+                               columns.Bound(p => p.SubsidiaryName).Title("Subsidiary");
+                               columns.Bound(p => p.SubAgentName).Title("Sub Agent");
+                               columns.Bound(p => p.Location_Name).Title("Location Name");
+                               columns.Bound(p => p.StoreNumber).Title("Store #");
+                               columns.Bound(p => p.ShippingStatusName).Title("Status");
+                               columns.Bound(p => p.IsShipped).Title("All").ClientTemplate("#if(IsShipped!=true){# <input  type='checkbox' #= IsSelected ? checked='checked':'' # class='inpchk' ></input> #}else{#  #}#").HeaderTemplate("<input type='checkbox' id='chkSelectAll' class='chicher2' onchange='SelectAll(this)'/><span class='order_tittle' style='margin-top: 1px;'>All</span>").Filterable(false).Sortable(false);
+                               // columns.Bound(c => c.IsShipped).Title("All").Width("3%").HtmlAttributes(new { @style = "font-size:x-small" }).ClientTemplate("<input type='checkbox'> #= IsShipped ? checked='checked' : ''# disabled='disabled'></input>");
+
+                           })
+                           .Editable(editable => editable.Mode(GridEditMode.InCell))
+                           .Pageable(pageable =>
+                           {
+                               pageable.Refresh(true);
+                               pageable.PageSizes(new int[] { 10, 20, 50 });
+                               pageable.Messages(messages => messages.Empty("No record found!"));
+                           })
+                                      .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                                 {
+                                                     fs.Clear().Contains("Contains");
+                                                     fs.DoesNotContain("Does not contain");
+                                                     fs.IsEqualTo("Equal to");
+                                                     fs.IsNotEqualTo("Not equal to");
+                                                     fs.StartsWith("Starts with");
+                                                     fs.EndsWith("Ends with");
+                                                 })))
+
+                                                         .ToolBar(toolbar =>
+                                                                    {
+                                                                        toolbar.Save();
+                                                                    })
+                           .Scrollable()
+                           .Sortable()
+
+                           .DataSource(dataSource => dataSource
+                           .Ajax().PageSize(10)
+                           .ServerOperation(true)
+                                   .Read(read => read.Action("LocationStatusAjax", "ManageShipping").Data("GridPara"))
+                                                   .Update("Location_Update", "ManageShipping")
+                                           .Model(model =>
+                                           {
+                                               model.Id(p => p.Location_ID);
+                                               model.Field(p => p.GroupName).Editable(false);
+                                               model.Field(p => p.CustomerName).Editable(false);
+                                               model.Field(p => p.SubsidiaryName).Editable(false);
+                                               model.Field(p => p.SubAgentName).Editable(false);
+                                               model.Field(p => p.Location_Name).Editable(false);
+                                               model.Field(p => p.StoreNumber).Editable(false);
+                                               model.Field(p => p.IsShipped).Editable(false);
+                                               model.Field(p => p.ShippingStatusName).Editable(false);
+                                           })
+                        )
+                             )*@
+                </div>
+
+                <div class="row spacer1">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    /*.k-grid-content td:nth-child(3){
+      border: 1px solid blue;
+    }*/
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        Revive.Redux.Common.SetKendoGridHeight();
+    });
+
+    function GridPara() {
+        var selsectedId = $("#GroupId").val();
+        if (selsectedId == '--Select--' || selsectedId == '') {
+            selsectedId = 0;
+        }
+
+        var CustLoc = {
+            GroupId: selsectedId
+           
+        };
+        return { objCustomerLocation: CustLoc };
+    }
+
+
+    $('#GroupId').change(function (e) {
+        $("#LocationStatusGrid").data("kendoGrid").dataSource.read();
+    });
+
+    function SelectAll(e) {
+        var state = $(e).is(':checked');
+        if (state == true) {
+            var grid = $('#LocationStatusGrid').data("kendoGrid");
+            $.each(grid.dataSource._data, function () {
+
+                $(".inpchk").prop('checked', 'checked');
+                if (this['IsSelected'] != state)
+                    this['IsSelected'] = state;
+            })
+        }
+        else {
+            $(".inpchk").removeAttr('checked');
+            var grid = $('#LocationStatusGrid').data("kendoGrid");
+            $.each(grid.dataSource._data, function () {
+                this['IsSelected'] = false;
+            })
+        }
+    }
+
+
+    $(function () {
+        $('#LocationStatusGrid').on('change', '.inpchk', function () {
+            var checked = $(this).is(':checked');
+            $("#chkSelectAll").removeAttr('checked');
+            if ($('.inpchk:checked').length == $('.inpchk').length) {
+                $("#chkSelectAll").prop('checked', 'checked');
+            }
+            var grid = $('#LocationStatusGrid').data().kendoGrid;
+            var dataItem = grid.dataItem($(this).closest('tr'));
+            dataItem.set('IsSelected', checked);
+        })
+    })
+
+    $('#updtLocStatus').click(function (e) {
+        var grid = $('#LocationStatusGrid').data().kendoGrid;
+        var items = $("#LocationStatusGrid").data("kendoGrid").dataSource.data();
+        var st = 0;
+        var machinescount = true;
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+
+            if (item.IsSelected == false) {
+                st = st + 1;
+            }
+            if (item.NoofMachines == 0 && item.IsShipped == true) {
+                machinescount = false;
+            }
+        }
+
+        if (LocStatus == "") {
+            toastr.warning('Please select status!');
+        }
+        else if (st == items.length) {
+            toastr.warning('Please select location to update!');
+        }
+        else if (machinescount == false) {
+            toastr.warning('No of Machines should be greater than 0 !');
+        }
+        else {
+            var grid = $('#LocationStatusGrid').data("kendoGrid");
+            var dat = grid.dataSource.data();
+            var Locationlist = [];
+            for (var i = 0; i < dat.length; i++) {
+                if (dat[i].IsSelected == true) {
+                    Locationlist.push({ 'LocationId': dat[i].Location_ID, 'NoofMachines': dat[i].NoofMachines, 'ShippingStatusId': dat[i].ShippingStatusId, 'Text': '' });
+                }
+            }
+            var GroupId = '@Model.GroupId';
+
+
+
+            $.ajax({
+                type: "POST",
+                datatype: 'json',
+                url: "/ManageCustomers/UpdLocationStatus",
+                data: JSON.stringify({ LocationList: Locationlist, LocationStatusId: LocStatus, GroupId: GroupId }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    // toastr.success();
+
+                }
+            }).done(function (data) {
+                //Successfully pass to server and get response
+                $('#LocationStatusGrid').data().kendoGrid.dataSource.read(data);
+                $('#LocationStatusGrid').data('kendoGrid').refresh();// or
+                if (data.result = "OK") {
+                    window.location.href = '@Url.Action("ManageGroupShippingQueue", "ManageShipping")';
+                    toastr.success('@ReviveMessages.Update');
+                    result = true;
+                    $("#chkSelectAll").removeAttr('checked')
+                }
+            })
+        }
+    });
+
+    LocStatus = "";
+    $("#Status").on('change', function () {
+        LocStatus = $("#Status").val();
+    });
+
+
+    function onRequestEnd(e) {
+        // debugger;
+        if (e.type == "update") {
+            if (!e.response.Errors) {
+                toastr.success("Updated Successfully.");
+                $("#LocationStatusGrid").data("kendoGrid").dataSource.read();
+            }
+            else {
+                //alert(e.response.Errors.StudentScores_Update.errors.toString());
+                toastr.error("Record not Saved.");
+                $("#LocationStatusGrid").data("kendoGrid").dataSource.read();
+            }
+        }
+    }
+
+    function onDataBound(e) {
+        var grid = $('#LocationStatusGrid').data("kendoGrid");
+        var dat = grid.dataSource.data();
+        for (var i = 0; i < dat.length; i++) {
+            if (dat[i].ShippingStatusId > 0) {
+                var model = grid.dataSource.at(i);
+                if (model) {//field names
+                    model.fields["NoofMachines"].editable = false;
+                }
+            }
+        }
+    }
+
+</script>

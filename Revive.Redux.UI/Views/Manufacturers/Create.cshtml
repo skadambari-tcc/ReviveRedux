@@ -1,0 +1,158 @@
+﻿@model Revive.Redux.Entities.ManufacturersModel
+
+@{
+    ViewBag.Title = "Create Manufacturer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+@using (Html.BeginForm("CreateMF", "Manufacturers", FormMethod.Post, new { @id = "CreateMFForm" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 nomargin nopadding">
+                <div class="contant_page">
+                    <!-- tittle -->
+                    <div class="row">
+                        <div class="col-md-8 nomargin nopadding">
+                            <h2 style="margin-left:2%">Create Manufacturer</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("Company Name", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right required" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Manufacturer_Name, new { @class = "form-control", maxlength = "100", @id = "txtName" })
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(model => model.Manufacturer_Name)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                @Html.Label("Address", htmlAttributes: new { @class = "col-md-5  col-sm-3  control-label text-right required" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Address, new { @class = " form-control ", maxlength = "500", @id = "txtAddress" })
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(model => model.Address)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                @Html.Label("Phone Number", htmlAttributes: new { @class = "col-md-5  col-sm-3  control-label text-right required" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Phone_Number, new { @class = "form-control", maxlength = "15", @id = "txtPhone" })
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(model => model.Phone_Number)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                @Html.Label("Manfactuer ID", htmlAttributes: new { @class = "col-md-5  col-sm-3  control-label text-right required" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Manufacturer_Ref_Code, new { @class = " form-control capitalise DisableKeyboardInput", maxlength = "1", @id = "Manufacturer_Ref_Code" })
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(model => model.Manufacturer_Ref_Code)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                @Html.Label("Website", htmlAttributes: new { @class = "col-md-5  col-sm-3  control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Company_Website, new { @class = " form-control ", maxlength = "100", @id = "txtWebsite" })
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(model => model.Company_Website)&nbsp;</span>
+                                </div>
+                            </div>                            
+                        </div>
+                        <div class="col-md-6">                            
+                            <div class="form-group display ">
+                                @Html.Label("Project Manager Name", htmlAttributes: new { @class = "col-md-5 col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.PM_Name, new { @class = "form-control", maxlength = "100", @id = "txtPMName" })
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(model => model.PM_Name)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                @Html.Label("Project Manager Email", htmlAttributes: new { @class = "col-md-5 col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.PM_Email, new { @class = "form-control", maxlength = "100", @id = "txtPMEmail" })
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(model => model.PM_Email)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                @Html.Label("Project Manager Office Phone", htmlAttributes: new { @class = "col-md-5 col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.PM_Office_Phone, new { @class = "form-control", maxlength = "15", @id = "txtPMPhone" })
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(model => model.PM_Office_Phone)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                @Html.Label("Project Manager Mobile", htmlAttributes: new { @class = "col-md-5 col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.PM_Mobile, new { @class = "form-control", maxlength = "15", @id = "txtPMMobile" })
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(model => model.PM_Mobile)&nbsp;</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 2%">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-6">
+                        <div class="col-md-12 col-md-offset-1 col-sm-6">
+                            @*<a id="btnCreate" href="#" class="btn login_button btn-primary">Save</a>*@
+                            <button id="btnCreate" class="btn GreenBtn" type="button">Save</button>
+
+                            <button id="btnCancel" class="btn login_button btn-primary yellow" type="button" style="margin-left:2px;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(function () {
+            $("#txtPhone").mask("(999) 999-9999", { autoclear: false });
+            $("#txtPMPhone").mask("(999) 999-9999", { autoclear: false });
+            $("#txtPMMobile").mask("(999) 999-9999", { autoclear: false });
+            
+
+        });
+        //$("#btnCreate").click(function () {
+        //    if ($('#CreateMFForm').valid()) {
+        //        $("#CreateMFForm").submit();
+        //    }
+        //});
+        $("#btnCreate").click(function () {
+            $('#CreateMFForm').validate();
+            if (!$('#CreateMFForm').valid()) {
+                //{
+                $("#btnCreate").prop('disabled', false);
+                return false;
+            }
+            else if ($("#CreateMFForm").valid()) {
+                $("#btnCreate").prop('disabled', true);
+                $('#CreateMFForm').submit();
+            }
+        });
+
+
+
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("Manage", "Manufacturers")';
+        });
+
+        $(".DisableKeyboardInput").keydown(function (e) {            
+            var key = e.keyCode;
+            if (((key == 32))) {
+                e.preventDefault();
+            }
+            
+        });
+    });
+</script>
+
+<style>
+    .capitalise
+{
+    text-transform:capitalize;
+}
+</style>

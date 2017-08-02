@@ -1,0 +1,206 @@
+﻿@model Revive.Redux.Entities.GroupModel
+@{
+    ViewBag.Title = "Edit Group";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var Enable=true;
+    if(Model.Machinestatus!=null && Model.Machinestatus=="Started")
+    {
+        Enable = false; 
+    }
+    else if (Model.Machinestatus != null && Model.Machinestatus == "Started")
+    {
+        
+    }   
+}
+
+@using (Html.BeginForm("AddEditGroup", "ManageUsers", FormMethod.Post, new { id = "UpdateGroupform", name = "UpdateGroupform", enctype = "multipart/form-data" }))
+{  @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+
+    <div>
+        <div class="col-md-12">
+            <div class="contant_page">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>Edit Group</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(m=>m.Priority_Id, htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-8">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.Priority_Id, new SelectList(Model.PriorityList, "Id", "Id"), "--Select--", new { @class = "form-control pull-right topspace selecter", @style = "" })
+                                    @Html.ValidationMessageFor(m => m.Priority_Id)
+                                </div>
+                            </div>
+                            @Html.HiddenFor(m => m.GroupId)
+                            @Html.HiddenFor(m => m.Redirectpath)
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m=>m.GroupName, htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(m => m.GroupName, new { @class = "k-textbox form-control CapitalizeWord", @style = "width:225px;", maxlength = "50" })
+                                @Html.ValidationMessageFor(m => m.GroupName)
+                                <div style="padding-left:15%">
+                                    <span id="RoleValidation" class="field-validation-error" style="display:none">Group Name is required</span>
+                                </div>
+                            </div>                           
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ShippingDate, htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right " })
+                                <div class="col-md-8">
+                                    @(Html.Kendo().DatePickerFor(m => m.ShippingDate).Enable(Enable).Min(DateTime.Today)//.Value(DateTime.Today.AddDays(5))
+                          .HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "ShippingDate", @style = "width: 100%;" })
+                                    )
+                  
+                                    <span id="invalidShippingDate" class="field-validation-error" style="display:none">Invalid date</span>
+                                </div>
+                            </div>
+                            @Html.HiddenFor(m => m.ShippingDate)
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1">
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="col-md-4 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            <button id="btnCreate" class="btn GreenBtn" type="button">Save</button>
+                            <button id="btnCancel" class="btn YellowBtn" type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1 spacer1">
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var redirectloc='@TempData["fromShippingQueue"]'
+        Revive.Redux.Common.SetParentMenuSelected('Admin');
+        if (redirectloc == 'True') {
+            $("#Redirectpath").val("ManageGroupShippingQueue");
+        }
+        // Cancel Button Click event
+        $("#btnCancel").click(function () {
+            if (redirectloc == 'True') {               
+                window.location.href = '@Url.Action("ManageGroupShippingQueue", "ManageShipping")';
+            }
+            else {
+                window.location.href = '@Url.Action("ManageGroups", "ManageUsers")';
+            }
+        });
+
+
+        $("#btnCreate").click(function () {
+            $('#UpdateGroupform').validate();
+
+            if (!$('#UpdateGroupform').valid()) {
+                //{
+                $("#btnCreate").prop('disabled', false);
+                return false;
+            }
+
+            else if ($("#UpdateGroupform").valid()) {
+                $("#btnCreate").prop('disabled', true);
+                $('#UpdateGroupform').submit();
+            }
+        });
+
+        $("#GroupName").change(function () {
+            var ddlCustomType = $("#Priority_Id").val();
+            if (ddlCustomType == "") {
+                $.alert({ content: 'Select Priority. ', confirm: function () { $("#GroupName").val(''); } });
+            }
+        });
+        //$("#ShippingDate").change(function () {
+
+        //    CheckShippingDate();
+        //});
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var datepicker = $("#ShippingDate").data("kendoDatePicker");
+        var date = new Date('@Model.ShippingDate');
+        var dateformated = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+        $("#ShippingDate").val(dateformated);
+
+        @*var todaysDate = new Date();
+        var pastDate = new Date('@Model.ShippingDate');
+        var dp = $("#ShippingDate").kendoDatePicker({
+            value: pastDate,
+            min: pastDate,
+            open: function (e) {
+                if (dp.min() == pastDate) {
+                    dp.value(pastDate);
+                    dp.min(todaysDate);
+                }
+            }
+        }).data("kendoDatePicker");*@
+
+        @*var disabledDaysBefore = [];
+        var now = new Date();
+        var daysOfYear = [];
+        for (var d = new Date('@Model.ShippingDate') ; d <= now; d.setDate(d.getDate() + 1)) {
+            disabledDaysBefore.push(new Date(d));
+        }
+        $("#ShippingDate").kendoDatePicker({
+            //value: new Date(),
+            dates: disabledDaysBefore,
+            month: {
+                content: '# if (data.date < data.dates) { #' +
+                '<div class="disabledDay">#= data.value #</div>' +
+                '# } else { #' +
+                '#= data.value #' +
+                '# } #'
+            },
+
+            open: function (e) {
+                $(".disabledDay").parent().removeClass("k-link")
+                $(".disabledDay").parent().removeAttr("href")
+            },
+        }).data("kendoDatePicker");*@
+
+
+        @*setTimeout(function () {
+                                                var NewDate = kendo.toString('@Model.ShippingDate.ToString()', 'MM/dd/yyyy');
+                                                var datepicker = $("#ShippingDate").data("kendoDatePicker");
+                                                $("#ShippingDate").data('kendoDatePicker').value(NewDate);
+                                                //datepicker.value(@Model.ShippingDate.ToString());
+                                            },2000);*@
+    });
+</script>
+
+<script type="text/javascript">
+    function CheckShippingDate() {
+        var startPicker = $("#ShippingDate").data("kendoDatePicker");
+        if (startPicker._value == null) {
+            $("#invalidShippingDate").show();
+            return false;
+        }
+        else { $("#invalidShippingDate").hide(); return true; }
+    }
+
+    $(document).ready(function () {
+        var shippdate='@Model.ShippingDate'
+
+        if(shippdate==''||shippdate==null)
+        {
+            $("#ShippingDate").val('');
+        }
+    });
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

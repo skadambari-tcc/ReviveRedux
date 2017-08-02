@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
+            xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
+
+  <mvcSiteMapNode title="Home" controller="Home" action="Index" >
+
+    <mvcSiteMapNode title="Admin" controller="Home" action="Index" clickable="false" >
+      <mvcSiteMapNode title="Manage Roles" controller="UserRole" action="GetRoles" id="4" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      <mvcSiteMapNode title="Manage Users" controller="ManageUsers" action="ManageUser" id="6" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      <mvcSiteMapNode title="Manage Manufacturers" controller="Manufacturers" action="Manage" id="39" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      <mvcSiteMapNode title="Manage Forms" controller="ManageForm" action="Form" id="26" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      <mvcSiteMapNode title="Menu Mapping" controller="UserRole" action="MenuMappingForLoginUser" id="5" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      <mvcSiteMapNode title="Pending Tasks" controller="ManageUsers" action="ViewPendingTask" id="42" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      <mvcSiteMapNode title="Manage Password" controller="ManageUsers" action="ManagePassword" id="49" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      <mvcSiteMapNode title="Manage Groups" controller="ManageUsers" action="ManageGroups" id="52" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      
+      
+
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Customers" controller="Home" action="Index" clickable="false" >
+      <mvcSiteMapNode title="Manage Customers" controller="ManageCustomers" action="ManageCustomers" id="8" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Manage Subsidiaries" controller="ManageSubsidiary" action="ManageSubsidiary" id="43" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      <mvcSiteMapNode title="Manage Sub Agents" controller="ManageSubAgent" action="ManageSubAgents" id="44" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      <mvcSiteMapNode title="Manage Locations" controller="ManageCustomers" action="Locations" id="9" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Stores" controller="Home" action="Index" clickable="false" >
+      <mvcSiteMapNode title="Manage Store Users" controller="ManageUsers" action="ViewUser" id="10" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      <mvcSiteMapNode title="View Locations" controller="ManageCustomers" action="viewCustomerLocation" id="36" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Orders" controller="Home" action="Index" clickable="false" >
+      <!--<mvcSiteMapNode title="Create New Order" controller="Order" action="CreateMachineOrder" id="19" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />-->
+      <mvcSiteMapNode title="Manage Orders" controller="Order" action="ManageMachineOrder" id="20" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      <mvcSiteMapNode title="Archive Orders" controller="Order" action="Archive" id="21" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      <mvcSiteMapNode title="Ship Machines" controller="ManageShipping" action="ShipMachines" id="53" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Shipping Queue" controller="ManageShipping" action="ManageGroupShippingQueue" id="54" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Shipping Configuration" controller="ManageShipping" action="ManageShippingConfiguration" id="55" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Shipped Machines" controller="Report" action="Show" id="1024" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+
+      
+      
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Technical Management" controller="Home" action="Index" clickable="false" >
+      <mvcSiteMapNode title="Manage Membership Configurations" controller="ManageMembershipConfig" action="Details" id="27" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Manage Machine Specifications" controller="ManageMachineSpecs" action="ManageMachineSpecs" id="23" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Manage Software Version" controller="ManageMachineSpecs" action="ManageSoftwareVersion" id="14" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Update Software Version" controller="ManageMachineSpecs" action="UpdateLatestSoftware" id="24" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Manage Debug Template" controller="ManageMachineSpecs" action="DebugParaTempl" id="28" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Configure Debug Template" controller="ManageMachineSpecs" action="ManageDebugPara" id="25" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Add Debug Template" controller="ManageMachineSpecs" action="AddEditTemplate" id="31" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Kill Machine" controller="ManageMachineSpecs" action="Details" id="12" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Recover Machine" controller="ManageMachineSpecs" action="ViewRecover" id="30" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Replace Machine" controller="ManageMachineSpecs" action="ReplaceMachine" id="41" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Manage Machine Demos" controller="ModeConfiguration" action="Details" id="40" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Delete Machine" controller="ManageMachineSpecs" action="DeleteMachines" id="45" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Move Machine" controller="ManageMachineSpecs" action="MoveMachine" id="46" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Manage Memberships" controller="ManageMembershipConfig" action="ManageMember" id="47" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Manage Logging" controller="ManageUsers" action="ViewLoging" id="48" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Configure Machine History" controller="ManageMachineSpecs" action="ConfigureMachineHistory" id="50" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Machine History" controller="ManageMachineSpecs" action="MachineHistory" id="51" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      
+      
+
+
+
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Knowledge Center" controller="Home" action="Index" clickable="false" >
+      <mvcSiteMapNode title="Manage FAQ's" controller="FAQ" action="Add" id="32" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+      <mvcSiteMapNode title="View FAQ's" controller="FAQ" action="Show" id="33" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI"/>
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Reports" controller="Home" action="Index" clickable="false" >
+      <mvcSiteMapNode title="Machines - Software Version" controller="Report" action="Show" id="1001" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Software Depository" controller="Report" action="Show" id="1012" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Memberships - Aggregate" controller="Report" action="Show" id="1002" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Memberships - Expiring" controller="Report" action="Show" id="1003" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Memberships - Expired " controller="Report" action="Show" id="1013" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Machine - Start Stop" controller="Report" action="Show" id="1004" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Machine Usage - Least" controller="Report" action="Show" id="1009" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Machine Usage - Most" controller="Report" action="Show" id="1010" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Machines - Killed" controller="Report" action="Show" id="1008" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Machines - Faults" controller="Report" action="Show" id="1015" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Machines - Specs" controller="Report" action="Show" id="1011" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Machines -  Activity" controller="Report" action="Show" id="1018" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Success Rate - Aggregate" controller="Report" action="Show" id="1005" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Success Rate - Members" controller="Report" action="Show" id="1006" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Success Rate – Device Mfr" controller="Report" action="Show" id="1007" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Diagnostic Fee Reconciliation" controller="Report" action="Show" id="1019" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Machines – Inventory" controller="Report" action="Show" id="1020" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Machines - Assigned" controller="Report" action="Show" id="1021" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+       <mvcSiteMapNode title="Logging" controller="ManageLogging" action="ManageLogging" id="1022" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Membership - Aggregate Summary" controller="Report" action="Show" id="1023" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Machine Activity-VZ" controller="Report" action="VZ_ActivityReport" id="1025" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      <mvcSiteMapNode title="Activity Report-Raw Data" controller="Report" action="ActivityReportDetails" id="1026" visibilityProvider="Revive.Redux.UI.AuthenticatedVisibilityProvider,Revive.Redux.UI" />
+      
+      
+      
+    
+
+    </mvcSiteMapNode>
+
+  </mvcSiteMapNode>
+
+</mvcSiteMap>
+
+

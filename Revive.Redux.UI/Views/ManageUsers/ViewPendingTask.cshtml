@@ -1,0 +1,130 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model UserModels
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Pending Task";
+
+}
+
+<style type="text/css">
+    .col-md-10 {
+        width: 73.3333%;
+    }
+
+    .col-md-8 {
+        padding-right: 37px;
+        width: 73.3333%;
+    }
+
+    .col-md-4 {
+        width: 19.333%;
+    }
+</style>
+
+
+<div class="modal-body" @*style="padding:0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>Pending Tasks</h2>
+                    </div>
+                    
+                    <div class="row">
+                        <div style="text-align:center;margin-top: -5%;padding-right:134.5px;">
+                            <div class="col-md-11 col-sm-10">
+                                <div class="select-icon">
+                                    @*Changes done for showing PendingApproval tasks to Admin & SuperAdmin also- Removed default value of Select*@
+                                    @Html.DropDownListFor(m => m.User_Level_Id, new SelectList(ViewBag.UserTypeLst, "Id", "Text", "1"), new { @style = "width: 200px;", @class = "form-control pull-right topspace selecter", @id = "ddlUserLevelId", onchange = "refreshGrid();" })
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+
+
+                    <br />
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid">
+
+                            @(Html.Kendo().Grid<Revive.Redux.Entities.OrderModel>()
+            .Name("GridPendingTask")
+                      .DataSource(dataSource => dataSource
+                      .Ajax().PageSize(10)
+                      .ServerOperation(false) // paging, sorting, filtering and grouping will be applied client-side
+                      .Read(read => read.Action("GetOrderStatusDashboardByRoleId", "Home").Data("UserLevelId"))
+                 )
+            .Columns(columns =>
+                {
+                    columns.Bound(c => c.JobOrderHeaderId).Title("Order#");
+                    columns.Bound(c => c.CustomerName).Title("Customer Name");
+                    columns.Bound(c => c.ManufacturerName).Title("Manufacturer");
+                    columns.Bound(c => c.AccountManagerName).Title("Account Manager");
+                    columns.Bound(c => c.NoOfMachines).Title("Machines Ordered");
+                    columns.Bound(c => c.StatusName).Title("Status");
+                    columns.Bound(p => p.JobOrderHeaderId).Title("View").ClientTemplate(
+                        "<a title='View Order' href='" + Url.Action("ViewOrder", "Order") + "/#= JobOrderHeaderIdEncoded #'" + "><i class='fa fa-eye fa-lg icon-color'></i></a>"
+                    ).Filterable(false).Sortable(false);
+                })
+                                                                .HtmlAttributes(new { style = "width:523px;height:215px;" })
+                        .Pageable(pageable =>
+                                                {
+                                                    pageable.Refresh(true);
+                                                    pageable.PageSizes(new int[] { 10, 20, 50 });
+                                                    pageable.Messages(messages => { messages.Empty("No records found!"); messages.ItemsPerPage("Items"); });
+                                                    pageable.ButtonCount(4);
+                                                })
+                                           .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                                          {
+                                                              fs.Clear().Contains("Contains");
+                                                              fs.DoesNotContain("Does not contain");
+                                                              fs.IsEqualTo("Equal to");
+                                                              fs.IsNotEqualTo("Not equal to");
+                                                              fs.StartsWith("Starts with");
+                                                              fs.EndsWith("Ends with");
+                                                          })))
+                                                      .Sortable()
+                                                              .Scrollable()
+                                                                      .HtmlAttributes(new { style = "width:80%;" })
+
+
+
+                            )
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    function refreshGrid(e) {
+        $("#GridPendingTask").data('kendoGrid').dataSource.read();
+        $("#GridPendingTask").data('kendoGrid').refresh();
+        $("#GridPendingTask").data("kendoGrid").dataSource.page(1);
+    }
+    function UserLevelId() {
+        var selsectedUserLevelId = $("#ddlUserLevelId").val();
+        if (selsectedUserLevelId == '-- Select --')
+            selsectedUserLevelId = null;
+
+        return { UserLevel_Id: selsectedUserLevelId };
+    }
+    $(document).ready(function () {
+        Revive.Redux.Common.SetKendoGridHeight();
+        Revive.Redux.Common.SetParentMenuSelected('Admin');
+
+        //$("#GridPendingTask").data("kendoGrid").dataSource.read();
+        //Changes done for showing PendingApproval tasks to Admin & SuperAdmin also- Set default value of dropdown
+        $("#ddlUserLevelId").val(1);
+
+      
+
+
+
+    });
+  </script>

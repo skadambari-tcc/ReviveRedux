@@ -1,0 +1,311 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model MachineSpecsModel
+@{
+    ViewBag.Title = "ManageMachineSpecs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .contant_sector {
+        height: auto;
+    }  
+
+    .k-window-titlebar {
+        height: 35px !important;
+    }
+
+    .k-window div.k-window-content {
+         overflow-x: hidden !important;
+    }
+
+    #body {
+       height: 550px;
+    }
+
+    .k-grid-content {
+        overflow-y: auto;
+        max-height: 410px;
+        overflow-x: auto;
+    }
+
+    .Title {
+        text-align: left;
+        font-size: larger;
+        color: #7c0000;
+    }
+
+    .k-grid tbody tr:hover {
+        background: #faecc1;
+    }
+        /*html, body {
+        overflow: hidden !important;
+    }*/
+</style>
+
+<script>
+        function onRowBound(e) {
+            
+            $(".k-grid-View").find("span").remove();
+            $("a.k-button.k-button-icontext.k-grid-View").text('').addClass("fa fa-eye fa-lg icon-color").removeClass("k-button k-button-icontext");
+
+        }
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).ready(function () {
+            Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+            Revive.Redux.Common.SetKendoGridHeight();
+        });
+
+        //    $("#ManageMachineGrid").kendoTooltip({
+        //        filter: "td.longTextPopup",
+        //        content: function (e) {
+        //            var element = e.target;
+        //            if (element.is("td.longTextPopup")) {
+        //                return element.html();
+        //            }
+        //        },
+        //        position: "top",
+        //        width: 120,
+        //    });
+        });
+
+  
+        function error_handler(e) {
+            if (e.errors) {
+                var message = "Errors:\n";
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                $.alert({ content: message, confirm: function () { } });
+            }
+        }
+   
+</script>
+<head>
+    <title></title>
+</head>
+<div class="modal-body" @*style="padding:0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>Manage Machines Specs</h2>
+                    </div>                    
+                    <div class="row">
+                        <div class="col-md-8 col-sm-8"></div>
+                        <div class="col-md-4 col-sm-4" style="float: right;margin-right:3%;">
+                            <div class="col-md-5 col-sm-5 "></div>
+                            <div class="col-md-7 col-sm-7 ">
+                                <input type="button" title="New Machine Specs" class="GreenBtn" value="New Machine Specs" onclick="location.href='@Url.Action("AddEditMachineSpec", "ManageMachineSpecs")'" />
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid" >
+                            @(Html.Kendo().Grid<MachineSpecsModel>()
+                        .Name("ManageMachineGrid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.MachineSpec_ID).Visible(false).Width(200);
+                    columns.Bound(p => p.Generation).Title("Machine Version").Width(200).HtmlAttributes(new { @class = "longTextPopup" });
+                    columns.Bound(p => p.software_version).Title("Software Version").Width(200).HtmlAttributes(new { @class = "longTextPopup" });
+                    columns.Bound(p => p.PowerSupply_1).Title("Power Supply").Width(200).HtmlAttributes(new { @class = "longTextPopup" });
+                    columns.Command(command => command.Custom("View").Click("showDetails")).Title("Details").Width(150);
+
+                    columns.Bound(p => p.MachineSpec_ID).Width(130).Title("Edit").ClientTemplate(
+                        "<a href='" + Url.Action("EditMachineSpecs", "ManageMachineSpecs") + "/#= MachineSpec_ID#'" + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>"
+                    ).Filterable(false).Sortable(false);
+                })
+                .Events(e => e.DataBound("onRowBound"))
+                .Pageable(pageable =>
+                {
+                    pageable.Refresh(true);
+                    pageable.PageSizes(new int[] { 10, 20, 50 });
+                    pageable.Messages(messages => messages.Empty("No record found!"));
+                })
+                        .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                       {
+                                           fs.Clear().Contains("Contains");
+                                           fs.DoesNotContain("Does not contain");
+                                           fs.IsEqualTo("Equal to");
+                                           fs.IsNotEqualTo("Not equal to");
+                                           fs.StartsWith("Starts with");
+                                           fs.EndsWith("Ends with");
+                                       })))
+                .Sortable()
+                .Scrollable()
+
+                .HtmlAttributes(new { style = "width:92.3%;" })
+                .DataSource(dataSource => dataSource.Ajax().PageSize(10)
+                .ServerOperation(false)
+
+                .Read("ManageMachineAjaxSpecs", "ManageMachineSpecs")
+                )
+                            )
+
+
+                            @(Html.Kendo().Window().Name("Details")
+                                             .Title("Machine Details")
+                                             .Visible(false)
+                                             .Modal(true)
+                                             .Draggable(true)
+                                             .Width(700)
+                                             //.Height(370)
+
+
+
+                            )
+                            
+                            <script type="text/x-kendo-template" id="template">
+                                <div id="details-container">
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                @Html.Label("Generation:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= Generation #
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("PCB Version:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= PCB_Version #
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.Label("Power Supply1 (HV):", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= PowerSupply_1 #
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Power Supply1 (LV):", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= PowerSupply_2 #
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Valve 1 (Vaccum):", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= Valve_1 #
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Valve 3 (Fresh Air):", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= Valve_3 #
+                                                </div>
+                                            </div><div class="form-group">
+                                                @Html.Label("Others 1:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= Customfield1 #
+                                                </div>
+                                            </div><div class="form-group">
+                                                @Html.Label("Others 3:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= Customfield3 #
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                @Html.Label("Pump:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= Pump #
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Injection Heater:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= INjection_Heater #
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Platen Heater:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= Platen_heater #
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Valve 2 (Injection):", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= Valve_2 #
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Firmware Version:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= software_version #
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Others 2:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= Customfield2 #
+                                                </div>
+                                            </div><div class="form-group">
+                                                @Html.Label("Others 4:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= Customfield4 #
+                                                </div>
+                                            </div><div class="form-group">
+                                                @Html.Label("Others 5:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                                <div class="col-sm-6 LableTextMargin" style="line-height:27px">
+                                                    #= Customfield5 #
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </script>
+
+
+
+                            <script type="text/javascript">
+                                var detailsTemplate = kendo.template($("#template").html());
+
+                                function showDetails(e) {
+                                    e.preventDefault();
+                                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                                    var wnd = $("#Details").data("kendoWindow");
+                                    wnd.content(detailsTemplate(dataItem));
+                                    wnd.center().open();
+                                }
+                                @if (TempData["isCreatedSuccess"] != null && (bool)TempData["isCreatedSuccess"] == true)
+                                    {
+
+                //@ReviveMessages.UserInsert
+                                        // <text>toastr.success('User information saved successfully.');</text>
+                <text>toastr.success('@ReviveMessages.MachineSpecSaveInfo');</text>
+                                    }
+                                @if (TempData["isUpdatedSuccess"] != null && (bool)TempData["isUpdatedSuccess"] == true)
+                                    {
+
+
+                                        <text>toastr.success('@ReviveMessages.MachineSpecUpdateInfo');</text>
+                                    }
+
+
+                            </script>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" style="height:60px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

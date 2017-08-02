@@ -1,0 +1,600 @@
+﻿@model Revive.Redux.Entities.ManageSubsidiaryModel
+@{
+    ViewBag.Title = "CreateSubsidiary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("AddSubsidiary", "ManageSubsidiary", FormMethod.Post, new { @id = "frmSubsidiary" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 nomargin nopadding">
+                <div class="contant_page">
+                    <!-- tittle -->
+                    <div class="row">
+                        <div class="col-md-8 nomargin nopadding">
+                            @if (ViewData["Create"].ToString() == "false")
+                            {
+                                <h2 style="margin-left:2%">Create Subsidiary</h2>
+                            }
+                            else
+                            {
+                                <h2 style="margin-left:2%">Edit Subsidiary</h2>
+                            }
+
+                            @Html.HiddenFor(M => M.Subsidiary_ID)
+                        </div>
+
+                        <div class="col-md-4 nopadding Account_display">
+                            <h4 class="align-right" style="margin-right:4%">Subsidiary Contact Details</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+
+                            <div class="form-group">
+
+
+                                @Html.Label("Name", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right required" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @*col-sm-6*@
+                                    @Html.TextBoxFor(M => M.Subsidiary_Name, new { @class = "form-control", @id = "txtName", maxlength = "100", required = "required" })
+                                    <div>
+                                        @*style="white-space: nowrap;"*@
+                                        @Html.ValidationMessageFor(model => model.Subsidiary_Name, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="form-group ">
+
+
+                                @Html.Label("Subsidiary ID", htmlAttributes: new { @class = "col-md-5  col-sm-3  control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.SubsidiaryID, new { @class = " form-control ", maxlength = "50", @id = "txtSubsidiary_Ref_Code" })
+                                    @Html.ValidationMessageFor(model => model.SubsidiaryID, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>*@
+
+                            <div class="form-group">
+
+
+                                @Html.LabelFor(M => M.CustomerId, htmlAttributes: new { @class = " required col-md-5  col-sm-3 control-label text-right required" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.CustomerId, new SelectList(ViewBag.Customerlst, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName" })
+                                        @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Subsidiary ID", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right required" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Subsidiary_Ref_Code, new { @class = "form-control ", @AutoComplete = "off", @id = "Subsidiary_Ref_Code" })
+                                    @Html.ValidationMessageFor(M => M.Subsidiary_Ref_Code, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("ZipCode", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Primary_ZipCode, new { @class = "form-control numericOnly ", maxlength = "5", @id = "txtZipCode" })
+                                    @Html.ValidationMessageFor(M => M.Primary_ZipCode, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Phone", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Primary_Phone, new { @class = "form-control", maxlength = "50", @id = "txtPhone" })
+                                    @Html.ValidationMessageFor(model => model.Primary_Phone, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Address", htmlAttributes: new { @class = "required col-md-5  col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextAreaFor(M => M.Primary_Address, new { @class = "form-control", maxlength = "100", @id = "txtAddress1" })
+                                    @Html.ValidationMessageFor(model => model.Primary_Address, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-4">
+
+                            <div class="form-group display ">
+
+
+                                @Html.Label("State", htmlAttributes: new { @class = "col-md-5 required col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.Primary_State, new SelectList(ViewBag.Statelst, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", maxlength = "50" })
+                                        @Html.ValidationMessageFor(model => model.Primary_State, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+
+
+                                @Html.Label("City", htmlAttributes: new { @class = "required col-md-5  col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    <div>
+                                        @Html.TextBoxFor(M => M.Primary_City_Name, new { @class = "form-control ", @id = "txtCityName" })
+                                        @Html.ValidationMessageFor(model => model.Primary_City_Name, "", new { @class = "text-danger Aligntext" })
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="col-md-4 nopadding Account_display2">
+                                <h4 class="align-right">Account Manager Details</h4>
+                            </div>
+                            <div class="form-group">
+
+                                @Html.Label("Copy address from Subsidiary", htmlAttributes: new { @class = " col-md-10  col-sm-6  control-label text-right", @id = "CopyData" })
+                                <div class="col-sm-2">
+                                    <input id="inputtype1" class="check" type="checkbox" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Name", htmlAttributes: new { @class = " required col-md-5  col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Acct_manager_Name, new { @class = "form-control ", maxlength = "100", @id = "txtNameCopy" })
+                                    @Html.ValidationMessageFor(model => model.Acct_manager_Name, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("Address", htmlAttributes: new { @class = "required col-md-5  col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextAreaFor(M => M.Acct_manager_Primary_Address, new { @class = "form-control ", maxlength = "100", @id = "txtAddress1Copy" })
+                                    @Html.ValidationMessageFor(model => model.Acct_manager_Primary_Address, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group ">
+
+
+                                @Html.Label("ZipCode", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Acct_manager_Primary_Zip, new { @class = "form-control numericOnly", maxlength = "5", @id = "txtZipCodeCopy" })
+                                    @Html.ValidationMessageFor(M => M.Acct_manager_Primary_Zip, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group ">
+
+
+                                @Html.Label("State", htmlAttributes: new { @class = "col-md-5 required col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.Acct_manager_Primary_State, new SelectList(ViewBag.Statelst, "Id", "Text"), "--Select--", new { @class = " form-control pull-right topspace selecter", maxlength = "50" })
+                                        @Html.ValidationMessageFor(M => M.Acct_manager_Primary_State, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("City", htmlAttributes: new { @class = "required col-md-5  col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    <div>
+
+                                        @Html.TextBoxFor(M => M.Acct_manager_Primary_City_Name, new { @class = "form-control ", @id = "txtAcctCityName" })
+                                        @Html.ValidationMessageFor(model => model.Acct_manager_Primary_City_Name, "", new { @class = "text-danger Aligntext" })
+
+
+                                        @*@Html.DropDownListFor(M => M.Acct_manager_Primary_City, new SelectList(ViewBag.Citylst, "Id", "Text"), new { @class = "form-control pull-right topspace selecter", })
+                                            @Html.ValidationMessageFor(model => model.Acct_manager_Primary_City, "", new { @class = "text-danger Aligntext" })*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+
+                                @Html.Label("Phone", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Acct_manager_Primary_Phone, new { @class = "form-control", maxlength = "50", @id = "txtPhoneCopy" })
+                                    @Html.ValidationMessageFor(model => model.Acct_manager_Primary_Phone, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                @Html.Label("Email", htmlAttributes: new { @class = "col-md-5 required col-sm-3 control-label text-right" })
+
+                                <div class="col-md-7 col-sm-9">
+
+                                    @Html.TextBoxFor(M => M.Email_ID, new { @class = "form-control", maxlength = "50", @id = "txtEmail" })
+                                    @Html.ValidationMessageFor(model => model.Email_ID, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-6">                      
+                        <div class="col-md-12 col-md-offset-1 col-sm-6">
+                            <button id="btnSavedata" class="btn GreenBtn" type="button">Save</button>
+                            <button id="btnCancel" class="btn YellowBtn" onclick='CancelCreateCustomer()' type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+}
+
+<style type="text/css">
+    #body {
+        height: auto;
+    }
+
+    .Aligntext {
+        display: block;
+        width: 15em;
+        word-wrap: break-word;
+        /*white-space:normal;*/
+    }
+
+    .k-reset {
+        /*border: 0 none;*/
+        font-size: 100%;
+        list-style: outside none none;
+        /*margin: 0;*/
+        outline: 0 none;
+        /*padding: 0;*/
+        text-decoration: none;
+        /*width: 190px !important;*/
+        /*padding-top: 5%*/
+    }
+
+    .k-upload-files {
+        margin: 0 0 .6em;
+        /*line-height: 1.5;*/
+        border-style: solid;
+        border-width: 1px 0 0;
+    }
+
+    .k-input {
+        height: inherit !important;
+        /* border: 0 none;
+
+     line-height: 1.65em!important;
+     margin: 0;
+    padding: 0.177em 0;
+     padding: 1em!important;
+     text-indent: 4px!important;*/
+    }
+
+    .modal.fade.in {
+        top: 5%;
+    }
+
+    .modal-open .modal {
+        overflow-x: hidden;
+        /* overflow-y: auto; */
+    }
+
+    .col-md-offset-1 {
+        margin-left: 10.333333%;
+    }
+
+    .k-widget.k-upload.k-header.k-upload-sync {
+        background-color: transparent;
+        border: 0 none;
+    }
+
+    .col-md-offset-8 {
+        margin-left: 75%;
+    }
+</style>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Customers');
+
+        $("#txtPhoneCopy").mask("(999) 999-9999", { autoclear: false });
+        $("#txtPhone").mask("(999) 999-9999", { autoclear: false });
+
+
+
+
+        //The Value of --Select-- is set to null to fire validation on city fields.   Start
+
+        //if ($("select#Primary_City") != null && $("select#Primary_City").length > 0 && $("select#Primary_City").val() == 0)
+        //    $("select#Primary_City").find(":selected").val('');
+
+        //if ($("select#Acct_manager_Primary_City") != null && $("select#Acct_manager_Primary_City").length > 0 && $("select#Acct_manager_Primary_City").val() == 0)
+        //    $("select#Acct_manager_Primary_City").find(":selected").val('');
+
+        //End
+        //File Upload Validation on Save Click
+        $("#btnSavedata").click(function (e) {
+            //Work if button type =button to validate complete form
+            if (!$('#frmSubsidiary').valid()) {
+                $("#btnSavedata").prop('disabled', false);
+                return false;
+            }
+            else {
+                if (validateflag == true) {
+                    $("#btnSavedata").prop('disabled', true);
+                    $('#frmSubsidiary').submit();
+                }
+            }
+            //Validate Upload Control
+            validateflag = true;
+        });
+        // Validation End
+
+        $("#ddlCustomerName").change(function () {
+            $("#Subsidiary_Ref_Code").val('');
+        });
+
+    });
+
+    var validateflag = true;
+    var value = '@ViewBag.File';
+    var count = 0;
+    function deleteRecord(DocDetails) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("DeleteCustomerDocs", "ManageCustomers")' + '?DocDetails=' + DocDetails,  // Calling json method
+            dataType: 'json',
+            cache: false,
+        }).done(function (data) {
+            $('#CustomerDocumentGrid').data().kendoGrid.dataSource.read(data); // or
+            if (data.FileStatus == false) {
+                //$('#fileUpload').show();
+                value = "False";
+                result = true;
+                $("#btnView").prop('disabled', true);
+            }
+            else {
+                value = "True";
+                $('#fileUpload').hide();
+                $("#btnView").prop('disabled', false);
+            }
+
+        })
+
+        return false;
+    }
+
+    function View() {
+
+        $('#DocumentGridModal').css("visibility", "visible");
+        $('#DocumentGridModal').modal('show');
+
+    }
+    $(document).on('click', '.check', function () {
+        if ($(this).prop('checked')) {
+
+            $('#txtNameCopy').val($('#txtName').val());
+            $('#txtAddress1Copy').val($('#txtAddress1').val());
+            //Copy Primary State value to AcctMgr State only when primary state is not null
+
+            //If Primary State value is null and the on Check Box click Copy null value to Acct Mge State And unload AcctMgr City
+
+            $('#txtZipCodeCopy').val($('#txtZipCode').val());
+            $('#txtPhoneCopy').val($('#txtPhone').val());
+            $('#txtEmailCopy').val($('#txtEmail').val());
+            $('#txtAcctCityName').val($('#txtCityName').val());
+
+            if ($("#Primary_State").val() != "") {
+                $('#Acct_manager_Primary_State').val($('#Primary_State').val());
+            }
+            //If Primary State value is null and the on Check Box click Copy null value to Acct Mge State And unload AcctMgr City
+            if ($("#Primary_State").val() == "") {
+                $('#Acct_manager_Primary_State').val($('#Primary_State').val());
+            }
+
+
+
+
+
+            //Load Acct_manager_Primary_City Value On checkBox Check On the basis Of Acct_manager_Primary_State Value
+            @*if ($("#Acct_manager_Primary_State").val() != 0) {
+                $(function () {
+                    $("#Acct_manager_Primary_City").empty();
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("/GetCascadeCity")', // Calling json method
+                        dataType: 'json',
+                        data: { Id: $("#Acct_manager_Primary_State").val() },
+                        success: function (CityList) {
+                            if (CityList.length > 0) {
+                                $.each(CityList, function (i, CityList) {
+                                    $("#Acct_manager_Primary_City").append('<option value="' + CityList.Id + '">' + CityList.Text + '</option>');
+                                });
+                                $('#Acct_manager_Primary_City').val($('#Primary_City').val());
+                            }
+                            else {
+                                $("#Acct_manager_Primary_City").append('<option value="">' + "--Select--" + '</option>');
+                            }
+                        },
+                        error: function (ex) { $.alert({ content: 'Failed to retrieve Citylist. ' + ex, confirm: function () { } }); }
+                    });
+                    return false;
+                });
+            }*@
+
+        }
+        else {
+            $('#txtNameCopy').val('');
+            $('#txtAddress1Copy').val('');
+            // $('#Acct_manager_Primary_State').val('');
+            $('#txtZipCodeCopy').val('');
+            $('#txtPhoneCopy').val('');
+            $('#txtEmailCopy').val('');
+            $('#txtAcctCityName').val('');
+            $('#Acct_manager_Primary_State').val('');
+        }
+    });
+    //$(".DisableKeyboardInput").keypress(function () {
+    //    return false;
+    //});
+    $(".DisableKeyboardInput").keydown(function (e) {
+        if (e.shiftKey || e.ctrlKey || e.altKey) {
+            e.preventDefault();
+        }
+        var key = e.keyCode;
+        if (((key == 32) || (key >= 65 && key <= 90) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105))) {
+            e.preventDefault();
+        }
+        if ((key >= 35 && key <= 40) || (key == 46)) {
+
+        }
+    });
+
+
+
+
+    function CancelCreateCustomer() {
+        window.location.href = '@Url.Action("ManageSubsidiary", "ManageSubsidiary")'; // Redirected to Home Page'../ManageRoles/ManageRoles';
+    }
+    //Validation again display on removal of files
+    function onRemove(e) {
+        var files = e.files;
+        var x = $("#files").data("kendoUpload");
+        var FileExist = value;
+        if (FileExist == "False") {
+            //x.element.context.files.length
+            if (count == 0) {
+                x.element.context.value = "";
+                $('#fileUpload').show();
+            }
+        }
+        count--;
+    }
+
+    function onUpload(e) {
+        var files = e.files;
+
+        //Bug ID 6836 resolved.
+        var filesInList = $(".k-upload-files .k-filename");
+        for (var i = 0; i < files.length; i++) {
+            var filename = files[i].name;
+
+            filesInList.each(function () {
+                if ($(this).text() === filename) {
+                    e.preventDefault();
+                    //bootbox.alert("Duplicate files can't be uploaded!").css({ "width": "40em" });
+                    $.alert({ content: 'Duplicate files cannot be uploaded!', confirm: function () { } });
+                }
+            });
+        }
+
+        $.each(files, function (index, value) {
+            //var name1 = value.name;
+            count++;
+            if (this.extension.toLowerCase() != ".pdf") {
+                //bootbox.alert("Only .pdf files can be uploaded!").css({ "width": "40em" });
+                $.alert({ content: 'Only .pdf files can be uploaded!', confirm: function () { } });
+                e.preventDefault();
+            }
+
+            if (this.size / 1024 / 1024 > 5) {
+                //bootbox.alert("Max 5Mb file size is allowed!");
+                $.alert({ content: 'Max 5Mb file size is allowed!', confirm: function () { } });
+                e.preventDefault();
+            }
+
+        });
+        validateflag = true;
+        $('#fileUpload').hide();
+
+    }
+    function endChange() {
+        var startPicker = $("#StartDate").data("kendoDatePicker"),
+            end = this.value();
+        var endDate = $("#EndDate").data("kendoDatePicker");
+        var eDate = Date.parse(endDate._value);
+
+        if (!eDate) {
+            $("#invalidenddate").show();
+            return false;
+        }
+        $("#date").hide();
+        if (startPicker._value != "") {
+            if (endDate._value < startPicker._value) {
+                $("#date").show();
+
+            }
+        }
+        $("#invalidenddate").hide();
+    }
+
+    $(function () {
+        $('.demo-section > .k-upload >div ').css({ "width": "9em", "margin": "2% 4% 0 0" });
+        // $('.demo-section > .k-upload >ul >li> .k-upload-status >button').attr({ "id": "filecancel" });
+        //$('.demo-section > .k-upload >div ').css({ "display": "inline" });
+
+    });
+    $(function () {
+        $('#CustomerDocumentGrid div:nth-child(2)').css("height", "auto");
+
+
+    });
+    $('#txtCustomer_Ref_Code').keypress(function (e) {
+        var regex = new RegExp("^[a-zA-Z0-9 _]+$");
+        if (event.keyCode == 37 || event.keyCode == 38 || event.keyCode == 39 || event.keyCode == 40 || event.keyCode == 35 || event.keyCode == 36 || event.keyCode == 46)
+            return true;
+        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (regex.test(str)) {
+            return true;
+        }
+
+        e.preventDefault();
+        return false;
+    });
+     @if (TempData["isDuplicate"] != null && (bool)TempData["isDuplicate"] == true)
+    {
+        <text>toastr.error('Subsidiary with same Id Already Exists.');</text>
+    }
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<style>
+    .demo-section > .k-upload > ul li > span:nth-child(3) {
+        width: 60%;
+        margin-left: -2%;
+    }
+
+    .k-file > .k-icon {
+        background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    }
+</style>
+

@@ -1,0 +1,276 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model UserModels
+@{
+    ViewBag.Title = "StoreUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    .col-md-10 {
+        width: 73.3333%;
+    }
+
+    .col-md-8 {
+        padding-right: 37px;
+        width: 73.3333%;
+    }
+
+    .col-md-4 {
+        padding-left: 45px;
+        width: 19.333%;
+    }
+</style>
+<input type="hidden" id="RecordID" name="DeactivateRecord" />
+<div id="myModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog  modal-sm">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    @Html.Label("Title", htmlAttributes: new { @class = "", @id = "Title" })
+                </div>
+            </div>
+
+            <!-- dialog buttons -->
+            <div class="modal-footer footerbtn">
+                <button type="button" id="Deactivatebtn" class="btn GreenBtn btn-primary" data-dismiss="modal">YES</button>
+                <button type="button" class="btn btn-primary YellowBtn" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div style="margin-left:0.5%">
+                        <h2>Manage Store Users</h2>
+                    </div>
+                    <div style="text-align:center;margin-top: -5%;">
+                        <div class="col-md-8 col-sm-8">
+                            <div class="select-icon">
+                                @if (ViewBag.StoreUserCustomerCount > 1)
+                                {
+                                    @Html.DropDownListFor(m => m.Customer_Id, new SelectList(ViewBag.StoreUserCustomer, "Id", "Text", "1"), "All", new { @style = "width: 200px;", @class = " form-control pull-right topspace selecter", @id = "ddlCustomerId", onchange = "refreshGrid();" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(m => m.Customer_Id, new SelectList(ViewBag.StoreUserCustomer, "Id", "Text", "1"), new { @disabled = "disabled", @style = "width: 200px;", @class = " form-control pull-right topspace selecter", @id = "ddlCustomerId", onchange = "refreshGrid();" })
+                                }
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.Customer_Id, "", new { @class = "red" })
+                    </div>
+                   @if (ViewBag.StoreUserCustomerCount>0)
+                   { 
+                    <div class="col-md-4  col-sm-4" id="divAddStoreUserBtn">
+                        <input type="button" title="AddUser" class="GreenBtn" value="Add Store User" onclick="location.href='@Url.Action("AddEditStoreUser", "ManageUsers", new { uid = "00000000-0000-0000-0000-000000000000" })'" />
+                    </div>
+                   }
+                </div>
+                <div class="row">
+                    <div class="col-md-4  col-sm-4" style="float:right">
+
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="table-responsive Kendogrid col-md-10" style=" margin-top: 3%;">
+
+
+                        @*<div class="k-grid-content">*@
+                        @(Html.Kendo().Grid<DtoUser>()
+                          .Name("ManageStoreUsersGrid")
+                  .Columns(columns =>
+                  {
+                      columns.Bound(p => p.FullName).Title("User Name");
+                      columns.Bound(p => p.Location_Name).Title("Location");
+                      columns.Bound(p => p.Email_ID).Title("Email");
+                      columns.Bound(p => p.Cell_Phone).Title("Phone No.");
+                      columns.Bound(p => p.Customer_ID).Title("Customer_ID").Visible(false);
+                      columns.Bound(p => p.User_ID).ClientTemplate("<a title='Edit' href='" + Url.Action("AddEditStoreUser", "ManageUsers") + "?uid=#= User_ID #''  " + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>").Title("Edit").Filterable(false).Sortable(false);
+                      columns.Bound(p => p.status).ClientTemplate(
+                       "# if (status == true) { #<a id=\"activate\" runat=\"server\" href='javascript: void(0);' onclick=\"Action(this,'#= User_ID#,#= status#');\" " + "><img src='" + Url.Content("~/Scripts/images/activate_icon.png") + "' /></a># }else{#<a id=\"deactivate\" runat=\"server\" href='javascript: void(0);' onclick=\"Action(this,'#= User_ID#,#= status#');\" " + "><img src='" + Url.Content("~/Scripts/images/disable_icon.png") + "' /></a>#} #").Title("Active").Sortable(false).HtmlAttributes(new { @style = "cursor:pointer" });
+
+
+
+
+                  })
+                                       .Pageable(pageable =>
+                                                    {
+                                                        pageable.Refresh(true);
+                                                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                                                        pageable.Messages(messages => messages.Empty("No record found!"));
+                                                    })
+                                                            .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                                          {
+                                                              fs.Clear().Contains("Contains");
+                                                              fs.DoesNotContain("Does not contain");
+                                                              fs.IsEqualTo("Equal to");
+                                                              fs.IsNotEqualTo("Not equal to");
+                                                              fs.StartsWith("Starts with");
+                                                              fs.EndsWith("Ends with");
+                                                          })))
+                                                      .Sortable()
+                                                      .Scrollable()
+                                                    .HtmlAttributes(new { style = "width:800px" })
+                                                  .DataSource(dataSource => dataSource
+                                                     .Ajax().PageSize(10)
+                                                    .ServerOperation(false) // paging, sorting, filtering and grouping will be applied client-side
+                                                      //.Read("ManageUsersAjax", "ManageUsers")
+                                                    .Read(read => read.Action("ManageStoreUsersAjax", "ManageUsers").Data("CustomerId"))
+                                                            //.Events(ev =>
+                                                            //{
+                                                            //    ev.Error("onErrorSearchWindow");
+                                                            //    ev.Change("onGridChange");
+                                                            //})
+                                                           )
+                        )
+
+                    </div>
+
+                    <div class="kendogrid col-md-2" style=" margin-top: 3%;">
+                        <img src="~/Scripts/images/profile.png" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //function onGridChange() {
+    //    var nStoreUserGridCount = 0;
+    //    var grid = $("#ManageStoreUsersGrid").data("kendoGrid");
+    //    nStoreUserGridCount = grid.dataSource.total();
+    //    $("div#divAddStoreUserBtn").hide();
+    //    if (nStoreUserGridCount > 0) {
+    //        $("div#divAddStoreUserBtn").show();
+    //    }
+
+    //}
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Stores');
+        Revive.Redux.Common.SetKendoGridHeight();
+        $("#ManageStoreUsersGrid").data("kendoGrid").dataSource.read();
+
+
+        //Tooltip added to email column of storeUserGrid
+        $("#ManageStoreUsersGrid").kendoTooltip({
+            filter: "td:nth-child(3)", //this filter selects the second column's cells
+            position: "top",
+            content: function (e) {
+                var dataItem = $("#ManageStoreUsersGrid").data("kendoGrid").dataItem(e.target.closest("tr"));
+                var content = dataItem.Email_ID;
+                return content;
+            }
+        }).data("kendoTooltip");
+        //end
+
+    });
+    function refreshGrid(e) {
+        $("#ManageStoreUsersGrid").data('kendoGrid').dataSource.read();
+        //$("#BatchGrid").data('kendoGrid').refresh();
+    }
+    //$(function () {
+    //    $('#ManageStoreUsersGrid div:nth-child(2)').css("height", "auto");
+
+    //    $('#ManageStoreUsersGrid div:nth-child(2)').css("max-height", "200px");
+
+
+    //});
+    function CustomerId() {
+        var selsectedId = $("#ddlCustomerId").val();
+        if (selsectedId == 'All' || selsectedId=='')
+            selsectedId = null;
+
+        return { Customer_ID: selsectedId };
+    }
+    function Action(e, Id) {
+        var arr = Id;
+        $('#myModal').modal('show');
+         if (e.id == "deactivate") {
+
+            $("#Title").text('@ReviveMessages.ActivateInfo');
+        }
+        else {
+            $("#Title").text('@ReviveMessages.DeactivateInfo');
+        }
+
+        $("#RecordID").val(arr);
+    }
+    //function error_handler(e) {
+    //    if (e.errors) {
+    //        var message = "Errors:\n";
+    //        $.each(e.errors, function (key, value) {
+    //            if ('errors' in value) {
+    //                $.each(value.errors, function () {
+    //                    message += this + "\n";
+    //                });
+    //            }
+    //        });
+    //        alert(message);
+    //    }
+    //}
+
+    //function onErrorSearchWindow() {
+
+    //}
+
+
+
+    $('#Deactivatebtn').click(function (e) {
+        var record = $("#RecordID").val();
+        var arr = record.split(',');
+        var recordID = arr[0];
+        var status = arr[1];
+        var objUserModel =
+             {
+                 "UserId": recordID,
+                 "Status": status
+             };
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ActivateDeactivateStoreUser", "ManageUsers")',
+
+            //Your Action name in the DropDownListConstroller.cs
+            data: JSON.stringify(objUserModel),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+        }).done(function (data) {
+            //Successfully pass to server and get response
+            $('#ManageStoreUsersGrid').data().kendoGrid.dataSource.read(data); // or
+            if (data.result = "OK") {
+                result = true;
+                if (data.Successmsg != "") {
+                    toastr.success(data.Successmsg);
+                }
+                else {
+                    toastr.warning(data.ErrorMsgs);
+                }
+            }
+
+
+
+
+        })
+
+    });
+    @if (TempData["isCreatedSuccess"] != null && (bool)TempData["isCreatedSuccess"] == true)
+    {
+        <text>toastr.success('@ReviveMessages.Add');</text>
+    }
+    @if (TempData["isUpdatedSuccess"] != null && (bool)TempData["isUpdatedSuccess"] == true)
+    {
+        <text>toastr.success('@ReviveMessages.Update');</text>
+    }
+    @if (TempData["CustomerRole"] != null && (bool)TempData["CustomerRole"] == false)
+    {
+        <text>toastr.error('Customer role not configured!');</text>
+    }
+
+</script>

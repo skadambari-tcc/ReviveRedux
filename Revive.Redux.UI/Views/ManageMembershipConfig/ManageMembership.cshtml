@@ -1,0 +1,137 @@
+﻿@model IEnumerable<MembershipConfigModel>
+
+@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+
+@{
+    ViewBag.Title = "Membership Configuration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <title></title>
+</head>
+
+
+
+<input type="hidden" id="RecordID" name="DeactivateRecord" />
+<div class="modal-body" @*style="padding:0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>Manage Membership Configurations</h2>
+                    </div>
+                    
+                    <br />
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid" >
+                            @(Html.Kendo().Grid<MembershipConfigModel>()
+    .Name("grdMembership")
+                            .DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(false)
+                                                                        .Read(read => read.Action("MembershipAjax", "ManageMembershipConfig")).PageSize(10))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.CustomerName).Title("Customer Name").Filterable(true).Width(140);
+        columns.Bound(p => p.MembershipDuration).Title("Duration (Months)").Filterable(true).Width(120);
+        columns.Bound(p => p.MembershipRenewDuration).Title("Renew Duration (Months)").Filterable(true).Width(160);
+        columns.Bound(p => p.TotalReviveAllowed).Title("Revives Allowed").Filterable(true).Width(120);
+        columns.Bound(p => p.TotalRenewedReviveAllowed).Title("Revives Allowed (Renew)").Filterable(true).Width(160);
+        columns.Bound(p => p.eligibiltyWaitPeriod).Title("Wait Period (Days)").Filterable(true).Width(160);
+        columns.Bound(p => p.VoidMembershipDays).Title("Void Membership (Days)").Filterable(true).Width(160);
+        columns.Bound(p => p.IsMultiDevice).Title("Multi Device").ClientTemplate("#= IsMultiDevice ? 'Yes' : 'No' #").Filterable(true).Width(140);
+        columns.Bound(p => p.NoOfDevices).Title("No of Devices").Filterable(true).Width(140); 
+        columns.Bound(p => p.CustomerId).Title("Edit").ClientTemplate(
+        "<a title='Edit' href='" + Url.Action("Edit", "ManageMembershipConfig") + "/#= CustomerId #'" + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>").Sortable(false).Filterable(false).Width(40);
+
+    })
+              .HtmlAttributes(new { style = "width:99%" })
+             .Pageable(pageable =>
+                        {
+                            pageable.Refresh(true);
+                            pageable.PageSizes(new int[] { 10, 20, 50 });
+                            pageable.Messages(messages => messages.Empty("No records available!"));
+                        })
+                               
+                        .Sortable()
+                        .Scrollable()
+                        .Filterable()
+                            )
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<style type="text/css">
+    /*.k-grid-content {
+        min-height: 300px;
+        height:405px;
+    }*/
+
+    .modal .fade {
+        top: 30%;
+        transition: opacity 0.3s linear;
+    }
+
+        .modal.fade.in {
+            top: 30%;
+        }
+
+    .modal-backdrop {
+        background-color: #000;
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 0 !important;
+    }
+    /*.contant_sector
+    {height: 100%;}*/
+</style>
+
+<script type="text/javascript">
+
+
+
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        Revive.Redux.Common.SetKendoGridHeight();
+
+        $("#btnResult").click(function (e) {
+            window.location.href = '@Url.Action("Details", "ManageMembershipConfig")';
+        });
+
+    });
+   
+    //$(function () {
+    //    //$('#RoleGrid div:nth-child(2)').css("height", "auto");
+    //    $('#grdMembership div:nth-child(2)').css("max-height", "170px");
+    //    $('#grdMembership div:nth-child(2)').css("height", "auto");
+
+
+    //});
+     @if (TempData["isUpdatedSuccess"] != null && (bool)TempData["isUpdatedSuccess"] == true)
+    {
+
+
+        //<text>toastr.success('@ReviveMessages.ManageUserSaveInfo');</text>
+        <text>toastr.success('Updated Successfully.');</text>
+        
+    }
+
+</script>

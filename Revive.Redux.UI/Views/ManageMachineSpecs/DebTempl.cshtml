@@ -1,0 +1,377 @@
+﻿@model Revive.Redux.Entities.ManageDebugParaModel
+
+@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@using System.Web.Optimization
+@using Revive.Redux.Repositories
+
+@{
+    ViewBag.Title = "ManageDebugPara";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="modal-body" @*style="padding: 0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>Configure Debug Parameters</h2>
+                    </div>
+
+                    <div class="row">
+
+
+
+
+                        <div class="col-md-5 col-sm-5" style="width:100%!important;">
+
+
+
+                            <div style="display:inline-block">
+
+                                <label class="col-md-6  col-sm-3 control-label text-right" for="customers">Customer</label>
+                                <div class="col-sm-6">
+                                    @(Html.Kendo().DropDownList()
+              .Name("customers")
+                      .HtmlAttributes(new { style = "width:165px" })
+              .OptionLabel("--Select--")
+              .DataTextField("Text")
+              .DataValueField("Id")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("GetCustomerList", "ManageMachineSpecs");
+                  });
+              })
+                                    )
+                                    <script>
+                                        $("#customers").on("change", function () {
+                                            $("#ManageDebug").data('kendoGrid').dataSource.read();
+                                        })
+                                    </script>
+                                </div>
+                            </div>
+
+
+
+
+                            <div style="display:inline-block">
+
+
+                                <label class="col-md-6  col-sm-3 control-label text-right " for="location">Locations</label>
+                                <div class="col-sm-6">
+                                    @(Html.Kendo().DropDownList()
+              .Name("location")
+                      .HtmlAttributes(new { style = "width:165px" })
+                      .OptionLabel("--Select--")
+              .DataTextField("Text")
+              .DataValueField("Id")
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("GetLocationList", "ManageMachineSpecs")
+                          .Data("filterlocations");
+                  })
+                  .ServerFiltering(true);
+              })
+              .Enable(false)
+              .AutoBind(false)
+              .CascadeFrom("customers")
+                                    )
+
+
+                                    <script>
+                                        //filter locations based on value selected in customer dropdown
+                                        function filterlocations() {
+                                            return {
+                                                Id: $("#customers").val()
+                                            };
+                                        }
+
+                                        $("#location").on('change', function () {
+                                            $("#ManageDebug").data('kendoGrid').dataSource.read();
+                                        })
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div style="display:inline-block" id="templ">
+
+                                <label class="col-md-6  col-sm-3 control-label text-right " for="templates">Template <span style="color:red">*</span></label>
+                                <div class="col-sm-6">
+                                    @(Html.Kendo().DropDownList()
+              .Name("templates")
+                      .HtmlAttributes(new { style = "width:165px" })
+                      .OptionLabel("--Select--")
+              .DataTextField("Text")
+              .DataValueField("Id")
+
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("GetTemplateList", "ManageMachineSpecs");
+                  });
+              })
+                                    )
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="col-md-4 col-sm-4" style="float: right;margin-right:3.8%;">
+                            <div class="col-md-5 col-sm-5 "></div>
+                            <div class="col-md-7 col-sm-7 ">
+
+
+                                <input type="button" title="Set debug Parameter" style="text-align:right;" class="GreenBtn" id="setdebug" value="Set debug Parameter" onclick="setDebugPara()" />
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid">
+                            @(Html.Kendo().Grid<ManageDebugParaModel>()
+                                                  .Name("ManageDebug")
+                                                  .Columns(columns =>
+                  {
+                      columns.Bound(p => p.CustomerId).Title("CustomerId").Visible(false);
+                      columns.Bound(p => p.Customer_Name).Title("Customer").Visible(true);
+                      columns.Bound(p => p.Location_Name).Title("Location").HtmlAttributes(new { @class = "longTextPopup", @id = "cus" });
+                      columns.Bound(p => p.MachineId).Title("Machine ID").HtmlAttributes(new { @class = "longTextPopup", @id = "loc" });
+                      columns.Bound(p => p.Template_Name).ClientTemplate("<a href='/ManageMachineSpecs/EditPtmpl/#= TempalteId#@#= Template_Name#'>#=Template_Name# </a>").Title("Debug Template").HtmlAttributes(new { @class = "longTextPopup", @id = "ver" });
+                      columns.Bound(p => p.Template_VersionNumber).Title("All").ClientTemplate("<input type='checkbox' #= isSelected ? checked='checked':'' # class='inpchk' ></input>").HeaderTemplate("<label><input type='checkbox' id='chkSelectAll' onchange='SelectAll(this)'/>&nbsp;All</label>").Filterable(false).Sortable(false);
+
+                  })
+                  .Pageable(pageable =>
+                  {
+                      pageable.Refresh(true);
+                      pageable.PageSizes(new int[] { 10, 20, 50 });
+                      pageable.Messages(messages => messages.Empty("No record found!"));
+                  })
+                  .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                       {
+                                           fs.Clear().Contains("Contains");
+                                           fs.DoesNotContain("Does not contain");
+                                           fs.IsEqualTo("Equal to");
+                                           fs.IsNotEqualTo("Not equal to");
+                                           fs.StartsWith("Starts with");
+                                           fs.EndsWith("Ends with");
+                                       })))
+                  .Sortable()
+                  .Scrollable()
+                  .HtmlAttributes(new { style = "width:92%" })
+                  .DataSource(dataSource => dataSource
+                  .Ajax().PageSize(10)
+                  .ServerOperation(false)
+                  .Read(read => read.Action("ManageDebugAjaxPara", "ManageMachineSpecs").Data("AddFilter"))
+                  .Events(events => events.Error("error_handler"))
+                  .Model(model => model.Id(p => p.MachineId))
+
+               )
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //select all checkbox function
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalSupport');
+    });
+    function SelectAll(e) {
+
+        var state = $(e).is(':checked');
+        if (state == true) {
+            var grid = $('#ManageDebug').data("kendoGrid");
+            $.each(grid.dataSource.view(), function () {
+                $(".inpchk").prop('checked', 'checked');
+                if (this['isSelected'] != state)
+                    this['isSelected'] = state;
+            })
+        }
+        else {
+            $(".inpchk").removeAttr('checked');
+            var grid = $('#ManageDebug').data("kendoGrid");
+            $.each(grid.dataSource.view(), function () {
+                this['isSelected'] = false;
+            })
+
+
+        }
+    }
+
+    $(function () {
+        $('#ManageDebug').on('change', '.inpchk', function () {
+            var checked = $(this).is(':checked');
+            $("#chkSelectAll").removeAttr('checked');
+            if ($('.inpchk:checked').length == $('.inpchk').length) {
+                $("#chkSelectAll").prop('checked', 'checked');
+                
+            }
+
+
+            var grid = $('#ManageDebug').data().kendoGrid;
+            var dataItem = grid.dataItem($(this).closest('tr'));
+            dataItem.set('isSelected', checked);
+        })
+    })
+
+
+
+
+
+
+
+
+
+    function setDebugPara() {
+        var grid = $('#ManageDebug').data().kendoGrid;
+
+        var items = $("#ManageDebug").data("kendoGrid").dataSource.data();
+        var st = 0;
+        for (var i = 0; i < items.length; i++) {
+
+            var item = items[i];
+            if (item.isSelected == false) {
+                st = st + 1;
+            }
+
+
+        }
+
+
+        if (temptoupdate == "") {
+
+
+            toastr.warning('Please Select Template');
+
+
+        }
+
+
+        else if (st == items.length) {
+            toastr.warning('Please Select Machine To Update');
+        }
+
+
+        else {
+
+            var grid = $('#ManageDebug').data("kendoGrid");
+            var dat = grid.dataSource.data();
+
+
+            $.ajax({
+                type: "POST",
+                datatype: 'json',
+                url: "/ManageMachineSpecs/UpdTemplate",
+                data: JSON.stringify({ da: dat, templ: temptoupdate }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+
+                    // toastr.success();
+                }
+            }).done(function (data) {
+                //Successfully pass to server and get response
+
+                $('#ManageDebug').data().kendoGrid.dataSource.read(data);
+                $('#ManageDebug').data('kendoGrid').refresh();// or
+                if (data.result = "OK") {
+                    toastr.success('Records have been saved successfully.');
+
+                    result = true;
+                    $("#chkSelectAll").removeAttr('checked')
+                }
+            })
+        }
+    }
+
+    //current selected template value
+    temptoupdate = "";
+    $("#templates").on('change', function () {
+
+        temptoupdate = $("#templates").val();
+
+
+
+    });
+
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.alert({ content: message, confirm: function () { } });
+        }
+    }
+
+    //function for server side filtering the managedebug grid
+    function AddFilter() {
+
+        var gridData = $("#ManageDebug").data("kendoGrid")
+        var custfilter = $("#customers").val();
+        var locfilter = $("#location").val();
+
+        var custtxt = $("#customers").data("kendoDropDownList").text();
+        //var custfilter = $("#customers").val();
+
+        if (custtxt == 'Select Customer')
+            custfilter = null;
+
+
+        if (custfilter != null) {
+            var loctxt = $("#location").data("kendoDropDownList").text();
+            // var locfilter = $("#location").val();
+
+            if (loctxt == 'Select Location') {
+                locfilter = null;
+            }
+
+        }
+        return { filtervalu: custfilter, loc: locfilter };
+    }
+
+
+</script>
+
+<script>
+    $(function () {
+        $("form").kendoValidator();
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

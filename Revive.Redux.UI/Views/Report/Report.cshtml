@@ -1,0 +1,88 @@
+﻿@model IEnumerable<Revive.Redux.Entities.ReportMasterModel>
+
+@{
+    ViewBag.Title = "Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="modal-body" style="padding:0px!important">
+
+    <div class="row">
+        <div class="col-RV">
+            <div class=" contant_page">
+                <div class="col-md-12">
+                    <!-- tittle -->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2>Reports</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                       
+                    </div>
+                    <br />
+                    <div class="table-responsive">
+                        @(Html.Kendo().Grid(Model)
+                        .Name("grdForm")    
+                        .DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(false)
+                        )
+                        .Columns(columns =>
+                        {
+                            columns.Bound(p => p.Name).Title("Report Name").Filterable(true).Width(150);
+                            columns.Bound(p => p.Description).Title("Report Description").Filterable(true).Width(260);
+                            columns.Bound(p => p.ReportId).Title("Show").ClientTemplate(
+                                           "<a href='" + Url.Action("Show", "Report") + "/#= ReportId #'" + "><i class='fa fa-eye fa-lg icon-color', style='align:center'></i></a>").Filterable(false).Width(25);
+                        })
+                         .Pageable(pageable =>
+                         {
+                             pageable.Refresh(true);
+                             pageable.PageSizes(new int[] { 10, 20, 50 });
+                             pageable.Messages(messages => messages.Empty("No Report available!"));
+                         })
+                        .Sortable()
+                        .Scrollable()
+                        .Filterable()
+                        )
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+   
+</div>
+
+<style type="text/css">
+    .k-grid-content {
+        max-height: 300px;
+    }
+
+    .modal .fade {
+        top: 30%;
+        transition: opacity 0.3s linear;
+    }
+
+        .modal.fade.in {
+            top: 30%;
+        }
+
+    .modal-backdrop {
+        background-color: #000;
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 0 !important;
+    }
+
+    .col-RV {
+        /*width: 110%;*/
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Reports');
+    });
+</script>

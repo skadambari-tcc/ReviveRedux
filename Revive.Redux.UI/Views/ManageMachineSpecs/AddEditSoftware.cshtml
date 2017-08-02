@@ -1,0 +1,285 @@
+﻿@model Revive.Redux.Entities.ManageSoftwareVersionModel
+@using Kendo.Mvc.UI
+@using System.Web.Optimization
+@{
+    ViewBag.Title = "Add Edit Software";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<style>
+    .k-upload-sync {
+        display: inline-flex;
+        margin-left: 2%;
+        width: 70%;
+        height: 48px;
+    }
+
+        .k-upload-sync > .k-upload-files {
+            width: 65%;
+        }
+
+    .contant_sector {
+        min-height: 300px !important;
+        height: auto;
+    }
+
+    .k-tooltip {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .k-widget.k-tooltip {
+        background-image: none !important;
+        display: none;
+    }
+
+    .k-widget.k-tooltip-validation {
+        border-color: transparent !important;
+        background-color: transparent !important;
+        color: red;
+    }
+
+
+
+    span .k-icon {
+        display: none !important;
+    }
+
+
+
+    .red {
+        color: red;
+    }
+
+    .form-control {
+        width: 70% !important;
+    }
+
+    .form-controls {
+        width: 85% !important;
+    }
+
+
+    .form-tex {
+        width: 50%;
+        display: block;
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    }
+</style>
+
+@*<script src="~/Scripts/jquery.validate.min.js"></script>*@
+
+@using (Html.BeginForm("RegisterSoftware", "ManageMachineSpecs", FormMethod.Post, new { @class = "form-horizontal", role = "form", @id = "frmSoftware" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    if (ViewBag.PageMode == 2)
+    {
+        @Html.HiddenFor(m => m.MasterData_Type_ID)
+        @Html.HiddenFor(m => m.Custom_Field1)
+    }
+    <div class="modal-body" @*style="padding:0px!important"*@>
+        <div class="row">
+            <div class="col-md-12">
+                <div class=" contant_page">
+                    <div class="row">
+                        <div class="lable-align-top">
+                            @if (ViewBag.PageMode == 2)
+                            {<h2 style="margin-left:-0.4%">
+                                Edit Software Version
+                            </h2> }
+                            else
+                            {<h2 style="margin-left:-0.4%">New Software Version</h2> }
+                        </div>
+
+
+
+
+                        <div class="row" style="width:92%;">
+
+                            <div class="col-md-4" style="width:50%">
+                                <div class="form-group" style="margin-bottom:2%;margin-top:2%">
+
+
+                                    @Html.Label("Software Version", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+
+                                    <div class="col-sm-6">
+                                        @*col-sm-6*@
+                                        @Html.TextBoxFor(M => M.MasterData_Value, new { @class = " form-control required", @style = "width:100%!important" })
+                                        @Html.ValidationMessageFor(M => M.MasterData_Value, "", new { @class = "text-danger" })
+
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+
+
+                                    @Html.Label("Notes", htmlAttributes: new { @class = " col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-6">
+                                        @Html.TextAreaFor(M => M.CustomField3, new { @class = " form-control form-controls", @style = "width:100%!important;", maxlength = "50" })
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4" style="width:50%">
+                                <div class="form-group ">
+                                    @if (ViewBag.PageMode == 2)
+                                    {
+                                        @Html.Label("File", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right", @style = "margin-left:-12%;" })
+                                        <div class="col-sm-6" style="margin-top:10px;">
+                                            @Html.ActionLink(Model.Custom_Field1.Replace("ReduxFirmware/", ""), "DownloadFile", new { FileName = Model.Custom_Field1, MasterData_Type_ID = Model.MasterData_Type_ID }, new { @class = "" })
+                                            @*@Html.TextBoxFor(M => M.Custom_Field1, new { @class = " form-control", @style = "width:100%!important;" })
+                                                @Html.ValidationMessageFor(M => M.Custom_Field1, "", new { @class = "text-danger" })*@
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="form-group">
+
+
+                                    @Html.Label("Details", htmlAttributes: new { @class = "required col-md-6  col-sm-3 control-label text-right", @style = "margin-left:-12%;" })
+
+                                    <div class="col-sm-6">
+                                        @Html.TextAreaFor(M => M.CustomField2, new { @class = " form-control form-controls", @style = "width:100%!important;", maxlength = "50" })
+                                        @Html.ValidationMessageFor(M => M.CustomField2, "", new { @class = "text-danger" })
+                                        @*<span class="field-validation-error">@Html.ValidationMessageFor(M => M.CustomField2)</span>*@
+
+
+                                    </div>
+                                </div>
+
+
+
+
+
+                                <div class="form-group" style="margin-left:10%">
+                                    @if (ViewBag.PageMode == 2)
+                                    {
+                                        @Html.Label("File Upload", htmlAttributes: new { @class = "col-sm-2 control-label text-right ", style = "padding-top: 12px;width:24.7%;" })
+                                    }
+                                    else
+                                    {
+                                        @Html.Label("File Upload", htmlAttributes: new { @class = "col-sm-2 control-label text-right required", style = "padding-top: 12px;width:24.7%;" })
+                                    }
+                                    <div>
+                                        @*<input type="file" name="files" id="fileLocationUpdload" onchange="check_extension(this.value);">*@
+                                        @(Html.Kendo().Upload()
+                                    .Name("files")
+                                    .Multiple(false)
+                                    .Messages(m => m.Select("Select file"))
+                                    .HtmlAttributes(new { @accept = ".bin", @class = "" })
+                                    .Events(events => events.Select("check_extension"))
+
+
+                                        )
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <br />
+                        <div class="row" style="width:92%;">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-6">
+                                <div class="col-md-3 col-sm-3"></div>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="btn GreenBtn" type="submit" value="Save" id="btnSubmit" />
+
+                                    <button type="reset" class="btn YellowBtn" onclick="location.href='@Url.Action("ManageSoftwareVersion", "ManageMachineSpecs")'">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        $('#btnSubmit').click(function (e) {
+            var Result = true;
+            var File = $("#files").data("kendoUpload");
+            //if (File.element.context.value == "")
+            if (@ViewBag.PageMode != 2)
+            {
+                var len = File.wrapper.find(".k-file").length;
+                if (len === 0) {
+                    Result = false;
+                    toastr.error('Please select a file to upload!');
+                }
+            }
+
+
+            return Result;
+        });
+
+
+    });
+
+</script>
+<script type="text/javascript" language="javascript">
+
+    function check_extension(e) {
+        var files = e.files;
+        var Result = true;
+
+        $.each(files, function () {
+
+            if (this.extension.toLowerCase() != ".bin") {
+                toastr.error("Only .bin files can be uploaded!");
+                e.preventDefault();
+                Result = false;
+
+            }
+
+            if (this.size / 1024  < 10) {
+                toastr.error("Min 10kb file size is allowed!")
+                e.preventDefault();
+                Result = false;
+            }
+            if (this.size / 1024 / 1024 > 5) {
+                toastr.error("Max 5Mb file size is allowed!")
+                e.preventDefault();
+                Result = false;
+            }
+        });
+
+        return Result;
+    }
+
+    @if (TempData["IsFileExists"] != null && (bool)TempData["IsFileExists"] == false)
+    {
+        <text>toastr.error('File not found.');</text>
+    }
+</script>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+

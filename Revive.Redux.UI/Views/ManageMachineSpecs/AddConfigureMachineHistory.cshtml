@@ -1,0 +1,100 @@
+﻿@model Revive.Redux.Entities.ConfigureMachineHistoryModel
+
+@{
+    ViewBag.Title = "Add Configure Machine History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("AddEditConfigureMachineHistory", "ManageMachineSpecs", FormMethod.Post, new { id = "AddConfigureMachineHistoryform", name = "AddConfigureMachineHistoryform", enctype = "multipart/form-data" }))
+{  @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    <div>
+        <div class="col-md-12">
+            <div class="contant_page">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>Add Configure Machine History</h2>
+                        @Html.HiddenFor(m => m.ConfigureMachineHistoryId)
+                    </div>
+                </div>              
+                <div class="row">
+                    <div class="col-md-4">                        
+                        <div class="form-group">
+                            @Html.Label("Custom Type", htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right required" })
+                            <div class="col-md-8">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.ConfigureTypeId, new SelectList(Model.ConfigureTypeList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @style = "" })
+                                    @Html.ValidationMessageFor(m => m.ConfigureTypeId)
+                                </div>
+                            </div>
+                        </div>    
+                        <div class="form-group">
+                            @Html.Label("Custom Field", htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right required" })
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.ConfiguredValue, new { @class = "k-textbox form-control CapitalizeWord", maxlength = "50", @style = "width:225px;" })
+                                @Html.ValidationMessageFor(m => m.ConfiguredValue)
+                                
+                            </div>
+                        </div>                    
+                    </div>
+                </div>
+                <div class="row spacer1">
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="col-md-4 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            <button id="btnCreate" class="btn GreenBtn" type="button">Save</button>
+                            <button id="btnCancel" class="btn YellowBtn" type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1 spacer1">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+
+        // Cancel Button Click event
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("ConfigureMachineHistory", "ManageMachineSpecs")';
+        });
+
+        $("#btnCreate").click(function () {
+            $('#AddConfigureMachineHistoryform').validate();
+            if (!$('#AddConfigureMachineHistoryform').valid()) {
+             
+                $("#btnCreate").prop('disabled', false);
+                return false;
+            }
+            else if ($("#AddConfigureMachineHistoryform").valid()) {
+                $("#btnCreate").prop('disabled', true);
+                $('#AddConfigureMachineHistoryform').submit();
+            }
+        });
+
+        $("#ConfiguredValue").change(function () {
+            var ddlCustomType = $("#ConfigureTypeId").val();
+            if (ddlCustomType == "")
+            {
+                $.alert({ content: 'Select Custom Type. ', confirm: function () { $("#ConfiguredValue").val(''); } });
+            }            
+        });
+    });
+
+    
+</script>
+
+
+

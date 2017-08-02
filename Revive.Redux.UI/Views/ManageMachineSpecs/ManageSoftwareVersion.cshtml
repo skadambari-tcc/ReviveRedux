@@ -1,0 +1,281 @@
+﻿@model Revive.Redux.Entities.ManageSoftwareVersionModel
+
+
+
+
+@using Kendo.Mvc.UI
+@using Revive.Redux.Entities;
+@using System.Web.Optimization;
+@using Revive.Redux.Repositories;
+
+@{
+    ViewBag.Title = "ManageSoftwareVersion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $(document).ready(function () {
+            Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+            Revive.Redux.Common.SetKendoGridHeight();
+        });
+
+        //$("#SoftwareVersionGrid").kendoTooltip({
+        //    filter: "td.longTextPopup",
+        //    content: function (e) {
+        //        var element = e.target;
+        //        if (element.is("td.longTextPopup")) {
+        //            return element.html();
+        //        }
+        //    },
+        //    position: "top",
+        //    width: 120,   
+        //});
+
+        //Tooltip added to email column of storeUserGrid
+        $("#SoftwareVersionGrid").kendoTooltip({
+            filter: "td:nth-child(2)", //this filter selects the second column's cells
+            position: "top",
+            content: function (e) {
+                var dataItem = $("#SoftwareVersionGrid").data("kendoGrid").dataItem(e.target.closest("tr"));
+                var content = dataItem.Custom_Field1;
+                return content;
+            }
+        }).data("kendoTooltip");
+
+        $("#SoftwareVersionGrid").kendoTooltip({
+            filter: "td:nth-child(5)", //this filter selects the second column's cells
+            position: "top",
+            content: function (e) {
+                var dataItem = $("#SoftwareVersionGrid").data("kendoGrid").dataItem(e.target.closest("tr"));
+                var content = dataItem.CheckSumKey;
+                return content;
+            }
+        }).data("kendoTooltip");
+
+        //end   
+
+
+    });
+
+
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.alert({ content: message, confirm: function () { } });
+        }
+    }
+    @if (TempData["isCreatedSuccess"] != null && (bool)TempData["isCreatedSuccess"] == true)
+    {
+
+        //@ReviveMessages.UserInsert
+        // <text>toastr.success('User information saved successfully.');</text>
+        <text>toastr.success('@ReviveMessages.Add');</text>
+    }
+    @if (TempData["isUpdatedSuccess"] != null && (bool)TempData["isUpdatedSuccess"] == true)
+    {
+
+
+        <text>toastr.success('@ReviveMessages.Update');</text>
+    }
+    
+
+    
+
+
+
+</script>
+
+
+<input type="hidden" id="RecordID" name="DeactivateRecord" />
+
+
+<div id="myModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body ">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    @*@Html.Label("Title", htmlAttributes: new { @class = "", @id = "Title" })*@
+                    Do you want to archive this version? 
+                </div>
+            </div>
+
+            <!-- dialog buttons -->
+            <div class="modal-footer footerbtn">
+                <button type="button" id="Deactivatebtn" class="btn GreenBtn btn-primary" data-dismiss="modal">YES</button>
+                <button type="button" class="btn btn-primary YellowBtn" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-body" @*style="padding:0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>Manage Software Version</h2>
+                    </div>                      
+                    <div class="row">
+                        <div class="col-md-8 col-sm-8"></div>
+                        <div class="col-md-4 col-sm-4" style="float: right;margin-right:4%;">
+                            <div class="col-md-5 col-sm-5 "></div>
+
+                            <div class="col-md-7 col-sm-7 ">
+                                <input type="button" title="New Software Version" class="GreenBtn" value="New Software Version" onclick="location.href='@Url.Action("AddEditSoftware", "ManageMachineSpecs")'" />
+                            </div>
+
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" >
+                        <div class="grid-align table-responsive Kendogrid" >
+                            @(Html.Kendo().Grid<ManageSoftwareVersionModel>()
+                                .Name("SoftwareVersionGrid")
+                .Columns(columns =>
+                {
+
+                    columns.Bound(p => p.MasterData_Value).Title("Software Version").HtmlAttributes(new { @class = "longTextPopup" });
+                    columns.Bound(p => p.Custom_Field1).Title("Software Path").HtmlAttributes(new { @class = "longTextPopup" });
+                    columns.Bound(p => p.CustomField2).Title("Version Details").HtmlAttributes(new { @class = "longTextPopup" });
+
+                    columns.Bound(p => p.CustomField3).Title("Notes").HtmlAttributes(new { @class = "longTextPopup" });
+                    columns.Bound(p => p.CheckSumKey).Width(250).Title("Check Sum Key").HtmlAttributes(new { @class = "longTextPopup" });
+                    columns.Bound(p => p.MasterData_Type_ID).Title("Edit").ClientTemplate(
+                        "<a title='Edit' href='" + Url.Action("EditSoftDetail", "ManageMachineSpecs") + "/#= MasterData_Type_ID#'" + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>").Filterable(false).Sortable(false);
+                    columns.Bound(p => p.status).ClientTemplate(
+                       "# if (status == true) { #<a id=\"archive\" runat=\"server\" href='javascript: void(0);' onclick=\"Action(this,'#= MasterData_Type_ID#,#= status#');\" " + "><img src='" + Url.Content("~/Scripts/images/delite_icon.png") + "' /></a># }else{#<a id=\"deactivate\" runat=\"server\" href='javascript: void(0);' onclick=\"Action(this,'#= MasterData_Type_ID#,#= status#');\" " + "><img src='" + Url.Content("~/Scripts/images/delite_icon.png") + "' /></a>#} #").Title("Archive").Sortable(false).HtmlAttributes(new { @style = "cursor:pointer" });
+
+                    
+                    
+                    //columns.Bound(p => p.MasterData_Type_ID).ClientTemplate(
+                    //    "#<a runat=\"server\" href='javascript: void(0);' onclick=\"Action(this,'# =MasterData_Type_ID#');\" " + "><img src='" + Url.Content("~/Scripts/images/activate_icon.png") + "' /></a>#")
+                    //    .Filterable(false).Sortable(false).HtmlAttributes(new { @style = "cursor:pointer" }); 
+                    
+                    
+                    //columns.Command(command => command.Destroy()).Title("Archive");
+
+                    //columns.Command(commands =>
+                    //{
+                    //    commands.Destroy().Text("Archive");
+                    //}).Title("Archive");
+                })
+                .Pageable(pageable =>
+                {
+                    pageable.Refresh(true);
+                    pageable.PageSizes(new int[] { 10, 20, 50 });
+                    pageable.Messages(messages => messages.Empty("No record found!"));
+                })
+                        .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                       {
+                                           fs.Clear().Contains("Contains");
+                                           fs.DoesNotContain("Does not contain");
+                                           fs.IsEqualTo("Equal to");
+                                           fs.IsNotEqualTo("Not equal to");
+                                           fs.StartsWith("Starts with");
+                                           fs.EndsWith("Ends with");
+                                       })))
+                                    //           .Editable(editable =>
+                                    //{
+                                    //    editable.DisplayDeleteConfirmation("Are you sure want to Archive this version?");
+                                    //})
+                .Sortable()
+                .Scrollable()
+
+                .HtmlAttributes(new { style = "width:92.4%" })
+                .DataSource(dataSource => dataSource.Ajax().PageSize(10)
+                
+                .Read("ManageSoftwareAjaxVersion", "ManageMachineSpecs")
+                        //.Destroy("UpdateArchiveStatus", "ManageMachineSpecs")
+                //.Destroy("UpdateArchiveStatus", "ManageMachineSpecs")
+                //                .Events(events => events.Error("error_handler"))
+                .Model(model => model.Id(p => p.MasterData_Type_ID))
+                )
+                            )
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function Action(e, Id) {
+        var arr = Id;
+        $('#myModal').modal('show');
+        @*if (e.id == "deactivate") {
+
+            $("#Title").text('@ReviveMessages.ActivateInfo');
+        }
+    else {
+            $("#Title").text('@ReviveMessages.DeactivateInfo');
+    }*@
+
+    $("#RecordID").val(arr);
+
+    }
+
+    $('#Deactivatebtn').click(function (e) {
+        //alert("Done!");
+        var record = $("#RecordID").val();
+        var arr = record.split(',');
+        var recordID = arr[0];
+        //var status = arr[1];
+        //var objUserModel =
+        //     {
+        //         "Id": recordID,
+        //         //"Status": status
+        //     };
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateArchiveStatus", "ManageMachineSpecs")',
+
+            //Your Action name in the DropDownListConstroller.cs
+            data: JSON.stringify({ ID: recordID }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+        }).done(function (data) {
+            //Successfully pass to server and get response
+            $('#SoftwareVersionGrid').data().kendoGrid.dataSource.read(data); // or
+
+            if (data == "OK") {
+
+                //if (data.Successmsg != "") {
+                toastr.success("Archived Successfully.");
+                //}
+                //else {
+                //    toastr.warning(data.ErrorMsgs);
+                //}
+                //result = true;
+
+            }
+
+        })
+    //.error(function (data) {
+    //    alert(data);
+    //})
+
+    });
+</script>

@@ -1,0 +1,506 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{553352D0-8620-4D40-9B26-8727F9445CC3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Revive.Redux.Repositories</RootNamespace>
+    <AssemblyName>Revive.Redux.Repositories</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Kendo.Mvc">
+      <HintPath>..\Revive.Redux.UI\Libraries\Kendo.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Admin\IMenuMappingRepository.cs" />
+    <Compile Include="Admin\MenuMappingRepository.cs" />
+    <Compile Include="City.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Common\GeneralRepository.cs" />
+    <Compile Include="Common\IGeneralRepository.cs" />
+    <Compile Include="Customer.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerManagement\CustomerManagementRespository.cs" />
+    <Compile Include="CustomerManagement\ICustomerManagementRespository.cs" />
+    <Compile Include="Customers_Locations.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Customer_CustomField.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Customer_Documents.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Debug_Templates.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Debug_Templates_Definition.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FAQ\FAQRepository.cs" />
+    <Compile Include="FAQ\IFAQRepository.cs" />
+    <Compile Include="FAQ_Management.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GroupsPriority.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder_header.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder_Locations.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder_Machine_activity_detail.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder_Machine_Id.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder_Machine_Mapping.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder_Machine_TestResultsFinal.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder_Machine_TestResultsMidLine.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder_Machine_TestResultsUL.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder_Status.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder_Testing_Attributes.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LocationGroup.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LocationManagement\ILocationManagementRespository.cs" />
+    <Compile Include="LocationManagement\LocationManagementRespository.cs" />
+    <Compile Include="LocationMapMachine.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Login\ILoginRepository.cs" />
+    <Compile Include="Login\LoginRepository.cs" />
+    <Compile Include="Machine.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MachinefaultParameterValue.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MachineHistory.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MachineHistory_Configuration.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MachineMovedHistory.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MachineOrder.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MachineReplacedHistory.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MachineSpec.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MachineTemplateMapping.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Machine\IMachineRepository.cs" />
+    <Compile Include="Machine\MachineRepository.cs" />
+    <Compile Include="Machine_activity_detail.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Machine_Documents.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Machine_TestResults.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ManageForm\FormManagementRespository.cs" />
+    <Compile Include="ManageForm\IFormManagementRespository.cs" />
+    <Compile Include="ManageLogging\ILogging.cs" />
+    <Compile Include="ManageLogging\Logging.cs" />
+    <Compile Include="ManageMachineSpecs\IManageMachineSpecsRepository.cs" />
+    <Compile Include="ManageMachineSpecs\ManageMachineSpecsRepository.cs" />
+    <Compile Include="ManageMembership\IMembershipRepository.cs" />
+    <Compile Include="ManageMembership\MembershipRepository.cs" />
+    <Compile Include="ManageShipping\IManageShippingRepository.cs" />
+    <Compile Include="ManageShipping\ManageShippingRepository.cs" />
+    <Compile Include="ManageSubAgent\ISubAgentManagementRespository.cs" />
+    <Compile Include="ManageSubAgent\SubAgentManagementRespository.cs" />
+    <Compile Include="Manufacturer.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Manufacturers\IManufacturersRepository.cs" />
+    <Compile Include="Manufacturers\ManufacturersRepository.cs" />
+    <Compile Include="MapLocationByGroup.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MapMode_UserType.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MasterData_Config_definitions.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Membership.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Membership_Survey.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Membership_Survey_Results.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Memebership_Details.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Menu.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Mode.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Modes_configuration.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Notification.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderManagement\IOrderManagementRepository.cs" />
+    <Compile Include="OrderManagement\OrderManagementRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\IReportRepository.cs" />
+    <Compile Include="Report\ReportRepository.cs" />
+    <Compile Include="Report_Filter_Type.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Report_Master.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Revive.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Revive.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Revive.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Revive.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Revive.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="RoleManagement\IRoleManagementRepository.cs" />
+    <Compile Include="RoleManagement\RoleManagementRepository.cs" />
+    <Compile Include="ShippingConfiguration.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="State.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Store_users.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SubAgent.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Subsidiary.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SubsidiaryManagement\SubsidiaryManagementRespository.cs" />
+    <Compile Include="SubsidiaryManagement\ISubsidiaryrManagementRespository.cs" />
+    <Compile Include="TabletAppLogFile.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tablet_App_Machine_Activity_Details.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tablet_App_Machine_Activity_Results.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tablet_App_MemberActivity_Details.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tablet_App_NonMemberActivity_Details.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Testing\ITestingRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Testing\TestingRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UPSSetting.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="User.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserManagement\IUserManagementRepository.cs" />
+    <Compile Include="UserManagement\UserManagementRepository.cs" />
+    <Compile Include="UserMap_Controller_Action.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserType.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="User_Level.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="User_Level_Menu_Mapping.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_AppMachineHistoryByMachineId_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_AppMachineHistoryByProcessId_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_DeleteMembershipById_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetAllModesByModeId_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetControllerActionByUserLevelID_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetGroupedLocationForShipByGroupId_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetGroupLocationToBeShipByPriority_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetKillMachineByLocationAndCustomer_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMachineDetailByMachMapId_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMachineHistoryByMachineId_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMachineHistoryCustomerDetailsByMachineId_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMachineHistory_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMachineIdByLocation_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMachineIdCounterVal_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMachineIdLocsListByOrderId_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMachineMapByCustomer_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMachineTemplate_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMappedMachinesByOrderId_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMembershipDetails_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetModeValidate_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetMyTaskByUserRole_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetNotification_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetOrderByID_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetOrderLocations_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetOrders_MFShip_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetOrders_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetParameterNotMappedByTemplateID_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetReports_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetReviveData_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetReviveDetails_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetRoleDetails_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetShippableDetailsByCustomerGroups_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetShippedDetails_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetShippedMachIds_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetShippedMachinesByGroupId_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetUnassignedMachineToDelete_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetUserDetails_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_GetValidMemberById_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_LegacyMemberInsert_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_MachineActivityDetails_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_RegisterMembership_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_Scheduler_GetCheckOutProcFailedDetails_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_Scheduler_GetCustomersLeaseEndingDetails_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_Scheduler_GetMachinesFailedDefaultParam_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_Scheduler_GetMachinesFailedToStart_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_UpdateMemberAsVoid_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_UpdateMembershipRenew_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+    <Compile Include="usp_vzMachineActivity_Result.cs">
+      <DependentUpon>Revive.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Revive.Redux.Commn\Revive.Redux.Commn.csproj">
+      <Project>{be06f026-3bbe-4eb3-991b-edbd7c40d3ff}</Project>
+      <Name>Revive.Redux.Commn</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Revive.Redux.Entities\Revive.Redux.Entities.csproj">
+      <Project>{00dda1f8-c649-424e-968b-30c5011a9106}</Project>
+      <Name>Revive.Redux.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Revive.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Revive.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
+    <None Include="Revive.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Revive.edmx</DependentUpon>
+      <LastGenOutput>Revive.Context.cs</LastGenOutput>
+    </None>
+    <None Include="Revive.edmx.diagram">
+      <DependentUpon>Revive.edmx</DependentUpon>
+    </None>
+    <None Include="Revive.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Revive.edmx</DependentUpon>
+      <LastGenOutput>Revive.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

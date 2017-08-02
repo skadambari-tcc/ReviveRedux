@@ -1,0 +1,147 @@
+﻿@model Revive.Redux.Entities.GroupModel
+
+@{
+    ViewBag.Title = "Add Group";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+
+
+@using (Html.BeginForm("AddEditGroup", "ManageUsers", FormMethod.Post, new { id = "AddEditGroupform", name = "AddEditGroupform", enctype = "multipart/form-data" }))
+{  @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    <div>
+        <div class="col-md-12">
+            <div class="contant_page">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>Add Group</h2>
+                        @Html.HiddenFor(m => m.GroupId)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Priority_Id, htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right required" })
+                            <div class="col-md-8">
+                                <div class="select-icon">
+                                    @Html.DropDownListFor(M => M.Priority_Id, new SelectList(Model.PriorityList, "Id", "Id"), "--Select--", new { @class = "form-control pull-right topspace selecter", @style = "" })
+                                    @Html.ValidationMessageFor(m => m.Priority_Id)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.GroupName, htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right required" })
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.GroupName, new { @class = "k-textbox form-control CapitalizeWord", maxlength = "50", @style = "width:225px;" })
+                                @Html.ValidationMessageFor(m => m.GroupName)
+
+                            </div>
+                        </div>
+                        
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ShippingDate, htmlAttributes: new { @class = "col-md-4  col-sm-3 control-label text-right" })
+                            <div class="col-md-8">
+                                @(Html.Kendo().DatePickerFor(m => m.ShippingDate).Min(DateTime.Today)
+                                 .HtmlAttributes(new { @class = "DisableKeyboardInput ", @id = "ShippingDate", @style = "width: 100%;" })
+                                )
+
+                              
+                              
+                                <span id="invalidShippingDate" class="field-validation-error" style="display:none">Invalid date</span>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+            </div>
+                </div>
+                <div class="row spacer1">
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="col-md-4 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            <button id="btnCreate" class="btn GreenBtn" type="button">Save</button>
+                            <button id="btnCancel" class="btn YellowBtn" type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1 spacer1">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+   
+
+        Revive.Redux.Common.SetParentMenuSelected('Admin');
+
+        // Cancel Button Click event
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("ManageGroups", "ManageUsers")';
+        });
+
+        $("#btnCreate").click(function () {
+            $('#AddEditGroupform').validate();
+            if (!$('#AddEditGroupform').valid()) {
+
+                $("#btnCreate").prop('disabled', false);
+                return false;
+            }
+            else if ($("#AddEditGroupform").valid()) {
+                $("#btnCreate").prop('disabled', true);
+                $('#AddEditGroupform').submit();
+            }
+        });
+
+        //$("#GroupName").change(function () {
+        //    var ddlCustomType = $("#Priority_Id").val();
+        //    if (ddlCustomType == "") {
+        //        $.alert({ content: 'Select Priority . ', confirm: function () { $("#GroupName").val(''); } });
+        //    }
+        //});
+
+        //$("#ShippingDate").change(function () {
+
+        //    CheckShippingDate();
+        //});
+
+
+    });
+
+
+</script>
+<script type="text/javascript">
+    function CheckShippingDate() {
+       
+        var startPicker = $("#ShippingDate").data("kendoDatePicker");
+        if (startPicker._value == null) {
+            $("#invalidShippingDate").show();
+            return true;
+        }
+        else { $("#invalidShippingDate").hide(); return true; }
+    }
+    $(".DisableKeyboardInput").keypress(function () {
+        return true;
+    });
+
+
+</script>

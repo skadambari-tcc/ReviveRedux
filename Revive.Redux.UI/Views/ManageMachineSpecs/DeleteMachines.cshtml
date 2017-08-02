@@ -1,0 +1,268 @@
+﻿@model Revive.Redux.Entities.MachineModel
+
+@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@{
+    ViewBag.Title = "Delete Machines";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .k-grid-content {
+        overflow-y: auto;
+        max-height: 250px;
+        overflow-x: auto;
+    }
+</style>
+
+<div id="myModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body ">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    @Html.Label("Title", htmlAttributes: new { @class = "", @id = "Title" })
+                </div>
+            </div>
+
+            <!-- dialog buttons -->
+            <div class="modal-footer footerbtn">
+                <button type="button" id="Deletebtn" class="btn GreenBtn btn-primary" data-dismiss="modal">YES</button>
+                <button type="button" class="btn btn-primary YellowBtn" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-body" @*style="padding: 0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>Delete Machines</h2>
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-md-8 col-sm-8"></div>
+                        <div class="col-md-4 col-sm-4" style="float: right;margin-right:1.3%;">
+                            <div class="col-md-5 col-sm-5 "></div>
+                            <div class="col-md-7 col-sm-7 ">
+
+                                <input type="button" name="btnDelete" title="Delete Machine" class="GreenBtn" id="btnDelete" value="Delete Machine" onclick="DeleteMachine()" />
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid" @*style="margin-left: 2%"*@>
+                            @(Html.Kendo().Grid<MachineModel>()
+                                                  .Name("DeleteMachine")
+                                                  .Columns(columns =>
+                  {
+                      columns.Bound(p => p.MachineId).Visible(false);
+                      columns.Bound(p => p.MachineId_Val).Title("Machine ID").Visible(true);
+                      //columns.Bound(p => p.Location).Title("Location").HtmlAttributes(new { @class = "longTextPopup", @id = "loc" });
+                      columns.Bound(p => p.Status).Title("Status").HtmlAttributes(new { @class = "longTextPopup", @id = "StatusId" });
+                      columns.Bound(p => p.isSelected).Title("All").ClientTemplate("<input type='checkbox' #= isSelected ? checked='checked':'' # class='inpchk' ></input>").HeaderTemplate("<input type='checkbox' id='chkSelectAll' class='chicher2' onchange='SelectAll(this)'/><span class='order_tittle' style='margin-top: 1px;'>All</span>").Filterable(false).Sortable(false);
+
+
+                  })
+                  .Pageable(pageable =>
+                  {
+                      pageable.Refresh(true);
+                      pageable.PageSizes(new int[] { 10, 20, 50 });
+                      pageable.Messages(messages => messages.Empty("No record found!"));
+                  })
+                             .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                                                  {
+                                                                      fs.Clear().Contains("Contains");
+                                                                      fs.DoesNotContain("Does not contain");
+                                                                      fs.IsEqualTo("Equal to");
+                                                                      fs.IsNotEqualTo("Not equal to");
+                                                                      fs.StartsWith("Starts with");
+                                                                      fs.EndsWith("Ends with");
+                                                                  })))
+                  .Scrollable()
+                  .Sortable()
+                  .HtmlAttributes(new { style = "width:92%" })
+                  .DataSource(dataSource => dataSource
+                  .Ajax().PageSize(10)
+                  .ServerOperation(false)
+                  
+                         .Read(read => read.Action("GetUnAssignedMachines", "ManageMachineSpecs"))
+                  ))
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        Revive.Redux.Common.SetKendoGridHeight();
+
+    });
+
+</script>
+<script>
+    //select all checkbox function
+
+    function SelectAll(e) {
+
+        var state = $(e).is(':checked');
+        if (state == true) {
+            var grid = $('#DeleteMachine').data("kendoGrid");
+            $.each(grid.dataSource.view(), function () {
+                $(".inpchk").prop('checked', 'checked');
+                if (this['isSelected'] != state)
+                    this['isSelected'] = state;
+            })
+        }
+        else {
+            $(".inpchk").removeAttr('checked');
+            var grid = $('#DeleteMachine').data("kendoGrid");
+            $.each(grid.dataSource.view(), function () {
+                this['isSelected'] = false;
+            })
+
+
+        }
+    }
+
+
+    //select selected checkboxes
+
+    $(function() {
+        $('#DeleteMachine').on('change', '.inpchk', function() {
+            var checked = $(this).is(':checked');
+            $("#chkSelectAll").removeAttr('checked');
+            if ($('.inpchk:checked').length == $('.inpchk').length) {
+                $("#chkSelectAll").prop('checked', 'checked');
+            }
+            var grid = $('#DeleteMachine').data().kendoGrid;
+            var dataItem = grid.dataItem($(this).closest('tr'));
+            dataItem.set('isSelected', checked);
+
+        });
+    });
+
+    //function called on set debug btn and get current grid data
+
+    function DeleteMachine() {
+
+        var grid = $('#DeleteMachine').data().kendoGrid;
+
+
+        var items = $("#DeleteMachine").data("kendoGrid").dataSource.data();
+        var st = 0;
+        for (var i = 0; i < items.length; i++) {
+
+            var item = items[i];
+            if (item.isSelected == false) {
+                st = st + 1;
+            }
+
+
+        }
+        if (st == items.length) {
+            toastr.warning('Please select any machine to Delete!');
+            return false;
+        }
+        DeleteConfirmMessage();
+    }
+    $('#Deletebtn').click(function (e) {
+        var element = $('#DeleteMachine');
+        kendo.ui.progress(element, true);
+        var grid = $('#DeleteMachine').data("kendoGrid");
+        var dat = grid.dataSource.data();
+
+        var MachineIdLst = [];
+        for (var i = 0; i < dat.length; i++) {
+            if (dat[i].isSelected == true) {
+                MachineIdLst.push({ 'MachineId': dat[i].MachineId});
+            }
+        }
+
+
+        $.ajax({
+            type: "POST",
+            datatype: 'json',
+            url: "/ManageMachineSpecs/DeleteMachineIDFromDB",
+            data: JSON.stringify({ data: MachineIdLst }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (result) {
+                kendo.ui.progress(element, false);
+                // toastr.success();
+            },
+            error: function (err) { kendo.ui.progress(element, false); }
+        }).done(function(data) {
+            //Successfully pass to server and get response
+
+            $('#DeleteMachine').data().kendoGrid.dataSource.read(data);
+            $('#DeleteMachine').data('kendoGrid').refresh(); // or
+            kendo.ui.progress(element, false);
+            if (data.result = "OK") {
+                toastr.success('@ReviveMessages.Update');
+
+                result = true;
+                $("#chkSelectAll").removeAttr('checked');
+            }
+        });
+
+    });
+
+
+
+    function DeleteConfirmMessage() {
+        $('#myModal').modal('show');
+        $("#Title").text('Are you sure to delete the selected machine IDs?” ');
+    }
+
+
+
+
+
+
+
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.alert({ content: message, confirm: function () { } });
+        }
+    }
+
+    //function for server side filtering the managedebug grid
+    function refreshUpdateLatestSoftware(e) {
+        $("#DeleteMachine").data('kendoGrid').dataSource.read();
+
+    }
+
+
+
+
+</script>
+
+<script>
+    $(function () {
+        $("form").kendoValidator();
+    });
+</script>
+

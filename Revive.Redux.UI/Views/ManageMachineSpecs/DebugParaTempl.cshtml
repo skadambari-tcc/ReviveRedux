@@ -1,0 +1,118 @@
+﻿@model Revive.Redux.Entities.Debug_Templates_DefinitionModel
+
+@using Kendo.Mvc.UI
+@using Revive.Redux.Entities;
+
+
+@{
+    ViewBag.Title = "DebugParaTempl";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="modal-body" @*style="padding:0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>Manage Templates</h2>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8 col-sm-8"></div>
+                        <div class="col-md-4 col-sm-4" style="float: right;margin-right:-8.7%;">
+                            <div class="col-md-5 col-sm-5 "></div>
+
+                            <div class="col-md-7 col-sm-7 ">
+                                <input type="button" title="Add Debug Parameter" class="GreenBtn" value="Add Debug Parameter" onclick="location.href='@Url.Action("AddEditTemplate", "ManageMachineSpecs")'" />
+                            </div>
+
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid">
+                            @(Html.Kendo().Grid<Debug_Templates_DefinitionModel>()
+                        .Name("ManageDebugParameters")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.Template_Name).Title("Debug Parameter").Width(200).HtmlAttributes(new { @class = "longTextPopup" });
+                    columns.Bound(p => p.TemplateCreatedBy).Title("Created By").Width(200).HtmlAttributes(new { @class = "longTextPopup" });
+                    columns.Bound(p => p.CreatedDate).Title("Created Date").Width(200).Format("{0:MM/dd/yyyy}").Filterable(true);
+                    columns.Bound(p => p.Template_ID).Width(100).Title("Edit").ClientTemplate(
+                        "<a href='" + Url.Action("EditPtmpl", "ManageMachineSpecs") + "/#= Template_ID#@#= Template_Name#'" + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>"
+                    ).Filterable(false).Sortable(false);
+                })
+
+                .Pageable(pageable =>
+                {
+                    pageable.Refresh(true);
+                    pageable.PageSizes(new int[] { 10, 20, 50 });
+                    pageable.Messages(messages => messages.Empty("No record found!"));
+                })
+                        .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                       {
+                                           fs.Clear().Contains("Contains");
+                                           fs.DoesNotContain("Does not contain");
+                                           fs.IsEqualTo("Equal to");
+                                           fs.IsNotEqualTo("Not equal to");
+                                           fs.StartsWith("Starts with");
+                                           fs.EndsWith("Ends with");
+                                       })))
+                .Sortable()
+                .Scrollable()
+
+                .HtmlAttributes(new { style = "width:92.3%" })
+                        .DataSource(dataSource => dataSource.Ajax().PageSize(10)
+
+                .ServerOperation(false)
+                .Read("GetDebugParaTemplateAjax", "ManageMachineSpecs")
+
+                )
+                            )
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        Revive.Redux.Common.SetKendoGridHeight();
+    });
+    //$(function () {
+    //    //$('#RoleGrid div:nth-child(2)').css("height", "auto");
+    //    $('#ManageDebugParameters div:nth-child(2)').css("max-height", "170px");
+    //    $('#ManageDebugParameters div:nth-child(2)').css("height", "auto");
+
+
+    //});
+    @if (TempData["isCreatedSuccess"] != null && (bool)TempData["isCreatedSuccess"] == true)
+    {
+
+
+        //<text>toastr.success('@ReviveMessages.ManageUserSaveInfo');</text>
+        <text>toastr.success('@ReviveMessages.Add');</text>
+
+    }
+
+    @if (TempData["isUpdateSuccess"] != null && (bool)TempData["isUpdateSuccess"] == true)
+    {
+
+
+        //<text>toastr.success('@ReviveMessages.ManageUserSaveInfo');</text>
+        <text>toastr.success('@ReviveMessages.Update');</text>
+
+    }
+
+
+</script>
+<style>
+    .col-md-7 {
+        width: 61.333333%;
+    }
+</style>

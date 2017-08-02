@@ -1,0 +1,345 @@
+﻿@model Revive.Redux.Entities.MachineSpecsModel
+@using Kendo.Mvc.UI
+@using System.Web.Optimization
+@{
+    ViewBag.Title = "AddEditMachineSpecs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    .k-tooltip {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .k-widget.k-tooltip {
+        background-image: none !important;
+        display: none;
+    }
+
+    .k-widget.k-tooltip-validation {
+        border-color: transparent !important;
+        background-color: transparent !important;
+        color: red;
+    }
+
+
+
+    span .k-icon {
+        display: none !important;
+    }
+</style>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+
+@using (Html.BeginForm("RegisterNewMachine", "ManageMachineSpecs", FormMethod.Post, new { @id = "frmMachineSpecs" }))
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="modal-body" @*style="padding:0px!important"*@>
+        <div class="row">
+            <div class="col-md-12">
+                <div class=" contant_page">
+                    <div class="row">
+                        <div class="lable-align-top">
+                            @if (Model.MachineSpec_ID != 0)
+                            {
+                                <h2 >
+                                    Edit Machine Spec
+                                </h2> }
+                            else
+                            {<h2>Add Machine Spec</h2> }
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+
+
+                                    @Html.Label("Generation", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+
+                                    <div class="col-sm-5">
+                                        @*col-sm-6*@
+                                        @Html.TextBoxFor(M => M.Generation, new { @class = "form-control", @style = "width:200px;", })
+                                        @*@Html.ValidationMessageFor(M => M.Generation, "", new { @class = "text-danger" })*@
+                                        <div style="white-space: nowrap">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group ">
+
+
+                                    @Html.Label("PCB Version", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })@*<span style="color: red; font-size: x-small">*</span>*@
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.PCB_Version, new { @class = "form-control", @style = "width:200px;" })
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+
+                                    @Html.Label("Power Supply 1 (High Voltage)", htmlAttributes: new { @class = " col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.PowerSupply_1, new { @class = "form-control", @style = "width:200px;", maxlength = "50" })
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+
+                                    @Html.Label("Power Supply 1 (Low Voltage)", htmlAttributes: new { @class = "  col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.PowerSupply_2, new { @class = "form-control", @style = "width:200px;", maxlength = "50" })
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+
+                                    @Html.Label("Valve 1 (Vaccum)", htmlAttributes: new { @class = "  col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.Valve_1, new { @class = "form-control", @style = "width:200px;", maxlength = "50" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group ">
+
+
+                                    @Html.Label("Valve 3 (Fresh Air)", htmlAttributes: new { @class = " col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.Valve_3, new { @class = "form-control ", @style = "width:200px;", maxlength = "50" })
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group ">
+
+
+                                    @Html.Label("Others 1", htmlAttributes: new { @class = " col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.Customfield1, new { @class = "form-control ", @style = "width:200px;", maxlength = "50" })
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group ">
+
+
+                                    @Html.Label("Others 3", htmlAttributes: new { @class = " col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.Customfield3, new { @class = "form-control ", @style = "width:200px;", maxlength = "50" })
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+
+                            <div class="col-md-6">
+
+                                <div class="form-group ">
+
+
+                                    @Html.Label("Pump", htmlAttributes: new { @class = " col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.Pump, new { @class = "form-control ", @style = "width:200px;", maxlength = "50" })
+
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+
+
+                                    @Html.Label("Injection Heater", htmlAttributes: new { @class = " col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.INjection_Heater, new { @class = "form-control ", @style = "width:200px;", maxlength = "50" })
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group ">
+
+
+                                    @Html.Label("Platen Heater", htmlAttributes: new { @class = " col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.Platen_heater, new { @class = "form-control ", @style = "width:200px;", maxlength = "50" })
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group display ">
+
+
+                                    @Html.Label("Firmware Version", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+
+                                    <div style="width: 38%;" class="col-sm-5">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(M => M.Firmware_Version, new SelectList(ViewBag.GetFirmware, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", maxlength = "50" })
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group ">
+
+
+                                    @Html.Label("Valve 2 (Injection)", htmlAttributes: new { @class = " col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.Valve_2, new { @class = "form-control ", @style = "width:200px;", maxlength = "50" })
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+
+
+                                    @Html.Label("Others 2", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.Customfield2, new { @class = "form-control", @style = "width:200px;", maxlength = "50" })
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    @Html.Label("Others 4", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.Customfield4, new { @class = "form-control", @style = "width:200px;", maxlength = "50" })
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    @Html.Label("Others 5", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(M => M.Customfield5, new { @class = "form-control", @style = "width:200px;", maxlength = "50" })
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-6">
+                                <div class="col-md-3 col-sm-3"></div>
+                                <div class="col-md-6 col-sm-6">
+                                    <button id="btnSavedata" class="btn GreenBtn" type="button">Save</button>
+
+                                    <button type="reset" class="btn YellowBtn" onclick="location.href='@Url.Action("ManageMachineSpecs", "ManageMachineSpecs")'">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<script>
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        $("#btnSavedata").click(function(){
+            
+            $('#frmMachineSpecs').submit();
+
+            if (!$('#Firmware_Version_validationMessage').is(':visible'))
+            {
+                   $("#btnSavedata").prop('disabled', true);
+                   $('#frmMachineSpecs').submit();
+                
+            }
+            if (!$('#Generation_validationMessage').is(':visible')) {
+                $("#btnSavedata").prop('disabled', true);
+                $('#frmMachineSpecs').submit();
+
+            }
+
+            if ($('#Firmware_Version_validationMessage').is(':visible')) {
+                $("#btnSavedata").prop('disabled', false);
+               // $('#frmMachineSpecs').submit();
+
+            }
+            if ($('#Generation_validationMessage').is(':visible')) {
+                $("#btnSavedata").prop('disabled', false);
+               // $('#frmMachineSpecs').submit();
+
+            }
+
+           
+
+            //else
+            //{
+            //    alert('show');
+            //       // $("#btnSavedata").prop('disabled', false);
+            //       // return false;
+            //}
+
+
+           // $('#frmMachineSpecs').submit();
+            //$('#frmMachineSpecs').validate();
+            //alert($('#frmMachineSpecs').valid());
+            //return false;
+
+            //if (!$('#frmMachineSpecs').valid()) {
+            //    //{
+            //    $("#btnSavedata").prop('disabled', false);
+            //    return false;
+            //}
+            //else if($("#frmMachineSpecs").valid())
+            //{
+            //    $("#btnSavedata").prop('disabled', true);
+            //    $('#frmMachineSpecs').submit();
+            //}
+        });
+    });
+    $(function () {
+        $("form").kendoValidator();
+    });
+
+    
+
+
+
+</script>
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+
+

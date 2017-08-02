@@ -1,0 +1,380 @@
+﻿@model Revive.Redux.Entities.OrderModel
+@using Kendo.Mvc
+@{
+    ViewBag.Title = "Assign Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .LableTextMargin {
+        margin-top: 3px;
+    }
+
+    .Title {
+        text-align: left;
+        font-size: larger;
+        color: #7c0000;
+        margin-left: 8px;
+    }
+
+    .k-window-titlebar {
+        height: 35px !important;
+    }
+
+    .k-window div.k-window-content {
+         overflow-x: hidden !important;
+    }
+    span.DisableKeyboardInput {
+        background-color: transparent;
+    }
+</style>
+@using (Html.BeginForm("AssignOrder", "Order"))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body" style="padding:15px 15px 0;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class=" contant_page">
+                    <div class="row">
+                        <div class="lable-align-top">
+                            <h2>
+                                EDIT ORDER
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="contant_page">
+                <div class="row">
+                    <!-- collun1 -->
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            @Html.Label("Customer", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @Html.DisplayFor(M => M.CustomerName)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Number of Machines", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @Html.DisplayFor(M => M.NoOfMachines)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.CheckBox("ChkBxAgreeDeliveryDate", true)&nbsp;<label>Agree with Delivery Date</label>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Expected Date", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6" style="padding-left:0px;">
+                                @(Html.Kendo().DatePickerFor(M => M.ExpectedDate).Name("ExpectedDate")
+                                .HtmlAttributes(new { @class = "DisableKeyboardInput form-control" }))
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            @Html.Label("Machine Specs", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                <a onclick='return MachineSpecs_View("@Model.MachineSpecsId");' href='javascript:void(0);'>@Html.DisplayFor(modelItem => modelItem.MachineSpecs)</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- collun2 -->
+                    <div class="col-md-5">
+
+                        <div class="form-group">
+                            @Html.Label("Approver Comments", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @if (@Model.ApproverComments.Length > 20)
+                                {
+                                    <label>@Model.ApproverComments.Substring(0, 17)...</label><a id='lnkMoreApproverComments' class='more' title='@Model.ApproverComments' href='#'>more</a>
+                                    <input id="ApproverComments" type="hidden" value='@Model.ApproverComments' />
+                                }
+                                else
+                                {
+                                    <label>@Model.ApproverComments</label>
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Software", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @if (Model.DownloadSWUrl == "#")
+                                {
+                                    <a href='@Model.DownloadSWUrl'>Download</a>
+                                }
+                                else
+                                {
+                                    <a href='@Model.DownloadSWUrl' target="_blank">Download</a>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Locations", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                <a href='@Url.Action("ViewLocations", "Order", new { Id = Model.JobOrderHeaderIdEncoded })' target="_blank">View</a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Manufacturer Comments", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right " })
+                            <div class="col-sm-6">
+                                @Html.TextAreaFor(model => model.ManufacturerComments, 3, 20, new { @class = "form-control", @style = "width:200px;", @id = "txtManufacturerComments" })
+                                @Html.ValidationMessageFor(model => model.ManufacturerComments)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div style="float:none; clear:both; text-align:center">
+        @if (@Model.StatusName == "Pending PC")
+        {
+            <button type="submit" id="btnAssign" class="btn login_button btn-primary">Assign</button>
+            <button type="button" id="btnCancel" class="btn login_button btn-primary yellow">Cancel</button>
+        }
+        else
+        {
+            <button type="button" id="btnBack" class="btn login_button btn-primary yellow">Back</button>
+        }
+    </div>
+
+    @Html.HiddenFor(M => M.CustomerId);
+    @Html.HiddenFor(M => M.JobOrderHeaderId);
+    @Html.HiddenFor(model => model.JobOrderHeaderIdEncoded);
+    @Html.HiddenFor(M => M.MachineSpecsId);
+    <input type="hidden" id="OriginalExpectedDate" name="OriginalExpectedDate" value="@Model.ExpectedDate" />
+}
+
+<div id="MachineWindow">
+    @(Html.Kendo().Window()
+           .Name("MachineSpecsWindow")
+           .Title("View Machine Specs")
+           .Modal(true)
+           .Content(@<text>
+        </text>)
+            .Draggable()
+            .Resizable()
+            .Width(600)
+            .Height(370)
+            .Actions(actions => actions.Close())
+    )
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Orders');
+
+        $('a#lnkMoreApproverComments').click(function (e) {
+            $.dialog({
+                title: 'Approver Comments',
+                content: $("input#ApproverComments").val(),
+            });
+        });
+
+        $(".k-overlay").hide();
+        $(".k-window").hide();
+
+        var datepicker = $("#ExpectedDate").data("kendoDatePicker");
+        datepicker.readonly();
+        var oldDate = datepicker.value();
+        var ChkBxAgreeDeliveryDate = $("input#ChkBxAgreeDeliveryDate");
+        $(ChkBxAgreeDeliveryDate).click(function () {
+            if ($(ChkBxAgreeDeliveryDate).is(':checked')) {
+                datepicker.value(oldDate);
+                datepicker.readonly();
+            }
+            else {
+                datepicker.readonly(false);
+            }
+        });
+        // Cancel Button Click event
+        $("#btnCancel, #btnBack").click(function () {
+            window.location.href = '@Url.Action("Manage", "Order")';
+        });
+        $("#btnAssign").click(function () {
+            if ($(ChkBxAgreeDeliveryDate).is(':checked')) {
+                return true;
+            }
+            else {                
+
+                var old1 = new Date(oldDate);
+                var old2 = ((old1.getMonth().length + 1) === 1) ? (old1.getMonth() + 1) : '0' + (old1.getMonth() + 1);
+                var oldFinal = old2 + "/" + old1.getDate() + "/" + old1.getFullYear();
+
+                var today1 = new Date();
+                var today2 = ((today1.getMonth().length + 1) === 1) ? (today1.getMonth() + 1) : '0' + (today1.getMonth() + 1);
+                var todayDate = today2 + "/" + today1.getDate() + "/" + today1.getFullYear();
+
+                var selected1 = new Date(datepicker.value());
+                var selected2 = ((selected1.getMonth().length + 1) === 1) ? (selected1.getMonth() + 1) : '0' + (selected1.getMonth() + 1);
+                var selectedDate = selected2 + "/" + selected1.getDate() + "/" + selected1.getFullYear();
+
+                var comments = $("#txtManufacturerComments").val().trim();
+
+                if (new Date(selectedDate) < new Date(todayDate)) {
+                    $.alert({ content: 'The expected date you have changed, should not be less than current date!', confirm: function () { } });
+                    return false;
+                }
+                else if (selectedDate != oldFinal && comments == '') {
+                    $.alert({ content: 'Your comments are required, as you have changed the Expected Delivery Date!', confirm: function () { } });
+                    $("#txtManufacturerComments").focus();
+                    return false;
+                }
+    
+                //if (selectedDate == oldFinal) {
+                //    return false;
+                //}
+                //else if (new Date(selectedDate) < new Date(todayDate)) {
+                //    $.alert({ content: 'The expected date you have changed, should not be less than current date!', confirm: function () { } });
+                //    return false;
+                //}
+
+                //var comments = $("#txtManufacturerComments").val().trim();
+                //if (comments == '') {
+                //    $.alert({ content: 'Your comments are required, as you have changed the Expected Delivery Date!', confirm: function () { } });
+                //    $("#txtManufacturerComments").focus();
+                //    return false;
+                //}
+            }
+            return true;
+        });
+    });
+</script>
+
+<script type="text/x-kendo-template" id="ViewMachineTemplate">
+    <div id="details-container">
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Generation", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Generation #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("PCB Version", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= PCB_Version #
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Power Supply1(HV)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= PowerSupply_1 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Power Supply1(LV)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= PowerSupply_2 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Valve 1(Vaccum)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Valve_1 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Valve 3(Fresh Air)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Valve_3 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others1", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield1 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others3", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield3 #
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Pump", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Pump #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Injection Heater", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= INjection_Heater #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Platen heater", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Platen_heater #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Valve 2(Injection)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Valve_2 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Firmware Version", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= software_version #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Others2:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield2 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others4", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield4 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others5", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield5 #
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+    function MachineSpecs_View(ID) {
+        var detailsTemplate = kendo.template($("#ViewMachineTemplate").html());
+        $.ajax({
+            dataType: 'json',
+            type: 'Post',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ ID: ID }),
+            url: '/ManageMachineSpecs/ViewMachineSpecs',
+            success: function (result) {
+                var wnd = $("#MachineSpecsWindow").data("kendoWindow");
+                wnd.content(detailsTemplate(result));
+                wnd.center().open();
+                $(".k-overlay").show();
+                $(".k-window").show();
+            },
+            error: function (obj) {
+                $.alert({ content: 'Error while getting record.', confirm: function () { } });
+            }
+        });
+    }
+</script>

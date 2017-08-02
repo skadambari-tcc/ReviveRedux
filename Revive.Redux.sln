@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Revive.Redux.Commn", "Revive.Redux.Commn\Revive.Redux.Commn.csproj", "{BE06F026-3BBE-4EB3-991B-EDBD7C40D3FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Revive.Redux.Repositories", "Revive.Redux.Repositories\Revive.Redux.Repositories.csproj", "{553352D0-8620-4D40-9B26-8727F9445CC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Revive.Redux.Entities", "Revive.Redux.Entities\Revive.Redux.Entities.csproj", "{00DDA1F8-C649-424E-968B-30C5011A9106}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Revive.Redux.Services", "Revive.Redux.Services\Revive.Redux.Services.csproj", "{0C1D2D36-3B55-4491-B342-63DF0C1D7C2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Revive.Redux.UI", "Revive.Redux.UI\Revive.Redux.UI.csproj", "{069F0611-AE70-4CE7-80EF-911E835B120D}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://nst-2013tfs:8080/tfs/nst-reduxenterprisesystem
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Revive.Redux.Commn\\Revive.Redux.Commn.csproj
+		SccProjectName1 = Revive.Redux.Commn
+		SccLocalPath1 = Revive.Redux.Commn
+		SccProjectUniqueName2 = Revive.Redux.Repositories\\Revive.Redux.Repositories.csproj
+		SccProjectName2 = Revive.Redux.Repositories
+		SccLocalPath2 = Revive.Redux.Repositories
+		SccProjectUniqueName3 = Revive.Redux.Entities\\Revive.Redux.Entities.csproj
+		SccProjectName3 = Revive.Redux.Entities
+		SccLocalPath3 = Revive.Redux.Entities
+		SccProjectUniqueName4 = Revive.Redux.Services\\Revive.Redux.Services.csproj
+		SccProjectName4 = Revive.Redux.Services
+		SccLocalPath4 = Revive.Redux.Services
+		SccProjectUniqueName5 = Revive.Redux.UI\\Revive.Redux.UI.csproj
+		SccProjectName5 = Revive.Redux.UI
+		SccLocalPath5 = Revive.Redux.UI
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE06F026-3BBE-4EB3-991B-EDBD7C40D3FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE06F026-3BBE-4EB3-991B-EDBD7C40D3FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE06F026-3BBE-4EB3-991B-EDBD7C40D3FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE06F026-3BBE-4EB3-991B-EDBD7C40D3FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{553352D0-8620-4D40-9B26-8727F9445CC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{553352D0-8620-4D40-9B26-8727F9445CC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{553352D0-8620-4D40-9B26-8727F9445CC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{553352D0-8620-4D40-9B26-8727F9445CC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00DDA1F8-C649-424E-968B-30C5011A9106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00DDA1F8-C649-424E-968B-30C5011A9106}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00DDA1F8-C649-424E-968B-30C5011A9106}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00DDA1F8-C649-424E-968B-30C5011A9106}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C1D2D36-3B55-4491-B342-63DF0C1D7C2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C1D2D36-3B55-4491-B342-63DF0C1D7C2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C1D2D36-3B55-4491-B342-63DF0C1D7C2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C1D2D36-3B55-4491-B342-63DF0C1D7C2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{069F0611-AE70-4CE7-80EF-911E835B120D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{069F0611-AE70-4CE7-80EF-911E835B120D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{069F0611-AE70-4CE7-80EF-911E835B120D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{069F0611-AE70-4CE7-80EF-911E835B120D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,239 @@
+﻿@model Revive.Redux.Entities.ConfigureMachineHistoryModel
+@{
+    ViewBag.Title = "Configure Machine History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm("AddEditConfigureMachineHistory", "ManageMachineSpecs", FormMethod.Post, new { id = "ConfigureMachineHistory", name = "ConfigureMachineHistory", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()    
+    @Html.HiddenFor(model => model.Config_ID);
+
+    <div class=" contant_page">
+        @Html.ValidationSummary(true)
+        <div class="row">
+            <div class="lable-align-top">
+                <h2>Configure Machine History</h2>
+            </div>
+            <div class="col-md-4">                
+                    @Html.Label("Reason Type", new { @class = "control-label col-md-8 text-right " })       
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Reason_Custom1, new { @class = "control-label col-md-4 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Reason_Custom1)
+                        @Html.ValidationMessageFor(model => model.Reason_Custom1)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Reason_Custom2, new { @class = "control-label col-md-4 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Reason_Custom2)
+                        @Html.ValidationMessageFor(model => model.Reason_Custom2)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Reason_Custom3, new { @class = "control-label col-md-4 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Reason_Custom3)
+                        @Html.ValidationMessageFor(model => model.Reason_Custom3)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Reason_Custom4, new { @class = "control-label col-md-4 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Reason_Custom4)
+                        @Html.ValidationMessageFor(model => model.Reason_Custom4)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Reason_Custom5, new { @class = "control-label col-md-4 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Reason_Custom5)
+                        @Html.ValidationMessageFor(model => model.Reason_Custom5)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Reason_Custom6, new { @class = "control-label col-md-4 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Reason_Custom6)
+                        @Html.ValidationMessageFor(model => model.Reason_Custom6)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Reason_Custom7, new { @class = "control-label col-md-4 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Reason_Custom7)
+                        @Html.ValidationMessageFor(model => model.Reason_Custom7)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Reason_Custom8, new { @class = "control-label col-md-4 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Reason_Custom8)
+                        @Html.ValidationMessageFor(model => model.Reason_Custom8)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Reason_Custom9, new { @class = "control-label col-md-4 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Reason_Custom9)
+                        @Html.ValidationMessageFor(model => model.Reason_Custom9)
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                @Html.Label("Status", new { @class = "control-label col-md-8 text-right " })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status_Custom1, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Status_Custom1)
+                        @Html.ValidationMessageFor(model => model.Status_Custom1)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status_Custom3, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Status_Custom3)
+                        @Html.ValidationMessageFor(model => model.Status_Custom3)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status_Custom2, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Status_Custom2)
+                        @Html.ValidationMessageFor(model => model.Status_Custom2)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status_Custom4, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Status_Custom4)
+                        @Html.ValidationMessageFor(model => model.Status_Custom4)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status_Custom5, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Status_Custom5)
+                        @Html.ValidationMessageFor(model => model.Status_Custom5)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status_Custom6, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Status_Custom6)
+                        @Html.ValidationMessageFor(model => model.Status_Custom6)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status_Custom7, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Status_Custom7)
+                        @Html.ValidationMessageFor(model => model.Status_Custom7)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status_Custom8, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Status_Custom8)
+                        @Html.ValidationMessageFor(model => model.Status_Custom8)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status_Custom9, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.Status_Custom9)
+                        @Html.ValidationMessageFor(model => model.Status_Custom9)
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                @Html.Label("Transaction Type", new { @class = "control-label col-md-8 text-right " })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TransType_Custom1, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-7">
+                        @Html.EditorFor(model => model.TransType_Custom1)
+                        @Html.ValidationMessageFor(model => model.TransType_Custom1)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TransType_Custom3, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.TransType_Custom3)
+                        @Html.ValidationMessageFor(model => model.TransType_Custom3)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TransType_Custom2, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.TransType_Custom2)
+                        @Html.ValidationMessageFor(model => model.TransType_Custom2)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TransType_Custom4, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.TransType_Custom4)
+                        @Html.ValidationMessageFor(model => model.TransType_Custom4)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TransType_Custom5, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.TransType_Custom5)
+                        @Html.ValidationMessageFor(model => model.TransType_Custom5)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TransType_Custom6, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.TransType_Custom6)
+                        @Html.ValidationMessageFor(model => model.TransType_Custom6)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TransType_Custom7, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.TransType_Custom7)
+                        @Html.ValidationMessageFor(model => model.TransType_Custom7)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TransType_Custom8, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.TransType_Custom8)
+                        @Html.ValidationMessageFor(model => model.TransType_Custom8)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TransType_Custom9, new { @class = "control-label col-md-5 text-right " })
+                    <div class="col-md-5">
+                        @Html.EditorFor(model => model.TransType_Custom9)
+                        @Html.ValidationMessageFor(model => model.TransType_Custom9)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 1%;">
+            <div class="col-md-3"></div>
+            <div class="col-md-8">
+                <div class="col-md-3 col-sm-3"></div>
+                <div class="col-md-6 col-sm-6">
+                    <input type="submit" value="Submit" class="GreenBtn" />
+                    <input type="button" value="Cancel" class="YellowBtn" onclick="" />
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+    });
+</script>

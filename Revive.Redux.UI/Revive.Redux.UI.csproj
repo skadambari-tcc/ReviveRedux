@@ -1,0 +1,1293 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{069F0611-AE70-4CE7-80EF-911E835B120D}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Revive.Redux.UI</RootNamespace>
+    <AssemblyName>Revive.Redux.UI</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ComponentSpace.SAML2">
+      <HintPath>Libraries\ComponentSpace.SAML2.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=3.1.3.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="Kendo.Mvc, Version=2014.1.528.545, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\Kendo.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MvcSiteMapProvider">
+      <HintPath>..\packages\MvcSiteMapProvider.MVC5.Core.4.6.18\lib\net45\MvcSiteMapProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="MvcSiteMapProvider.WebActivator">
+      <HintPath>..\packages\MvcSiteMapProvider.MVC5.4.6.18\lib\net45\MvcSiteMapProvider.WebActivator.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Cors">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Cors">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.3\lib\net45\System.Web.Http.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=__MvcPagesVersion__, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\packages\WebActivatorEx.2.0.1\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.1.0\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.0\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.0\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.0\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.0\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Common\CustomMemberShip.cs" />
+    <Compile Include="Controllers\Common\Helper.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\ExcelExportController.cs" />
+    <Compile Include="Controllers\FAQ\FAQController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Machine\MachineController.cs" />
+    <Compile Include="Controllers\ManageCustomers\ManageCustomersController.cs" />
+    <Compile Include="Controllers\ManageForm\ManageFormController.cs" />
+    <Compile Include="Controllers\ManageLogging\ManageLoggingController.cs" />
+    <Compile Include="Controllers\ManageMachineSpecs\ManageMachineSpecsController.cs" />
+    <Compile Include="Controllers\ManageMembershipConfig\ManageMembershipConfigController.cs" />
+    <Compile Include="Controllers\ManageShipping\ManageShippingController.cs" />
+    <Compile Include="Controllers\ManageSubAgent\ManageSubAgentController.cs" />
+    <Compile Include="Controllers\ManageSubsidiary\ManageSubsidiaryController.cs" />
+    <Compile Include="Controllers\ManageUsers\ManageUsersController.cs" />
+    <Compile Include="Controllers\Manufacturers\ManufacturersController.cs" />
+    <Compile Include="Controllers\ModeConfiguration\ModeConfigurationController.cs" />
+    <Compile Include="Controllers\Order\OrderController.cs" />
+    <Compile Include="Controllers\Reports\ReportController.cs" />
+    <Compile Include="Controllers\SAMLController.cs" />
+    <Compile Include="Controllers\Testing\TestingController.cs" />
+    <Compile Include="Controllers\UserRoleController.cs" />
+    <Compile Include="Filters\AjaxHandleExceptionAttribute.cs" />
+    <Compile Include="Filters\ReviveApiAuth.cs" />
+    <Compile Include="Filters\ReviveHandleError.cs" />
+    <Compile Include="Filters\ValidateUserRoleMenus.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helper\AuthenticatedVisibilityProvider.cs" />
+    <Compile Include="Helper\LoginHelper.cs" />
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ManageUsers\ManageUserDtlsViewModel.cs" />
+    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Filters\ReviveAuth.cs" />
+    <Compile Include="Models\SSOLog.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="ReviveMessages.Designer.cs">
+      <DependentUpon>ReviveMessages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Startup.cs" />
+    <Compile Include="Web References\WebReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="WebApi\Counter\CounterController.cs" />
+    <Compile Include="WebApi\FileUploadController.cs" />
+    <Compile Include="WebApi\Machines\MachinesController.cs" />
+    <Compile Include="WebApi\ManageMemberShip\ManageMemberController.cs" />
+    <Compile Include="WebApi\ManageUsers\ManageUserController.cs" />
+    <Compile Include="WebApi\SearchMember\SearchMemberController.cs" />
+    <Compile Include="WebApi\UPS\ShipClient.cs" />
+    <Compile Include="WebApi\UPS\ShippingController.cs" />
+    <Compile Include="TrustAllCertificatePolicy.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-multiselect.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\main.css" />
+    <Content Include="Content\pace-theme-flat-top.tmpl.css" />
+    <Content Include="Content\toastr.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Kendo\CSS\Black\editor.png" />
+    <Content Include="Kendo\CSS\Black\imagebrowser.png" />
+    <Content Include="Kendo\CSS\Black\loading-image.gif" />
+    <Content Include="Kendo\CSS\Black\loading.gif" />
+    <Content Include="Kendo\CSS\Black\loading_2x.gif" />
+    <Content Include="Kendo\CSS\Black\slider-h.gif" />
+    <Content Include="Kendo\CSS\Black\slider-v.gif" />
+    <Content Include="Kendo\CSS\Black\sprite.png" />
+    <Content Include="Kendo\CSS\Black\sprite_2x.png" />
+    <Content Include="Kendo\CSS\BlueOpal\editor.png" />
+    <Content Include="Kendo\CSS\BlueOpal\imagebrowser.png" />
+    <Content Include="Kendo\CSS\BlueOpal\loading-image.gif" />
+    <Content Include="Kendo\CSS\BlueOpal\loading.gif" />
+    <Content Include="Kendo\CSS\BlueOpal\loading_2x.gif" />
+    <Content Include="Kendo\CSS\BlueOpal\slider-h.gif" />
+    <Content Include="Kendo\CSS\BlueOpal\slider-v.gif" />
+    <Content Include="Kendo\CSS\BlueOpal\sprite.png" />
+    <Content Include="Kendo\CSS\BlueOpal\sprite_2x.png" />
+    <Content Include="Kendo\CSS\Bootstrap\editor.png" />
+    <Content Include="Kendo\CSS\Bootstrap\imagebrowser.png" />
+    <Content Include="Kendo\CSS\Bootstrap\loading-image.gif" />
+    <Content Include="Kendo\CSS\Bootstrap\loading.gif" />
+    <Content Include="Kendo\CSS\Bootstrap\loading_2x.gif" />
+    <Content Include="Kendo\CSS\Bootstrap\slider-h.gif" />
+    <Content Include="Kendo\CSS\Bootstrap\slider-v.gif" />
+    <Content Include="Kendo\CSS\Bootstrap\sprite.png" />
+    <Content Include="Kendo\CSS\Bootstrap\sprite_2x.png" />
+    <Content Include="Kendo\CSS\Default\editor.png" />
+    <Content Include="Kendo\CSS\Default\imagebrowser.png" />
+    <Content Include="Kendo\CSS\Default\loading-image.gif" />
+    <Content Include="Kendo\CSS\Default\loading.gif" />
+    <Content Include="Kendo\CSS\Default\loading_2x.gif" />
+    <Content Include="Kendo\CSS\Default\slider-h.gif" />
+    <Content Include="Kendo\CSS\Default\slider-v.gif" />
+    <Content Include="Kendo\CSS\Default\sprite.png" />
+    <Content Include="Kendo\CSS\Default\sprite1.png" />
+    <Content Include="Kendo\CSS\Default\sprite1_2x.png" />
+    <Content Include="Kendo\CSS\Default\sprite_2x.png" />
+    <Content Include="Kendo\CSS\Flat\editor.png" />
+    <Content Include="Kendo\CSS\Flat\imagebrowser.png" />
+    <Content Include="Kendo\CSS\Flat\loading-image.gif" />
+    <Content Include="Kendo\CSS\Flat\loading.gif" />
+    <Content Include="Kendo\CSS\Flat\loading_2x.gif" />
+    <Content Include="Kendo\CSS\Flat\slider-h.gif" />
+    <Content Include="Kendo\CSS\Flat\slider-v.gif" />
+    <Content Include="Kendo\CSS\Flat\sprite.png" />
+    <Content Include="Kendo\CSS\Flat\sprite_2x.png" />
+    <Content Include="Kendo\CSS\HighContrast\editor.png" />
+    <Content Include="Kendo\CSS\HighContrast\imagebrowser.png" />
+    <Content Include="Kendo\CSS\HighContrast\loading-image.gif" />
+    <Content Include="Kendo\CSS\HighContrast\loading.gif" />
+    <Content Include="Kendo\CSS\HighContrast\loading_2x.gif" />
+    <Content Include="Kendo\CSS\HighContrast\slider-h.gif" />
+    <Content Include="Kendo\CSS\HighContrast\slider-v.gif" />
+    <Content Include="Kendo\CSS\HighContrast\sprite.png" />
+    <Content Include="Kendo\CSS\HighContrast\sprite_2x.png" />
+    <Content Include="Kendo\CSS\images\back.png" />
+    <Content Include="Kendo\CSS\images\wp8_icons.png" />
+    <Content Include="Kendo\CSS\images\wp8_inverseicons.png" />
+    <Content Include="Kendo\CSS\kendo.black.min.css" />
+    <Content Include="Kendo\CSS\kendo.blueopal.min.css" />
+    <Content Include="Kendo\CSS\kendo.bootstrap.min.css" />
+    <Content Include="Kendo\CSS\kendo.common.min.css" />
+    <Content Include="Kendo\CSS\kendo.dataviz.black.min.css" />
+    <Content Include="Kendo\CSS\kendo.dataviz.blueopal.min.css" />
+    <Content Include="Kendo\CSS\kendo.dataviz.bootstrap.min.css" />
+    <Content Include="Kendo\CSS\kendo.dataviz.default.min.css" />
+    <Content Include="Kendo\CSS\kendo.dataviz.flat.min.css" />
+    <Content Include="Kendo\CSS\kendo.dataviz.highcontrast.min.css" />
+    <Content Include="Kendo\CSS\kendo.dataviz.metro.min.css" />
+    <Content Include="Kendo\CSS\kendo.dataviz.metroblack.min.css" />
+    <Content Include="Kendo\CSS\kendo.dataviz.min.css" />
+    <Content Include="Kendo\CSS\kendo.dataviz.moonlight.min.css" />
+    <Content Include="Kendo\CSS\kendo.dataviz.silver.min.css" />
+    <Content Include="Kendo\CSS\kendo.dataviz.uniform.min.css" />
+    <Content Include="Kendo\CSS\kendo.default.min.css" />
+    <Content Include="Kendo\CSS\kendo.flat.min.css" />
+    <Content Include="Kendo\CSS\kendo.highcontrast.min.css" />
+    <Content Include="Kendo\CSS\kendo.icenium.min.css" />
+    <Content Include="Kendo\CSS\kendo.metro.min.css" />
+    <Content Include="Kendo\CSS\kendo.metroblack.min.css" />
+    <Content Include="Kendo\CSS\kendo.mobile.all.min.css" />
+    <Content Include="Kendo\CSS\kendo.mobile.android4.min.css" />
+    <Content Include="Kendo\CSS\kendo.mobile.blackberry.min.css" />
+    <Content Include="Kendo\CSS\kendo.mobile.common.min.css" />
+    <Content Include="Kendo\CSS\kendo.mobile.flat.min.css" />
+    <Content Include="Kendo\CSS\kendo.mobile.icenium.min.css" />
+    <Content Include="Kendo\CSS\kendo.mobile.ios.min.css" />
+    <Content Include="Kendo\CSS\kendo.mobile.meego.min.css" />
+    <Content Include="Kendo\CSS\kendo.mobile.wp8.min.css" />
+    <Content Include="Kendo\CSS\kendo.moonlight.min.css" />
+    <Content Include="Kendo\CSS\kendo.rtl.min.css" />
+    <Content Include="Kendo\CSS\kendo.silver.min.css" />
+    <Content Include="Kendo\CSS\kendo.uniform.min.css" />
+    <Content Include="Kendo\CSS\MetroBlack\editor.png" />
+    <Content Include="Kendo\CSS\MetroBlack\imagebrowser.png" />
+    <Content Include="Kendo\CSS\MetroBlack\loading-image.gif" />
+    <Content Include="Kendo\CSS\MetroBlack\loading.gif" />
+    <Content Include="Kendo\CSS\MetroBlack\loading_2x.gif" />
+    <Content Include="Kendo\CSS\MetroBlack\slider-h.gif" />
+    <Content Include="Kendo\CSS\MetroBlack\slider-v.gif" />
+    <Content Include="Kendo\CSS\MetroBlack\sprite.png" />
+    <Content Include="Kendo\CSS\MetroBlack\sprite_2x.png" />
+    <Content Include="Kendo\CSS\Metro\editor.png" />
+    <Content Include="Kendo\CSS\Metro\imagebrowser.png" />
+    <Content Include="Kendo\CSS\Metro\loading-image.gif" />
+    <Content Include="Kendo\CSS\Metro\loading.gif" />
+    <Content Include="Kendo\CSS\Metro\loading_2x.gif" />
+    <Content Include="Kendo\CSS\Metro\slider-h.gif" />
+    <Content Include="Kendo\CSS\Metro\slider-v.gif" />
+    <Content Include="Kendo\CSS\Metro\sprite.png" />
+    <Content Include="Kendo\CSS\Metro\sprite_2x.png" />
+    <Content Include="Kendo\CSS\Moonlight\editor.png" />
+    <Content Include="Kendo\CSS\Moonlight\imagebrowser.png" />
+    <Content Include="Kendo\CSS\Moonlight\loading-image.gif" />
+    <Content Include="Kendo\CSS\Moonlight\loading.gif" />
+    <Content Include="Kendo\CSS\Moonlight\loading_2x.gif" />
+    <Content Include="Kendo\CSS\Moonlight\slider-h.gif" />
+    <Content Include="Kendo\CSS\Moonlight\slider-v.gif" />
+    <Content Include="Kendo\CSS\Moonlight\sprite.png" />
+    <Content Include="Kendo\CSS\Moonlight\sprite_2x.png" />
+    <Content Include="Kendo\CSS\Silver\editor.png" />
+    <Content Include="Kendo\CSS\Silver\imagebrowser.png" />
+    <Content Include="Kendo\CSS\Silver\loading-image.gif" />
+    <Content Include="Kendo\CSS\Silver\loading.gif" />
+    <Content Include="Kendo\CSS\Silver\loading_2x.gif" />
+    <Content Include="Kendo\CSS\Silver\slider-h.gif" />
+    <Content Include="Kendo\CSS\Silver\slider-v.gif" />
+    <Content Include="Kendo\CSS\Silver\sprite.png" />
+    <Content Include="Kendo\CSS\Silver\sprite_2x.png" />
+    <Content Include="Kendo\CSS\textures\brushed-metal.png" />
+    <Content Include="Kendo\CSS\textures\dots1.png" />
+    <Content Include="Kendo\CSS\textures\dots10.png" />
+    <Content Include="Kendo\CSS\textures\dots11.png" />
+    <Content Include="Kendo\CSS\textures\dots12.png" />
+    <Content Include="Kendo\CSS\textures\dots13.png" />
+    <Content Include="Kendo\CSS\textures\dots2.png" />
+    <Content Include="Kendo\CSS\textures\dots3.png" />
+    <Content Include="Kendo\CSS\textures\dots4.png" />
+    <Content Include="Kendo\CSS\textures\dots5.png" />
+    <Content Include="Kendo\CSS\textures\dots6.png" />
+    <Content Include="Kendo\CSS\textures\dots7.png" />
+    <Content Include="Kendo\CSS\textures\dots8.png" />
+    <Content Include="Kendo\CSS\textures\dots9.png" />
+    <Content Include="Kendo\CSS\textures\glass-lighter.png" />
+    <Content Include="Kendo\CSS\textures\glass.png" />
+    <Content Include="Kendo\CSS\textures\highlight.png" />
+    <Content Include="Kendo\CSS\textures\hsv-gradient.png" />
+    <Content Include="Kendo\CSS\textures\hue.png" />
+    <Content Include="Kendo\CSS\textures\leather1.png" />
+    <Content Include="Kendo\CSS\textures\leather2.png" />
+    <Content Include="Kendo\CSS\textures\noise.png" />
+    <Content Include="Kendo\CSS\textures\stripe1.png" />
+    <Content Include="Kendo\CSS\textures\stripe2.png" />
+    <Content Include="Kendo\CSS\textures\stripe3.png" />
+    <Content Include="Kendo\CSS\textures\stripe4.png" />
+    <Content Include="Kendo\CSS\textures\stripe5.png" />
+    <Content Include="Kendo\CSS\textures\stripe6.png" />
+    <Content Include="Kendo\CSS\textures\transparency.png" />
+    <Content Include="Kendo\CSS\textures\transtexture.png" />
+    <Content Include="Kendo\CSS\Uniform\editor.png" />
+    <Content Include="Kendo\CSS\Uniform\imagebrowser.png" />
+    <Content Include="Kendo\CSS\Uniform\loading-image.gif" />
+    <Content Include="Kendo\CSS\Uniform\loading.gif" />
+    <Content Include="Kendo\CSS\Uniform\loading_2x.gif" />
+    <Content Include="Kendo\CSS\Uniform\slider-h.gif" />
+    <Content Include="Kendo\CSS\Uniform\slider-v.gif" />
+    <Content Include="Kendo\CSS\Uniform\sprite.png" />
+    <Content Include="Kendo\CSS\Uniform\sprite_2x.png" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.af-ZA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.af.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.am-ET.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.am.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-AE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-BH.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-DZ.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-EG.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-IQ.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-JO.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-KW.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-LB.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-LY.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-MA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-OM.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-QA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-SA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-SY.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-TN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar-YE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ar.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.arn-CL.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.arn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.as-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.as.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.az-Cyrl-AZ.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.az-Cyrl.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.az-Latn-AZ.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.az-Latn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.az.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ba-RU.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ba.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.be-BY.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.be.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.bg-BG.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.bg.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.bn-BD.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.bn-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.bn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.bo-CN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.bo.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.br-FR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.br.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.bs-Cyrl-BA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.bs-Cyrl.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.bs-Latn-BA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.bs-Latn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.bs.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ca-ES.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ca.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.co-FR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.co.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.cs-CZ.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.cs.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.cy-GB.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.cy.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.da-DK.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.da.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.de-AT.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.de-CH.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.de-DE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.de-LI.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.de-LU.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.de.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.dsb-DE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.dsb.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.dv-MV.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.dv.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.el-GR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.el.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-029.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-AU.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-BZ.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-CA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-GB.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-IE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-JM.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-MY.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-NZ.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-PH.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-SG.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-TT.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-US.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-ZA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en-ZW.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.en.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-AR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-BO.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-CL.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-CO.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-CR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-DO.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-EC.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-ES.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-GT.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-HN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-MX.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-NI.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-PA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-PE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-PR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-PY.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-SV.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-US.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-UY.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es-VE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.es.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.et-EE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.et.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.eu-ES.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.eu.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fa-IR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fa.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fi-FI.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fi.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fil-PH.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fil.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fo-FO.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fo.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fr-BE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fr-CA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fr-CH.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fr-FR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fr-LU.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fr-MC.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fr.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fy-NL.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.fy.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ga-IE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ga.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.gd-GB.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.gd.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.gl-ES.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.gl.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.gsw-FR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.gsw.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.gu-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.gu.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ha-Latn-NG.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ha-Latn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ha.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.he-IL.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.he.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.hi-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.hi.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.hr-BA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.hr-HR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.hr.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.hsb-DE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.hsb.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.hu-HU.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.hu.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.hy-AM.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.hy.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.id-ID.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.id.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ig-NG.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ig.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ii-CN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ii.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.is-IS.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.is.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.it-CH.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.it-IT.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.it.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.iu-Cans-CA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.iu-Cans.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.iu-Latn-CA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.iu-Latn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.iu.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ja-JP.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ja.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ka-GE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ka.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.kk-KZ.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.kk.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.kl-GL.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.kl.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.km-KH.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.km.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.kn-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.kn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ko-KR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ko.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.kok-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.kok.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ky-KG.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ky.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.lb-LU.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.lb.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.lo-LA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.lo.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.lt-LT.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.lt.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.lv-LV.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.lv.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.mi-NZ.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.mi.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.mk-MK.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.mk.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ml-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ml.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.mn-Cyrl.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.mn-MN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.mn-Mong-CN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.mn-Mong.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.mn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.moh-CA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.moh.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.mr-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.mr.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ms-BN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ms-MY.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ms.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.mt-MT.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.mt.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.nb-NO.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.nb.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ne-NP.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ne.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.nl-BE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.nl-NL.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.nl.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.nn-NO.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.nn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.no.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.nso-ZA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.nso.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.oc-FR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.oc.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.or-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.or.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.pa-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.pa.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.pl-PL.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.pl.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.prs-AF.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.prs.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ps-AF.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ps.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.pt-BR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.pt-PT.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.pt.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.qut-GT.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.qut.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.quz-BO.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.quz-EC.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.quz-PE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.quz.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.rm-CH.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.rm.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ro-RO.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ro.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ru-RU.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ru-UA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ru.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.rw-RW.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.rw.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sa-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sa.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sah-RU.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sah.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.se-FI.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.se-NO.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.se-SE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.se.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.si-LK.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.si.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sk-SK.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sk.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sl-SI.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sl.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sma-NO.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sma-SE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sma.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.smj-NO.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.smj-SE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.smj.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.smn-FI.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.smn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sms-FI.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sms.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sq-AL.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sq.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sr-Cyrl-BA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sr-Cyrl-CS.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sr-Cyrl-ME.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sr-Cyrl-RS.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sr-Cyrl.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sr-Latn-BA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sr-Latn-CS.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sr-Latn-ME.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sr-Latn-RS.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sr-Latn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sr.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sv-FI.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sv-SE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sv.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sw-KE.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.sw.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.syr-SY.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.syr.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ta-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ta.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.te-IN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.te.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tg-Cyrl-TJ.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tg-Cyrl.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tg.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.th-TH.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.th.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tk-TM.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tk.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tn-ZA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tr-TR.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tr.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tt-RU.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tt.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tzm-Latn-DZ.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tzm-Latn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.tzm.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ug-CN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ug.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.uk-UA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.uk.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ur-PK.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.ur.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.uz-Cyrl-UZ.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.uz-Cyrl.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.uz-Latn-UZ.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.uz-Latn.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.uz.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.vi-VN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.vi.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.wo-SN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.wo.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.xh-ZA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.xh.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.yo-NG.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.yo.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.zh-CHS.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.zh-CHT.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.zh-CN.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.zh-Hans.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.zh-Hant.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.zh-HK.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.zh-MO.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.zh-SG.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.zh-TW.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.zh.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.zu-ZA.min.js" />
+    <Content Include="Kendo\JS\cultures\kendo.culture.zu.min.js" />
+    <Content Include="Kendo\JS\jquery.min.js" />
+    <Content Include="Kendo\JS\kendo.all.min.js" />
+    <Content Include="Kendo\JS\kendo.aspnetmvc.min.js" />
+    <Content Include="Kendo\JS\kendo.autocomplete.min.js" />
+    <Content Include="Kendo\JS\kendo.binder.min.js" />
+    <Content Include="Kendo\JS\kendo.calendar.min.js" />
+    <Content Include="Kendo\JS\kendo.colorpicker.min.js" />
+    <Content Include="Kendo\JS\kendo.columnmenu.min.js" />
+    <Content Include="Kendo\JS\kendo.combobox.min.js" />
+    <Content Include="Kendo\JS\kendo.core.min.js" />
+    <Content Include="Kendo\JS\kendo.data.min.js" />
+    <Content Include="Kendo\JS\kendo.data.odata.min.js" />
+    <Content Include="Kendo\JS\kendo.data.xml.min.js" />
+    <Content Include="Kendo\JS\kendo.dataviz.barcode.min.js" />
+    <Content Include="Kendo\JS\kendo.dataviz.canvas.min.js" />
+    <Content Include="Kendo\JS\kendo.dataviz.chart.min.js" />
+    <Content Include="Kendo\JS\kendo.dataviz.chart.polar.min.js" />
+    <Content Include="Kendo\JS\kendo.dataviz.core.min.js" />
+    <Content Include="Kendo\JS\kendo.dataviz.gauge.min.js" />
+    <Content Include="Kendo\JS\kendo.dataviz.min.js" />
+    <Content Include="Kendo\JS\kendo.dataviz.qrcode.min.js" />
+    <Content Include="Kendo\JS\kendo.dataviz.sparkline.min.js" />
+    <Content Include="Kendo\JS\kendo.dataviz.stock.min.js" />
+    <Content Include="Kendo\JS\kendo.dataviz.svg.min.js" />
+    <Content Include="Kendo\JS\kendo.dataviz.themes.min.js" />
+    <Content Include="Kendo\JS\kendo.dataviz.vml.min.js" />
+    <Content Include="Kendo\JS\kendo.datepicker.min.js" />
+    <Content Include="Kendo\JS\kendo.datetimepicker.min.js" />
+    <Content Include="Kendo\JS\kendo.draganddrop.min.js" />
+    <Content Include="Kendo\JS\kendo.dropdownlist.min.js" />
+    <Content Include="Kendo\JS\kendo.editable.min.js" />
+    <Content Include="Kendo\JS\kendo.editor.min.js" />
+    <Content Include="Kendo\JS\kendo.filtermenu.min.js" />
+    <Content Include="Kendo\JS\kendo.fx.min.js" />
+    <Content Include="Kendo\JS\kendo.grid.min.js" />
+    <Content Include="Kendo\JS\kendo.groupable.min.js" />
+    <Content Include="Kendo\JS\kendo.imagebrowser.min.js" />
+    <Content Include="Kendo\JS\kendo.list.min.js" />
+    <Content Include="Kendo\JS\kendo.listview.min.js" />
+    <Content Include="Kendo\JS\kendo.menu.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.actionsheet.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.application.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.button.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.buttongroup.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.drawer.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.listview.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.loader.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.modalview.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.navbar.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.pane.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.popover.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.scroller.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.scrollview.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.shim.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.splitview.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.switch.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.tabstrip.min.js" />
+    <Content Include="Kendo\JS\kendo.mobile.view.min.js" />
+    <Content Include="Kendo\JS\kendo.multiselect.min.js" />
+    <Content Include="Kendo\JS\kendo.numerictextbox.min.js" />
+    <Content Include="Kendo\JS\kendo.pager.min.js" />
+    <Content Include="Kendo\JS\kendo.panelbar.min.js" />
+    <Content Include="Kendo\JS\kendo.popup.min.js" />
+    <Content Include="Kendo\JS\kendo.reorderable.min.js" />
+    <Content Include="Kendo\JS\kendo.resizable.min.js" />
+    <Content Include="Kendo\JS\kendo.router.min.js" />
+    <Content Include="Kendo\JS\kendo.scheduler.agendaview.min.js" />
+    <Content Include="Kendo\JS\kendo.scheduler.dayview.min.js" />
+    <Content Include="Kendo\JS\kendo.scheduler.min.js" />
+    <Content Include="Kendo\JS\kendo.scheduler.monthview.min.js" />
+    <Content Include="Kendo\JS\kendo.scheduler.recurrence.min.js" />
+    <Content Include="Kendo\JS\kendo.scheduler.view.min.js" />
+    <Content Include="Kendo\JS\kendo.selectable.min.js" />
+    <Content Include="Kendo\JS\kendo.slider.min.js" />
+    <Content Include="Kendo\JS\kendo.sortable.min.js" />
+    <Content Include="Kendo\JS\kendo.splitter.min.js" />
+    <Content Include="Kendo\JS\kendo.tabstrip.min.js" />
+    <Content Include="Kendo\JS\kendo.timepicker.min.js" />
+    <Content Include="Kendo\JS\kendo.timezones.min.js" />
+    <Content Include="Kendo\JS\kendo.tooltip.min.js" />
+    <Content Include="Kendo\JS\kendo.touch.min.js" />
+    <Content Include="Kendo\JS\kendo.treeview.min.js" />
+    <Content Include="Kendo\JS\kendo.upload.min.js" />
+    <Content Include="Kendo\JS\kendo.userevents.min.js" />
+    <Content Include="Kendo\JS\kendo.validator.min.js" />
+    <Content Include="Kendo\JS\kendo.view.min.js" />
+    <Content Include="Kendo\JS\kendo.web.min.js" />
+    <Content Include="Kendo\JS\kendo.window.min.js" />
+    <Content Include="Libraries\Dapper.dll" />
+    <Content Include="Libraries\Kendo.Mvc.dll" />
+    <Content Include="Libraries\log4net.dll" />
+    <Content Include="Libraries\MiniProfiler.dll" />
+    <Content Include="Libraries\System.Web.Mvc.dll" />
+    <Content Include="Libraries\System.Web.Optimization.dll" />
+    <Content Include="MailTemplates\ManagePassword.html" />
+    <Content Include="MailTemplates\KillMachine.html" />
+    <Content Include="MailTemplates\Location\LocationStatus.html" />
+    <Content Include="MailTemplates\ManageCustomer\CustomerStatus.html" />
+    <Content Include="MailTemplates\ManageCustomer\SubAgentStatus.html" />
+    <Content Include="MailTemplates\ManageCustomer\SubsidiaryStatus.html" />
+    <Content Include="MailTemplates\ManageUser\UserStatus.html" />
+    <Content Include="MailTemplates\Manufacturers\ManufacturerStatus.html" />
+    <Content Include="MailTemplates\Order\ApproveReject.html" />
+    <Content Include="MailTemplates\Order\Archive.html" />
+    <Content Include="MailTemplates\Order\Assign.html" />
+    <Content Include="MailTemplates\Order\Create.html" />
+    <Content Include="MailTemplates\RegisterStoreUserBulk.html" />
+    <Content Include="MailTemplates\RegisterUser.html" />
+    <Content Include="MailTemplates\ForgotPassword.html" />
+    <Content Include="MailTemplates\TabletForgetPassword.html" />
+    <Content Include="MailTemplates\MemberCheckoutResult.html" />
+    <Content Include="MailTemplates\TabletMembershipRegistration.html" />
+    <Content Include="Scripts\bootbox.min.js" />
+    <Content Include="Scripts\bootstrap-multiselect.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Kendo\CSS\images\KendoUI.ttf" />
+    <Content Include="Kendo\CSS\images\KendoUI.woff" />
+    <Content Include="Mvc.sitemap" />
+    <Content Include="Certificates\adfs.cer" />
+    <Content Include="Certificates\bitium.cer" />
+    <Content Include="Certificates\centrify.cer" />
+    <Content Include="Certificates\idp.cer" />
+    <Content Include="Certificates\okta.cer" />
+    <Content Include="Certificates\onelogin.cer" />
+    <Content Include="Certificates\pingone.cer" />
+    <Content Include="Certificates\sp.cer" />
+    <Content Include="Certificates\sp.pfx" />
+    <Content Include="Certificates\wso2.cer" />
+    <None Include="MvcSiteMapSchema.xsd" />
+    <Content Include="Scripts\css\jquery-confirm.css" />
+    <Content Include="Scripts\images\export_data.png" />
+    <Content Include="Scripts\images\hideFAQ.png" />
+    <Content Include="Scripts\images\excel_icon.png" />
+    <Content Include="Scripts\images\loading-Spinner.gif" />
+    <Content Include="Scripts\images\showFAQ.png" />
+    <Content Include="Scripts\images\TemplateDownload.png" />
+    <Content Include="Scripts\jquery-confirm.js" />
+    <Content Include="Scripts\jquery-confirm.min.js" />
+    <Content Include="Scripts\redux.common.js" />
+    <Content Include="Scripts\css\bootstrap-theme.css.map" />
+    <Content Include="Scripts\css\bootstrap.css.map" />
+    <None Include="Properties\PublishProfiles\ReviveRedux.pubxml" />
+    <Content Include="Scripts\dual-list-box.js" />
+    <Content Include="Scripts\dual-list-box.min.js" />
+    <Content Include="Scripts\fonts\fontawesome-webfont.eot" />
+    <Content Include="Scripts\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Scripts\fonts\fontawesome-webfont.woff" />
+    <Content Include="Scripts\fonts\FontAwesome.otf" />
+    <Content Include="Scripts\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Scripts\fonts\glyphicons-halflings-regular.eot%40" />
+    <Content Include="Scripts\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Scripts\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Scripts\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Scripts\fonts\icomoon.eot" />
+    <Content Include="Scripts\fonts\icomoon.ttf" />
+    <Content Include="Scripts\fonts\icomoon.woff" />
+    <Content Include="Models\ReduxFirmware\drying_device_0.9_M17.bin" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="saml.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\css\bootstrap-theme.css" />
+    <Content Include="Scripts\css\bootstrap-theme.min.css" />
+    <Content Include="Scripts\css\bootstrap.css" />
+    <Content Include="Scripts\css\bootstrap.min.css" />
+    <Content Include="Scripts\css\component.css" />
+    <Content Include="Scripts\css\default.css" />
+    <Content Include="Scripts\css\font-awesome.css" />
+    <Content Include="Scripts\css\main.css" />
+    <Content Include="Scripts\css\toastr.css" />
+    <Content Include="Scripts\fonts\fontawesome-webfont.svg" />
+    <Content Include="Scripts\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Scripts\fonts\icomoon.dev.svg" />
+    <Content Include="Scripts\fonts\icomoon.svg" />
+    <Content Include="Scripts\fonts\license.txt" />
+    <Content Include="Scripts\images\activate_icon.png" />
+    <Content Include="Scripts\images\container.jpg" />
+    <Content Include="Scripts\images\delite_icon.png" />
+    <Content Include="Scripts\images\disable_icon.png" />
+    <Content Include="Scripts\images\Edit_icon.png" />
+    <Content Include="Scripts\images\eye_icon.png" />
+    <Content Include="Scripts\images\filter_icon.png" />
+    <Content Include="Scripts\images\header_bg.jpg" />
+    <Content Include="Scripts\images\logo.png" />
+    <Content Include="Scripts\images\profile.png" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-2.1.3.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <None Include="Scripts\jquery-2.1.3.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.3.js" />
+    <Content Include="Scripts\jquery-2.1.3.min.js" />
+    <Content Include="Scripts\jquery.dlmenu.js" />
+    <Content Include="Scripts\jquery.maskedinput.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\knockout-3.2.0.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\modernizr.custom.js" />
+    <Content Include="Scripts\npm.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Ship Machines_files\paper.css" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\Validations.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SiteMapTitleHelperModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SiteMapNodeModelList.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SiteMapNodeModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SiteMapHelperModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\MetaRobotsHelperModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\MenuHelperModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\CanonicalHelperModel.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\ManageUsers\ManageUser.cshtml" />
+    <Content Include="Views\UserRole\GetRoles.cshtml" />
+    <Content Include="Views\UserRole\MenuMapping.cshtml" />
+    <Content Include="Views\ManageCustomers\ManageCustomers.cshtml" />
+    <Content Include="Views\ManageUsers\AddEditUsers.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\ManageCustomers\CreateCustomer.cshtml" />
+    <Content Include="Views\ManageCustomers\UploadFile.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\AddEditMachineSpec.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\ManageMachineSpecs.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\UpdateLatestSoftware.cshtml" />
+    <Content Include="Views\Order\ViewLocations.cshtml" />
+    <Content Include="Views\Order\UpdateLocations.cshtml" />
+    <Content Include="Views\Order\ViewOrder.cshtml" />
+    <Content Include="Views\Order\Approve.cshtml" />
+    <Content Include="Views\Order\Archive.cshtml" />
+    <Content Include="Views\Order\Assign.cshtml" />
+    <Content Include="Views\Order\Create.cshtml" />
+    <Content Include="Views\Order\Manage.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\ManageMachineSpecs\ManageDebugPara.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\AddEditMachineSpec.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\ManageDebugPara.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\ManageMachineSpecs.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\UpdateLatestSoftware.cshtml" />
+    <Content Include="Views\ManageCustomers\ManageLocation.cshtml" />
+    <Content Include="Views\ManageCustomers\AddEditLocation.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\AddEditSoftware.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\ManageSoftwareVersion.cshtml" />
+    <Content Include="Views\Machine\MoreDetails.cshtml" />
+    <Content Include="Views\Machine\MapMachines.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\AddEditTemplate.cshtml" />
+    <Content Include="Views\ManageForm\Form.cshtml" />
+    <Content Include="Views\ManageForm\AddEditForm.cshtml" />
+    <Content Include="Views\Shared\UnAuth.cshtml" />
+    <Content Include="Views\ManageMembershipConfig\ManageMembership.cshtml" />
+    <Content Include="Views\ManageMembershipConfig\EditMembership.cshtml" />
+    <Content Include="Views\Testing\Perform.cshtml" />
+    <Content Include="Views\Machine\Shipping.cshtml" />
+    <Content Include="Views\ManageUsers\AddEditStoreUser.cshtml" />
+    <Content Include="Views\ManageUsers\ViewUser.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\KillMachine.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\DebugParaTempl.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\EditPtmpl.cshtml" />
+    <Content Include="Views\FAQ\Add.cshtml" />
+    <Content Include="Views\FAQ\Show.cshtml" />
+    <Content Include="Views\Report\Report.cshtml" />
+    <Content Include="Views\Report\ViewReport.cshtml" />
+    <Content Include="Views\ManageCustomers\viewCustomerLocation.cshtml" />
+    <Content Include="Views\Manufacturers\Manage.cshtml" />
+    <Content Include="Views\Manufacturers\Create.cshtml" />
+    <Content Include="Views\Manufacturers\ViewMF.cshtml" />
+    <Content Include="Views\Manufacturers\Edit.cshtml" />
+    <Content Include="Views\UserRole\AddNewRole.cshtml" />
+    <Content Include="Views\UserRole\EditRole.cshtml" />
+    <Content Include="Views\ModeConfiguration\Details.cshtml" />
+    <Content Include="Views\ModeConfiguration\AddNewModeConfiguration.cshtml" />
+    <Content Include="Views\ModeConfiguration\EditModeConfig.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\ReplaceMachine.cshtml" />
+    <Content Include="Views\ManageUsers\ViewPendingTask.cshtml" />
+    <Content Include="Views\ManageSubsidiary\ManageSubsidiary.cshtml" />
+    <Content Include="Views\ManageSubsidiary\CreateSubsidiary.cshtml" />
+    <Content Include="Views\ManageSubAgent\ManageSubAgents.cshtml" />
+    <Content Include="Views\ManageSubAgent\CreateSubAgent.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\DeleteMachines.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\MoveMachine.cshtml" />
+    <Content Include="Views\ManageMembershipConfig\ManageMember.cshtml" />
+    <Content Include="Views\ManageMembershipConfig\EditMember.cshtml" />
+    <Content Include="Views\ManageUsers\ViewLoging.cshtml" />
+    <Content Include="Views\ManageUsers\Configurelogging.cshtml" />
+    <Content Include="Views\ManageLogging\ManageLogging.cshtml" />
+    <Content Include="Views\ManageLogging\ViewLogFile.cshtml" />
+    <Content Include="Views\ManageUsers\ManagePassword.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\ConfigureMachineHistoryBackup.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\MachineHistory.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\EditMachineHistory.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\AddConfigureMachineHistory.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\EditConfigureMachineHistory.cshtml" />
+    <Content Include="Views\ManageMachineSpecs\ConfigureMachineHistory.cshtml" />
+    <Content Include="Views\ManageUsers\ManageGroups.cshtml" />
+    <Content Include="Views\ManageUsers\AddGroup.cshtml" />
+    <Content Include="Views\ManageUsers\EditGroup.cshtml" />
+    <Content Include="Views\ManageShipping\ViewGroupShippingQueue.cshtml" />
+    <Content Include="Views\ManageShipping\UpdateLocationStatus.cshtml" />
+    <Content Include="Views\ManageShipping\ManageShippingConfiguration.cshtml" />
+    <Content Include="Views\ManageShipping\AddShipping.cshtml" />
+    <Content Include="Views\ManageShipping\UPSSettings.cshtml" />
+    <Content Include="Views\Order\CreateMachineOrder.cshtml" />
+    <Content Include="Views\Order\ManageMachineOrder.cshtml" />
+    <Content Include="Views\SAML\Index.cshtml" />
+    <Content Include="Views\Account\SingleSignOn.cshtml" />
+    <Content Include="Views\Report\VZ_ActivityReport.cshtml" />
+    <Content Include="Views\Report\ActivityReportDetails.cshtml" />
+    <Content Include="Templates\Redux_TCC_MemberuploadTemplate.xlsx" />
+    <Content Include="Templates\ReduxAWMemberUploadTemplate.xlsx" />
+    <None Include="Web References\WebReference\common.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\WebReference\Error1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\WebReference\IFWS.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\WebReference\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\WebReference\Ship.wsdl" />
+    <Content Include="Web References\WebReference\ShipAcceptResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\WebReference\ShipConfirmResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\WebReference\ShipmentResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <None Include="Web References\WebReference\ShipWebServiceSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\WebReference\UPSSecurity.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="WebApi\UPS\WSDL\Ship.wsdl" />
+    <Content Include="Views\ManageShipping\ManageGroupShippingQueue.cshtml" />
+    <Content Include="Views\ManageShipping\ShipMachines.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="LoggingFiles\" />
+    <Folder Include="TempUpload\" />
+    <Folder Include="Views\ConfigurationMode\" />
+    <Folder Include="Views\ExcelExport\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Revive.Redux.Commn\Revive.Redux.Commn.csproj">
+      <Project>{be06f026-3bbe-4eb3-991b-edbd7c40d3ff}</Project>
+      <Name>Revive.Redux.Commn</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Revive.Redux.Entities\Revive.Redux.Entities.csproj">
+      <Project>{00dda1f8-c649-424e-968b-30c5011a9106}</Project>
+      <Name>Revive.Redux.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Revive.Redux.Services\Revive.Redux.Services.csproj">
+      <Project>{0c1d2d36-3b55-4491-b342-63df0c1d7c2d}</Project>
+      <Name>Revive.Redux.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ReviveMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ReviveMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="D:\Revive\NST-ReduxEnterpriseSystem\Code\Revive.Redux\Revive.Redux.UI\WebApi\UPS\WSDL\Ship.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\WebReference\</RelPath>
+      <UpdateFromURL>D:\Revive\NST-ReduxEnterpriseSystem\Code\Revive.Redux\Revive.Redux.UI\WebApi\UPS\WSDL\Ship.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Revive_Redux_UI_WebReference_ShipService</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>52719</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:52722/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

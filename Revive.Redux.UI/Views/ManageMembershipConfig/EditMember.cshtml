@@ -1,0 +1,364 @@
+﻿@model Revive.Redux.Entities.ManageMember
+
+@{
+    ViewBag.Title = "Edit Member";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("UpdateMember", "ManageMembershipConfig", FormMethod.Post))
+{
+
+    @Html.HiddenFor(m => m.Membership_Det_ID, Model.Membership_Det_ID)
+    @Html.HiddenFor(m => m.MembershipId, Model.MembershipId)
+    @Html.HiddenFor(m => m.custMaxNoOfDevices, Model.custMaxNoOfDevices)
+    @Html.HiddenFor(m => m.IsMultiDevice, Model.IsMultiDevice)
+    <div>
+        <div class="col-md-12">
+            <div class="contant_page">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>Edit Member</h2>
+                    </div>
+                </div>
+                <!-- Error Panel -->
+                <div class="row">
+                    <div class="col-md-8">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @*@Html.Label("Customer Name", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right " })*@
+                            <div class="col-sm-4">
+                                @Html.LabelFor(M => M.CustomerName, Model.CustomerName, new { @class = "control-label", @style = "width:200px;" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Membersip ID", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right " })
+                            <div class="col-sm-4">
+                                @Html.LabelFor(M => M.MembershipId, Model.MembershipId, new { @class = "control-label", @style = "width:200px;" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Member Name", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right " })
+                            <div class="col-sm-4">
+                                @Html.LabelFor(M => M.MemberName, Model.MemberName, new { @class = "control-label", @style = "width:200px;" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Membership Start Date", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-4">
+                                @*@Html.LabelFor(M => M.MembershipDate, Model.MembershipDate.ToShortDateString(), new { @class = "", @style = "width:200px;", })*@
+                                @(Html.Kendo().DatePickerFor(model => model.MembershipStartDate).Format("MM/dd/yyyy")
+        .HtmlAttributes(new { @class = "DisableKeyboardInput", @style = "width:140px", @type = "" }))
+                                <span id="invalidmembershipstartdate" class="field-validation-error" style="display:none">Invalid date</span>
+                                @*@Html.ValidationMessageFor(model => model.MembershipStartDate, "Required", new { @class = "Valmembershipstartdate" })*@
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Invoice Number", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(M => M.InvoiceNumber, new { @class = "k-textbox form-control  ", @style = "width:200px;", })
+                                @Html.ValidationMessageFor(model => model.InvoiceNumber)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Email ID", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(M => M.EmailId, new { @class = "k-textbox form-control", @style = "width:200px;", })
+                                @Html.ValidationMessageFor(model => model.EmailId)
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Revives Used", htmlAttributes: new { @class = "col-md-7  col-sm-3  control-label text-right " })
+                            <div class="col-sm-4">
+                                @Html.LabelFor(M => M.RevivesUsed, Model.RevivesUsed.ToString(), new { @class = "", @style = "width:200px;", })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Pending Revives", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right " })
+                            <div class="col-sm-4">
+                                @Html.LabelFor(M => M.PendingRevives, Model.PendingRevives.ToString(), new { @class = " ", @style = "width:200px;", })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Last Revive Used Date", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right " })
+                            <div class="col-sm-4">
+                                @Html.LabelFor(M => M.LastReviveUsedDate, Model.LastReviveUsedDate, new { @class = "", @style = "width:200px;" })
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                            @Html.Label("DOB", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-4">
+                                @(Html.Kendo().DatePickerFor(m => m.DOB)
+                                    .HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "DOB", @style = "width: 140px;" })
+                                )*@
+                        @*<span id="invalidDOB" class="field-validation-error" style="display:none">Invalid date</span>*@
+                        @*@Html.ValidationMessageFor(model => model.DOB)
+                                </div>
+                            </div>*@
+
+                        <div class="form-group">
+                            @Html.Label("Phone Number", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required", @id = "lblPhoneNumber1" })
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(M => M.MobileNumber, new { @class = "k-textbox form-control ", maxlength = "50", @id = "txtPhone", @style = "width:200px;", })
+                                @Html.ValidationMessageFor(model => model.MobileNumber)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Device2", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required", @id = "lblPhoneNumber2" })
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(M => M.Device2, new { @class = "k-textbox form-control ", maxlength = "50", @id = "txtDevice2", @style = "width:200px;", })
+                                @Html.ValidationMessageFor(model => model.Device2)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Device3", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required", @id = "lblPhoneNumber3" })
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(M => M.Device3, new { @class = "k-textbox form-control ", maxlength = "50", @id = "txtDevice3", @style = "width:200px;", })
+                                @Html.ValidationMessageFor(model => model.Device3)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Device4", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required", @id = "lblPhoneNumber4" })
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(M => M.Device4, new { @class = "k-textbox form-control ", maxlength = "50", @id = "txtDevice4", @style = "width:200px;", })
+                                @Html.ValidationMessageFor(model => model.Device4)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Device5", htmlAttributes: new { @class = "col-md-7  col-sm-3 control-label text-right required", @id = "lblPhoneNumber5" })
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(M => M.Device5, new { @class = "k-textbox form-control ", maxlength = "50", @id = "txtDevice5", @style = "width:200px;", })
+                                @Html.ValidationMessageFor(model => model.Device5)
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row spacer1">
+                </div>
+                <div class="row">
+                    <div class="col-md-6" style="width:100%;">
+                        <div class="col-md-4 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            @if (!Model.IsVoid)
+                            {
+                                <button id="btnUpdate" class="btn GreenBtn" type="submit">Update</button>
+                                <button id="btnVoidMembership" class="btn GreenBtn" type="button" onclick="VoidMembership()">Void Membership</button>
+                            }
+                            <button id="btnCancel" class="btn YellowBtn" type="button" onclick="CancelUpdateMemberShip()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1 spacer1">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    function CancelUpdateMemberShip() {
+        window.location.href = '@Url.Action("ManageMember", "ManageMembershipConfig")'; // Redirected to Page'../ManageMembershipConfig/ManageMember';
+    }
+
+
+    function ValidateVoidMembership() {
+        var value = 0;
+        var ManageMembersDetails = {
+            MembershipId: $("#MembershipId").val(),
+            Membership_Details_ID: $("#Membership_Det_ID").val()
+        };
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("/ValidateVoidMembership")', // Calling json method
+            dataType: 'json',
+            async: false,
+            data: { MembershipPara: ManageMembersDetails },
+            success: function (data) {
+                value = data;
+            },
+            error: function (ex) { $.alert({ content: 'Failed to void membership. ' + ex, confirm: function () { } }); }
+        });
+        return value;
+    }
+
+    function UpdateVoidMembership() {
+        var value = 0;
+        var ManageMembersDetails = {
+            MembershipId: $("#MembershipId").val(),
+            Membership_Details_ID: $("#Membership_Det_ID").val()
+        };
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("/UpdateVoidMembership")', // Calling json method
+            dataType: 'json',
+            async: false,
+            data: { MembershipPara: ManageMembersDetails },
+            success: function (data) {
+                value = data;
+            },
+            error: function (ex) { $.alert({ content: 'Failed to void membership. ' + ex, confirm: function () { } }); }
+        });
+        return value;
+    }
+
+
+
+
+
+    function VoidMembership() {
+
+        var data = ValidateVoidMembership();
+        var AlertMessages = 'Are you sure to void this membership?';
+        if (data != null) {
+
+            if (data.VoidExpire == 'Yes' && data.DryAttemptCount > 0) {
+                AlertMessages = 'This membership is past the ' + data.VoidDays + '" day return period.  Are you sure you want to void?'
+            }
+            if (data.VoidExpire == 'No' && data.DryAttemptCount > 0) {
+                AlertMessages = 'This membership has already used "' + data.DryAttemptCount + '" dry attempt.  Are you sure you want to void?'
+            }
+            if (data.VoidExpire == 'Yes' && data.DryAttemptCount == 0) {
+                AlertMessages = 'This membership is past the ' + data.VoidDays + ' day return period.  Are you sure you want to void?'
+            }
+            if (data.VoidExpire == 'No' && data.DryAttemptCount == 0) {
+                AlertMessages = 'Are you sure to void this membership?'
+            }
+
+        }
+
+        $.confirm({
+            content: AlertMessages, confirm: function () {
+                var DataResult = UpdateVoidMembership();
+                if (DataResult.WarningMessage == "updated") {
+                    window.location.href = '@Url.Action("ManageMember", "ManageMembershipConfig")'; // Redirected to Page'../ManageMembershipConfig/ManageMember';
+                }
+                else {
+                    toastr.error("void membership failed.");
+                    window.location.href = '@Url.Action("ManageMember", "ManageMembershipConfig")'; // Redirected to Page'../ManageMembershipConfig/ManageMember';
+                }
+            }, cancel: function () { }
+        });
+    }
+    function hideDeviceFields() {
+        $("#txtDevice2").hide();
+        $("#txtDevice3").hide();
+        $("#txtDevice4").hide();
+        $("#txtDevice5").hide();
+        $("#lblPhoneNumber2").hide();
+        $("#lblPhoneNumber3").hide();
+        $("#lblPhoneNumber4").hide();
+        $("#lblPhoneNumber5").hide();
+
+
+
+    }
+
+    $(document).ready(function () {
+        //Hide Error message MemberStartDate
+        $(".Valmembershipstartdate").hide();
+        hideDeviceFields();
+        var _custNoOfDevices = $("#custMaxNoOfDevices").val();
+        debugger;
+        var _IsMultiDevice = $("#IsMultiDevice").val();
+        if (_IsMultiDevice == 'True') {
+            if (_custNoOfDevices == 2) {
+                $("#txtDevice2").show();
+                $("#lblPhoneNumber2").show();
+
+            }
+            if (_custNoOfDevices == 3) {
+                $("#txtDevice2").show();
+                $("#txtDevice3").show();
+                $("#lblPhoneNumber2").show();
+                $("#lblPhoneNumber3").show();
+            }
+            if (_custNoOfDevices == 4) {
+                $("#txtDevice2").show();
+                $("#txtDevice3").show();
+                $("#txtDevice4").show();
+                $("#lblPhoneNumber2").show();
+                $("#lblPhoneNumber3").show();
+                $("#lblPhoneNumber4").show();
+
+            }
+            if (_custNoOfDevices == 5) {
+                $("#txtDevice2").show();
+                $("#txtDevice3").show();
+                $("#txtDevice4").show();
+                $("#txtDevice5").show();
+                $("#lblPhoneNumber2").show();
+                $("#lblPhoneNumber3").show();
+                $("#lblPhoneNumber4").show();
+                $("#lblPhoneNumber5").show();
+            }
+        }
+
+
+
+        //Update Button Event
+        $("#btnUpdate").click(function () {
+
+            $("#invalidmembershipstartdate").hide();
+            var membershipDatePicker = $("#MembershipStartDate").data("kendoDatePicker");
+            var msDate = Date.parse(membershipDatePicker.value());
+            $("#invalidmembershipstartdate").text("Invalid Date");
+
+            if ($("#MembershipStartDate").val() != "") {
+                if (!msDate) {
+                    $("#invalidmembershipstartdate").show();
+                    return false;
+                }
+            }
+
+            if (isNaN(msDate)) {
+                $("#invalidmembershipstartdate").text("Required");
+                $("#invalidmembershipstartdate").show();
+                return false;
+            }
+
+            //var dob = $("#DOB").data("kendoDatePicker");
+            //var cDate = new Date();
+
+            //if (dob._value > cDate) {
+            //    toastr.error("DOB should not greater than current date");
+            //    return false;
+            //}
+
+            //if (dob._value == null) {
+            //    $("#invalidDOB").show();
+            //    return false;
+            //}
+            //else { $("#invalidDOB").hide(); return true; }
+
+        });
+
+
+        $("#txtPhone").mask("(999) 999-9999", { autoclear: false });
+        $("#txtDevice2").mask("(999) 999-9999", { autoclear: false });
+        $("#txtDevice3").mask("(999) 999-9999", { autoclear: false });
+        $("#txtDevice4").mask("(999) 999-9999", { autoclear: false });
+        $("#txtDevice5").mask("(999) 999-9999", { autoclear: false });
+
+
+
+    });
+
+
+    @if (TempData["isMemberUpdatedSuccess"] != null && (bool)TempData["isMemberUpdatedSuccess"] == false)
+    {
+          <text>toastr.error('@TempData["ErrorMessages"]');</text>
+    }
+
+
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

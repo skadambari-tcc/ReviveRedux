@@ -1,0 +1,485 @@
+﻿@model Revive.Redux.Entities.ManageDebugParaModel
+
+@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@using System.Web.Optimization
+@using Revive.Redux.Repositories
+
+@{
+    ViewBag.Title = "ManageDebugPara";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .k-grid-content {
+        overflow-y: auto;
+        max-height: 250px;
+        overflow-x: auto;
+    }
+</style>
+
+
+
+<div class="modal-body" @*style="padding: 0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>Configure Debug Parameters</h2>
+                    </div>
+                    <div class="row">
+
+
+
+
+                        <div class="col-md-12 col-sm-12">
+                            <div class="col-md-4 col-sm-4">
+                                <div class="form-group">
+
+                                    <label class="col-md-6   col-sm-6 control-label text-right" style="margin-left:-30%" for="customers">Customer</label>
+                                    <div class="col-md-6  col-sm-6 ">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.CustomerId, new SelectList(ViewBag.culst, "Id", "Text"), "--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", onchange = "refreshManageDebugPara();" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <div class="form-group">
+                                    <label for="subsidiary" style="margin-left:-25%" class="col-md-6  col-sm-6  control-label text-right ">
+                                        Subsidiary
+                                    </label>
+                                    <div class="col-md-6  col-sm-6 ">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.SubsidiaryId, new SelectList(ViewBag.SubsidiaryLst, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter", onchange = "refreshManageDebugPara();" })
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <div class="form-group">
+
+                                    <div id="templ">
+
+                                        <label for="agent" style="margin-left:-18%" class="col-md-6  col-sm-6 control-label text-right">Agent</label>
+                                        <div class="col-md-6  col-sm-6 ">
+                                            <div class="select-icon">
+                                                @Html.DropDownListFor(model => model.SubAgentId, new SelectList(ViewBag.AgentLst, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter", @id = "SubAgentId", onchange = "refreshManageDebugPara();" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <div class="form-group">
+                                    <label for=" location" style="margin-left:-30%" class="col-md-6  col-sm-6  control-label text-right ">
+                                        Locations
+                                    </label>
+                                    <div class="col-md-6  col-sm-6 ">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.LocationId, new SelectList(ViewBag.Locations, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter", onchange = "refreshManageDebugPara();" })
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <div class="form-group">
+
+                                    <div id="templ">
+
+                                        <label for="softwareversion" style="margin-left:-25%" class="col-md-6  col-sm-6 control-label text-right">Template<span style="color:red">*</span></label>
+                                        <div class="col-md-6  col-sm-6 ">
+                                            <div class="select-icon">
+                                                @Html.DropDownListFor(model => model.templateId, new SelectList(ViewBag.templatelst, "Id", "Text"), "--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @id = "templates" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+
+
+                        <div class="col-md-8 col-sm-8"></div>
+                        <div class="col-md-4 col-sm-4" style="float: right;margin-right:4.5%;">
+                            <div class="col-md-5 col-sm-5 "></div>
+                            <div class="col-md-7 col-sm-7 ">
+
+                                <input type="button" title="Set Debug Parameter" style="text-align:right;" class="GreenBtn" id="setdebug" value="Set Debug Parameter" onclick="setDebugPara()" />
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid">
+                            @(Html.Kendo().Grid<ManageDebugParaModel>()
+                                                  .Name("ManageDebug")
+                                                  .Columns(columns =>
+                  {
+                      columns.Bound(p => p.CustomerId).Title("CustomerId").Visible(false);
+                      columns.Bound(p => p.Customer_Name).Title("Customer").Visible(true);
+                      columns.Bound(p => p.Location_Name).Title("Location").HtmlAttributes(new { @class = "longTextPopup", @id = "cus" });
+                      columns.Bound(p => p.MachineId_Val).Title("Machine ID").HtmlAttributes(new { @class = "longTextPopup", @id = "loc" });
+                      columns.Bound(p => p.Template_Name).ClientTemplate("<a href='/ManageMachineSpecs/EditPtmpl/#= TempalteId#@#= Template_Name#'>#=Template_Name# </a>").Title("Debug Template").HtmlAttributes(new { @class = "longTextPopup", @id = "ver" });
+                      columns.Bound(p => p.Template_VersionNumber).Title("All").ClientTemplate("<input type='checkbox' #= isSelected ? checked='checked':'' # class='inpchk' ></input>").HeaderTemplate("<input type='checkbox' id='chkSelectAll' class='chicher2' onchange='SelectAll(this)'/><span class='order_tittle' style='margin-top: 1px;'>All</span>").Filterable(false).Sortable(false);
+
+                  })
+                  .Pageable(pageable =>
+                  {
+                      pageable.Refresh(true);
+                      pageable.PageSizes(new int[] { 10, 20, 50 });
+                      pageable.Messages(messages => messages.Empty("No record found!"));
+                  })
+                  .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                       {
+                                           fs.Clear().Contains("Contains");
+                                           fs.DoesNotContain("Does not contain");
+                                           fs.IsEqualTo("Equal to");
+                                           fs.IsNotEqualTo("Not equal to");
+                                           fs.StartsWith("Starts with");
+                                           fs.EndsWith("Ends with");
+                                       })))
+                  .Sortable()
+                  .Scrollable()
+                  .HtmlAttributes(new { style = "width:92%" })
+                  .DataSource(dataSource => dataSource
+                  .Ajax().PageSize(10)
+                  .ServerOperation(false)
+                  .Read(read => read.Action("ManageDebugAjaxPara", "ManageMachineSpecs").Data("AddFilter"))
+                  .Events(events => events.Error("error_handler"))
+                  .Model(model => model.Id(p => p.MachineId))
+
+               )
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        Revive.Redux.Common.SetKendoGridHeight();
+        $("#CustomerId").change(function () {
+            $("#LocationId").empty();
+            $("#SubAgentId").empty();
+            $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            $("#LocationId").append('<option value="">' + "--Select--" + '</option>');
+            var cust_id = 0;
+            if ($("#CustomerId").val() != null && $("#CustomerId").val() != '') {
+                cust_id = $("#CustomerId").val();
+            }
+
+            if ($("#CustomerId").val() != "") {
+                $("#SubsidiaryId").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: cust_id },
+                    success: function (data) {
+                        $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+                        if (data.length > 0) {
+                            $.each(data, function (i, dataitem) {
+                                $("#SubsidiaryId").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                            });
+                        }
+                    },
+                    error: function (ex) {
+                        if ($("#CustomerId").val() != null && $("#CustomerId").val() != '')
+                            $.alert({ content: 'Failed to retrieve Subsidairy. ' + ex, confirm: function () { } });
+                    }
+                });
+            }
+            else {
+                $("#SubsidiaryId").empty();
+                $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+            }
+            return false;
+        });
+
+        $("#SubsidiaryId").change(function () {
+            $("#LocationId").empty();
+            $("#SubAgentId").empty();
+            $("#LocationId").append('<option value="">' + "--Select--" + '</option>');
+            if ($("#SubsidiaryId").val() != "") {
+
+                var nCustomerId = $("#CustomerId").val();
+                $("#SubAgentId").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetAgentBySubsidiary")', // Calling json method
+                    dataType: 'json',
+                    data: { SubsidiaryId: $("#SubsidiaryId").val() },
+                    success: function (data) {
+                        $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                        if (data.length > 0) {
+                            $.each(data, function (i, dataitem) {
+                                $("#SubAgentId").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                            });
+                        }
+                    },
+                    error: function (ex) {
+                        if ($("#SubsidiaryId").val() != null && $("#SubsidiaryId").val() != '')
+                            $.alert({ content: 'Failed to retrieve Agent. ' + ex, confirm: function () { } });
+                    }
+                });
+            }
+            else {
+                $("#SubAgentId").empty();
+                $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            }
+            return false;
+        });
+
+
+
+        $("#SubAgentId").change(function () {
+            $("#LocationId").empty();
+            if ($("#SubAgentId").val() != "") {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetCustomerLocationbyAgent")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: $("#CustomerId").val(), SubsidiaryId: $("#SubsidiaryId").val(), AgentId: $("#SubAgentId").val(), IsActive: true },
+                    success: function (LocationList) {
+                        if (LocationList.length > 0) {
+                            $("#LocationId").append('<option value="">' + "--Select--" + '</option>');
+                            $.each(LocationList, function (i, LocationList) {
+                                $("#LocationId").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                            });
+                        }
+                        else {
+                            $("#LocationId").append('<option value="">' + "--Select--" + '</option>');
+                        }
+                    },
+                    error: function (ex) { $.alert({ content: 'Failed to retrieve Location. ' + ex, confirm: function () { } }); }
+                });
+            }
+            else {
+                $("#LocationId").empty();
+                $("#LocationId").append('<option value="">' + "--Select--" + '</option>');
+            }
+        });
+
+    });
+</script>
+
+<script>
+    //select all checkbox function
+
+    function SelectAll(e) {
+
+        var state = $(e).is(':checked');
+        if (state == true) {
+            var grid = $('#ManageDebug').data("kendoGrid");
+            $.each(grid.dataSource.view(), function () {
+                $(".inpchk").prop('checked', 'checked');
+                if (this['isSelected'] != state)
+                    this['isSelected'] = state;
+            })
+        }
+        else {
+            $(".inpchk").removeAttr('checked');
+            var grid = $('#ManageDebug').data("kendoGrid");
+            $.each(grid.dataSource.view(), function () {
+                this['isSelected'] = false;
+            })
+
+
+        }
+    }
+
+
+    //select selected checkboxes
+
+    $(function () {
+        $('#ManageDebug').on('change', '.inpchk', function () {
+            var checked = $(this).is(':checked');
+            $("#chkSelectAll").removeAttr('checked');
+            if ($('.inpchk:checked').length == $('.inpchk').length) {
+                $("#chkSelectAll").prop('checked', 'checked');
+            }
+
+
+            var grid = $('#ManageDebug').data().kendoGrid;
+            var dataItem = grid.dataItem($(this).closest('tr'));
+            dataItem.set('isSelected', checked);
+        })
+    })
+
+    //function called on set debug btn and get current grid data
+
+    function setDebugPara() {
+        var grid = $('#ManageDebug').data().kendoGrid;
+
+        var items = $("#ManageDebug").data("kendoGrid").dataSource.data();
+        var st = 0;
+        for (var i = 0; i < items.length; i++) {
+
+            var item = items[i];
+            if (item.isSelected == false) {
+                st = st + 1;
+            }
+
+
+        }
+
+
+        if (temptoupdate == "") {
+
+
+            toastr.warning('Please select template!');
+
+
+        }
+
+
+        else if (st == items.length) {
+            toastr.warning('Please select machine to update!');
+        }
+
+
+        else {
+
+            var grid = $('#ManageDebug').data("kendoGrid");
+            var dat = grid.dataSource.data();
+
+
+            $.ajax({
+                type: "POST",
+                datatype: 'json',
+                url: "/ManageMachineSpecs/UpdTemplate",
+                data: JSON.stringify({ da: dat, templ: temptoupdate }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+
+                    // toastr.success();
+                }
+            }).done(function (data) {
+                //Successfully pass to server and get response
+
+                $('#ManageDebug').data().kendoGrid.dataSource.read(data);
+                $('#ManageDebug').data('kendoGrid').refresh();// or
+                if (data.result = "OK") {
+                    toastr.success('@ReviveMessages.Update');
+
+                    result = true;
+                    $("#chkSelectAll").removeAttr('checked')
+                }
+            })
+        }
+    }
+
+
+    //current selected template value
+    //current selected template value
+    temptoupdate = "";
+    $("#templates").on('change', function () {
+
+        temptoupdate = $("#templates").val();
+
+
+
+    });
+
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.alert({ content: message, confirm: function () { } });
+        }
+    }
+
+    //function for server side filtering the managedebug grid
+    function refreshManageDebugPara(e) {
+        $("#ManageDebug").data('kendoGrid').dataSource.read();
+        //$("#BatchGrid").data('kendoGrid').refresh();
+    }
+
+
+    //function for server side filtering the managedebug grid
+    function AddFilter() {
+        var gridData = $("#").data("kendoGrid")
+        var custfilter = $("#CustomerId").val();
+        var locfilter = $("#LocationId").val();
+        var Subsidiaryfilter = $("#SubsidiaryId").val();
+        var SubAgentfilter = $("#SubAgentId").val();
+
+
+     
+        if (custfilter == '' || custfilter == 0 || custfilter == '--Select--') {
+            custfilter = null;
+            locfilter = null;
+            Subsidiaryfilter = 0;
+            SubAgentfilter = 0;
+        }
+
+        if (locfilter == '' || locfilter == 0 || locfilter == '--Select--') {
+            locfilter = null;
+
+        }
+
+
+        if (Subsidiaryfilter == '' || Subsidiaryfilter == 0 || Subsidiaryfilter == '--Select--') {
+            Subsidiaryfilter = 0;
+            locfilter = null;
+            SubAgentfilter = 0;
+        }
+
+        if (SubAgentfilter == '' || SubAgentfilter == 0 || SubAgentfilter == '--Select--') {
+            SubAgentfilter = 0;
+            locfilter = null;
+        }
+
+        return { CustomerId: custfilter, LocationId: locfilter, SubsidiaryId: Subsidiaryfilter, SubAgentId: SubAgentfilter };
+    }
+
+
+
+
+
+</script>
+
+<script>
+    $(function () {
+        $("form").kendoValidator();
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

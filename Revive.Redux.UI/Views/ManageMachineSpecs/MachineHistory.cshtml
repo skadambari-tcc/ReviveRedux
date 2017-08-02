@@ -1,0 +1,258 @@
+﻿@model Revive.Redux.Entities.MachineHistoryLst
+@using Revive.Redux.Entities
+
+@{
+    ViewBag.Title = "Machine History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="modal-body">
+    <div class="row">
+        <div class=" contant_page">
+            <div class="col-md-12">
+                <!-- tittle -->
+                <div class="lable-align-top">
+                    <h2>Machine History</h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right">Customer</div>
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @*@Html.DropDownListFor(M => M.CustomerId, new SelectList(Model.CustomerNameList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName" })*@
+                                    @Html.DropDownListFor(model => model.CustomerId, new SelectList(ViewBag.culst, "Id", "Text"), "--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName" })
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right"> Subagent </div>
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @*@Html.DropDownListFor(M => M.SubAgentID, new SelectList(Model.SubAgentList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubAgentName"})*@
+                                    @Html.DropDownListFor(model => model.SubAgentID, new SelectList(ViewBag.AgentLst, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter", @id = "ddlSubAgentName" })
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right">Subsidiary</div>
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @*@Html.DropDownListFor(M => M.SubsidiaryID, new SelectList(Model.SubsidiaryList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubsidiaryName" })*@
+                                    @Html.DropDownListFor(model => model.SubsidiaryID, new SelectList(ViewBag.SubsidiaryLst, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter", @id = "ddlSubsidiaryName" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6  col-sm-3 control-label text-right"> Location </div>
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @*@Html.DropDownListFor(M => M.LocationId, new SelectList(Model.LocationList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlLocationName" })*@
+                                    @Html.DropDownListFor(model => model.LocationId, new SelectList(ViewBag.Locations, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter", @id = "ddlLocationName" })
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row spacer1 spacer1"></div>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="col-md-6 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            <button id="btnSearch" class="btn login_button btn-primary" type="submit" onclick="refreshManageMachineHistory()">Show Report</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-top:10px;">
+                    <div class="grid-align table-responsive Kendogrid">
+                        @(Html.Kendo().Grid<MachineHistoryLst>()
+
+                      .Name("ManageMachineHistory")
+      .DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(false)
+.Read(read => read.Action("ViewMachineHistory", "ManageMachineSpecs").Data("ManageMachineHistoryDetails"))
+                                    )
+                      .Columns(columns =>
+                      {
+                          columns.Bound(c => c.Location).Width(120).Title("Location");
+                          columns.Bound(c => c.MachineId_Val).Width(120).Title("Machine ID");
+                          columns.Bound(c => c.Status).Title("Status").Sortable(false).Width(80);
+                          columns.Bound(c => c.MachineId).ClientTemplate("<a title='Edit' onclick=\"Edit();\" href='" + Url.Action("EditMachineHistory", "ManageMachineSpecs") + "?Id=#= MachineId #' ' " + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>").Title("Edit").Filterable(false).Sortable(false).Width(80).HtmlAttributes(new { @style = "cursor:pointer" });
+                          columns.Bound(c => c.MachineId).Hidden(true);
+                      })
+                                            .Pageable(pageable =>
+                                    {
+                                        pageable.Refresh(true);
+                                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                                        pageable.Messages(messages => messages.Empty("No records available!"));
+                                    })
+                                    .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                        {
+                                            fs.Clear().Contains("Contains");
+                                            fs.DoesNotContain("Does not contain");
+                                            fs.IsEqualTo("Equal to");
+                                            fs.IsNotEqualTo("Not equal to");
+                                            fs.StartsWith("Starts with");
+                                            fs.EndsWith("Ends with");
+                                        })))
+                                    .Sortable()
+                                    .Scrollable()
+                                    .Filterable()
+                                    .HtmlAttributes(new { style = "width: 91%;" })
+                        )
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        Revive.Redux.Common.SetKendoGridHeight();
+        //$("#ManageMachineHistory").data('kendoGrid').dataSource.read();
+    });
+
+</script>
+<script type="text/javascript">
+
+    function ManageMachineHistoryDetails() {
+        var ManageMachineHistory = {
+            CustomerId: $("#ddlCustomerName").val(),
+            SubsidiaryID: $("#ddlSubsidiaryName").val(),
+            SubAgentID: $("#ddlSubAgentName").val(),
+            LocationId: $("#ddlLocationName").val()
+        };
+        return { objMachineHistoryParameter: ManageMachineHistory };
+    }
+
+    //function for server side filtering the MachineHistory grid
+    function refreshManageMachineHistory(e) {
+        $("#ManageMachineHistory").data('kendoGrid').dataSource.read();
+    }
+
+    // Customer dropdown change event
+    // Load Subsidiary on select of Customer
+    $("#ddlCustomerName").change(function () {
+        $("#ddlSubsidiaryName").empty();
+        $("#ddlSubAgentName").empty();
+        $("#ddlLocationName").empty();
+        $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+        $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+        var nCustomerId = $("#ddlCustomerName").val();
+        if (nCustomerId == '')
+        { nCustomerId = 0; }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+            dataType: 'json',
+            data: { CustomerId: nCustomerId },
+            success: function (subsidiaryLst) {
+                if (subsidiaryLst.length > 0) {
+                    $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+                    $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                        $("#ddlSubsidiaryName").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                    });
+                }
+                else {
+                    $("#ddlSubsidiaryName").empty();
+                    $("#ddlSubAgentName").empty();
+                    $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+                    $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                }
+            },
+            error: function (ex) { $.alert({ content: 'Failed to retrieve Subsidiary list. ' + ex, confirm: function () { } }); }
+        });
+        return false;
+    });
+
+    // Subsidiary dropdown change event
+    // Load Subagent on select of Subsidiary
+    $("#ddlSubsidiaryName").change(function () {
+        $("#ddlSubAgentName").empty();
+        $("#ddlLocationName").empty();
+        $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+        var nCustomerId = $("#ddlSubsidiaryName").val();
+        if (nCustomerId == '')
+        { nCustomerId = 0; }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("/GetAgentBySubsidiary")', // Calling json method
+            dataType: 'json',
+            data: { SubsidiaryId: nCustomerId },
+            success: function (subsidiaryLst) {
+                if (subsidiaryLst.length > 0) {
+                    $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                    $.each(subsidiaryLst, function (i, subsidiaryLst) {
+                        $("#ddlSubAgentName").append('<option value="' + subsidiaryLst.Id + '">' + subsidiaryLst.Text + '</option>');
+                    });
+                }
+                else {
+                    $("#ddlSubAgentName").empty();
+                    $("#ddlSubAgentName").append('<option value="">' + "--Select--" + '</option>');
+                }
+            },
+            error: function (ex) { $.alert({ content: 'Failed to retrieve SubAgent list. ' + ex, confirm: function () { } }); }
+        });
+        return false;
+    });
+
+
+    // SubAgent dropdown change event
+    // Load Location on select of SubAgent
+    $("#ddlSubAgentName").change(function () {
+        $("#ddlLocationName").empty();
+        var nCustomerId = $("#ddlCustomerName").val();
+        var nSubsidiaryId = $("#ddlSubsidiaryName").val();
+        var nSubAgentId = $("#ddlSubAgentName").val();
+
+        if (nCustomerId == '')
+        { nCustomerId = 0; }
+
+        if (nSubsidiaryId == '')
+        { nSubsidiaryId = 0; }
+
+        if (nSubAgentId == '')
+        { nSubAgentId = 0; }
+
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("/GetCustomerLocationbyAgent")', // Calling json method
+            dataType: 'json',
+            data: { CustomerId: nCustomerId, SubsidiaryId: nSubsidiaryId, AgentId: nSubAgentId, bActive: true },
+            success: function (LocationList) {
+                if (LocationList.length > 0) {
+                    $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                    $.each(LocationList, function (i, LocationList) {
+                        $("#ddlLocationName").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                    });
+                }
+                else {
+                    $("#ddlLocationName").empty();
+                    $("#ddlLocationName").append('<option value="">' + "--Select--" + '</option>');
+                }
+            },
+            error: function (ex) { $.alert({ content: 'Failed to retrieve Location list. ' + ex, confirm: function () { } }); }
+        });
+        return false;
+    });
+
+    
+    @if (TempData["isUpdatedSuccess"] != null && (bool)TempData["isUpdatedSuccess"] == true)
+    {        
+        <text>toastr.success('@TempData["ViewModelMsg"]');</text>
+    }
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

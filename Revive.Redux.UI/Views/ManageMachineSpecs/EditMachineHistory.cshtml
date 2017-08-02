@@ -1,0 +1,427 @@
+﻿@model Revive.Redux.Entities.EditMachineHistory
+@{
+    ViewBag.Title = "Edit Machine History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .imageTransform {
+        margin-top: 100px;
+        -ms-transform: rotate(90deg); /* IE 9 */
+        -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+        transform: rotate(90deg);
+        border: 2px solid #000;
+    }
+</style>
+<input type="hidden" id="RecordID" name="RecordID" />
+<!--Shipping Label data-->
+<div id="ShippingLabelGridModal" class="modal" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Shipping Label</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" style="height:400px;">
+                        <img name="img_label" class="ImgLabel imageTransform" id="img_label" height="200" width="400" src="" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Attachments-->
+<div id="DocumentGridModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Documents</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive kendogrid">
+                    @{
+                        @(Html.Kendo().Grid(Model.MachineDocs)
+                                .Name("MachineDocumentGrid")
+                                        .DataSource(dataSource => dataSource
+                                        .Ajax().PageSize(10)
+                                        .ServerOperation(false)
+                                        .Read(read => read.Action("ManageMachineDocumentsAjax", "ManageMachineSpecs").Data("MachineDocPara"))
+                                        )
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(c => c.Machine_Doc_Name).ClientTemplate("<a  href='" + Url.Action("DownloadFileActual", "ManageMachineSpecs") + "?DocDetails=#= Machine_ID #,#= Machine_Doc_Name#''  " + ">\"#=Machine_Doc_Name#\"</a>").Width(200).Title("Document Name").HtmlAttributes(new { @style = "cursor:pointer" });
+                                    columns.Bound(c => c.Created_Date).Width(100).Title("Date Uploaded").Format("{0:MM-dd-yyyy}");
+                                    columns.Bound(c => c.Machine_ID).Visible(false);
+                                    columns.Bound(c => c.Machine_Doc_type).Visible(false);
+                                })
+
+                                .HtmlAttributes(new { style = "width: 555px;" })
+                                .Pageable(pageable =>
+                                {
+                                    pageable.Refresh(true);
+                                    pageable.Messages(messages => messages.Empty("No Documents found"));
+                                    pageable.PageSizes(new int[] { 10, 20, 50 });
+                                })
+                                .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                        {
+                                            fs.Clear().Contains("Contains");
+                                            fs.DoesNotContain("Does not contain");
+                                            fs.IsEqualTo("Equal to");
+                                            fs.IsNotEqualTo("Not equal to");
+                                            fs.StartsWith("Starts with");
+                                            fs.EndsWith("Ends with");
+                                        })))
+                                .Sortable()
+                                .Scrollable()
+                        )
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Delete Machine History Modal-->
+<input type="hidden" id="MachineHistoryID" name="DeleteMachineHistory" />
+<div id="myModalDelete" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    @Html.Label("Title", htmlAttributes: new { @class = "", @id = "lblTitleDelete" })
+                </div>
+            </div>
+            <!-- dialog buttons -->
+            <div class="modal-footer footerbtn">
+                <button type="button" id="Deletebtn" class="btn GreenBtn" data-dismiss="modal">YES</button>
+                <button type="button" class="btn YellowBtn" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("UpdateMachineHistory", "ManageMachineSpecs", FormMethod.Post, new { id = "EditMachineHistory", name = "EditMachineHistory", enctype = "multipart/form-data" }))
+{
+    <div class=" contant_page">
+        @Html.ValidationSummary(true)
+
+        @Html.HiddenFor(m => m.MachineId)
+        @Html.HiddenFor(m => m.MachineId_Val)
+        @Html.HiddenFor(m => m.Manufacturer)
+        @Html.HiddenFor(m => m.LastReportedSoftwareVersion)
+        @Html.HiddenFor(m => m.CustomerId)
+        @Html.HiddenFor(m => m.LocationId)
+        @Html.HiddenFor(m => m.SubsidiaryId)
+        @Html.HiddenFor(m => m.SubAgentId)
+        @Html.HiddenFor(m => m.TransactionTypeId)
+        <div class="row">
+            <div class="lable-align-top">
+                <h2>Edit Machine History</h2>
+            </div>
+            <div class="col-md-7">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MachineId_Val, new { @class = "control-label col-md-4 text-right " })
+                    <div class="col-md-5">
+                        @Html.DisplayFor(model => model.MachineId_Val)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Manufacturer, new { @class = "control-label col-md-4 text-right " })
+                    <div class="col-md-5">
+                        @Html.DisplayFor(model => model.Manufacturer)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LastReportedSoftwareVersion, new { @class = "control-label col-md-4 text-right " })
+                    <div class="col-md-5">
+                        @Html.DisplayFor(model => model.LastReportedSoftwareVersion)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4  col-sm-3 control-label text-right required"> Reason Type </div>
+                    <div class="col-sm-5">
+                        <div class="select-icon">
+                            @Html.DropDownListFor(model => model.ReasonType, new SelectList(Model.ReasonTypeList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlReasonType" })
+                            @Html.ValidationMessageFor(m => m.ReasonType)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Notes, new { @class = "control-label col-md-4 text-right " })
+                    <div class="col-md-7">
+                        @Html.TextAreaFor(model => model.Notes, new { @class = " form-control form-controls", @style = "width:100%!Important" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Attachment_Path, new { @class = "control-label col-md-4 text-right ", style = "padding-top: 12px;" })
+                    @(Html.Kendo().Upload()
+                    .Name("files")
+                    .Multiple(true)
+                    .Messages(m => m.Select("Select file"))
+                    .HtmlAttributes(new { @accept = ".jpg,.png", @class = "" })
+                    .Events(events => events.Select("check_extension").Remove("onRemove"))
+
+                    )
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <div class="form-group">
+                    <div class="col-md-4  col-sm-3 control-label text-right required"> Status </div>
+                    <div class="col-sm-5">
+                        <div class="select-icon">
+                            @Html.DropDownListFor(model => model.Status_MachineHistory, new SelectList(Model.StatusTypeList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlStatus" })
+                            @Html.ValidationMessageFor(m => m.Status_MachineHistory)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top:10px;">
+            <div class="col-md-2  col-sm-12 control-label text-right">Machine Details </div>
+            <div>
+                <div class="grid-align table-responsive Kendogrid">
+                    @(Html.Kendo().Grid(Model.MachineGridList)
+                        .Name("ManageMachineHistoryGrid")
+                        .DataSource(dataSource => dataSource.Ajax().PageSize(10).ServerOperation(true)
+                        .Read(read => read.Action("ViewEditMachineHistory", "ManageMachineSpecs").Data("EditMachineHistoryPara"))
+                                    )
+                      .Columns(columns =>
+                      {
+                          columns.Bound(c => c.EventDate).Width(120).Title("Date").ClientTemplate("#= kendo.toString(kendo.parseDate(EventDate, 'yyyy-MM-dd HH:mm:ss'), 'MM-dd-yyyy HH:mm:ss') #");
+                          columns.Bound(c => c.Customer).Width(80).Title("Customer");
+                          columns.Bound(c => c.Subsidiary).Width(80).Title("Subsidiary");
+                          columns.Bound(c => c.SubAgent).Width(80).Title("SubAgent");
+                          columns.Bound(c => c.Location).Width(80).Title("Location");
+                          columns.Bound(c => c.Transaction_Type).Width(120).Title("Transaction Type").ClientTemplate("# if (Transaction_Type == 'InitialDeploymentNotToDelete') { # Initial Deployment #}else{# #=Transaction_Type# #}#");
+                          columns.Bound(c => c.Notes_Lst).Width(120).Title("Notes");
+                          columns.Bound(c => c.MachineHistoryId).Width(50).Title("View").ClientTemplate("# if (Attachment_Path_Lst == 'Exist') { # <a onclick=\"ViewMachineDocuments('#=MachineHistoryId#');\"><i class='fa fa-eye fa-lg icon-color' , style='align:center'></i></a># }else if(ShippingLabelData!=null){#  <a onclick=\"ViewMachineShippingLabel('#=ShippingLabelData#');\"><i class='fa fa-eye fa-lg icon-color' , style='align:center'></i></a> #}else{}#").Filterable(false).Sortable(false).Width(50).HtmlAttributes(new { @style = "cursor:pointer" });
+                          //columns.Bound(p => p.MachineHistoryId).ClientTemplate("<a onclick='return deleteMachineHistoryAction(\"#=MachineHistoryId#\")' href='javascript:void(0);'><img src='" + Url.Content("~/Scripts/images/delite_icon.png") + "' /></a>").Title("Delete").Filterable(false).Sortable(false).HtmlAttributes(new { @style = "cursor:pointer" });
+                      })
+                                            .Pageable(pageable =>
+                                    {
+                                        pageable.Refresh(true);
+                                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                                        pageable.Messages(messages => messages.Empty("No records available!"));
+                                    })
+                                    .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                        {
+                                            fs.Clear().Contains("Contains");
+                                            fs.DoesNotContain("Does not contain");
+                                            fs.IsEqualTo("Equal to");
+                                            fs.IsNotEqualTo("Not equal to");
+                                            fs.StartsWith("Starts with");
+                                            fs.EndsWith("Ends with");
+                                        })))
+                                    .Sortable()
+                                    .Scrollable()
+                                    .Filterable()
+                                    .HtmlAttributes(new { style = "width: 91%;" })
+                    )
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 1%;padding-bottom:1%;">
+            <div class="col-md-3"></div>
+            <div class="col-md-8">
+                <div class="col-md-3 col-sm-3"></div>
+                <div class="col-md-6 col-sm-6">
+                    <input type="button" id="SaveMachineHistory" value="Submit" class="GreenBtn" />
+                    <input type="button" value="Cancel" id="btnCancel" class="YellowBtn " onclick="" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        Revive.Redux.Common.SetKendoGridHeight()
+    });
+
+    //Delete MachineHistory
+    function deleteMachineHistoryAction(MachineHistoryID) {
+        $('#myModalDelete').modal('show');
+        $("#lblTitleDelete").text("Do you want to delete this Machine Detail/History?");
+        $("#MachineHistoryID").val(MachineHistoryID);
+    }
+
+    $('#Deletebtn').click(function (e) {
+        var MachineHistoryID = $("#MachineHistoryID").val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteMachineHistory", "ManageMachineSpecs")',
+            data: JSON.stringify({ "MachineHistoryID": MachineHistoryID }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+        }).done(function (result) {
+            $('#ManageMachineHistoryGrid').data().kendoGrid.dataSource.read(); // or
+            if (result != " ") {
+                if (result == "Success") {
+                    toastr.success('Machine History deleted Successfully!');
+                }
+                else if (result == "Fail") {
+                    toastr.warning('There is some error deleting Machine History!');
+                }
+                else {
+                    toastr.warning(result);
+                }
+            }
+        })
+    });
+
+    $("#SaveMachineHistory").click(function (e) {
+        var validateflag = true;
+        var FilesCount = count - CountOnRemove;
+        if (FilesCount > 5) {
+            toastr.error("maximum 5 files.");
+            validateflag = false;
+        }
+        if (!$('#EditMachineHistory').valid()) {
+            $("#SaveMachineHistory").prop('disabled', false);
+            validateflag = false;
+        }
+        else {
+            if (validateflag == true) {
+                $("#SaveMachineHistory").prop('disabled', true);
+                $('#EditMachineHistory').submit();
+            }
+        }
+
+    });
+
+    // Cancel Button Click event
+    $("#btnCancel").click(function () {
+        window.location.href = '@Url.Action("MachineHistory", "ManageMachineSpecs")';
+    });
+
+
+    function ViewMachineDocuments(MachineHistoryId) {
+
+        $("#RecordID").val(MachineHistoryId);
+        $('#DocumentGridModal').css("visibility", "visible");
+        $('#DocumentGridModal').modal('show');
+        $('#MachineDocumentGrid').data().kendoGrid.dataSource.read();
+    }
+
+    function ViewMachineShippingLabel(ShippingLabelData) {
+        $('#ShippingLabelGridModal').css("visibility", "visible");
+        $('#ShippingLabelGridModal').modal('show');
+        $("#img_label").attr('src', 'data:image/png;base64,' + ShippingLabelData);
+    }
+
+    function MachineDocPara() {
+        var MachineHistoryId = $("#RecordID").val();
+        var MachineId = $("#MachineId").val();
+        return {
+            Id: MachineHistoryId, MacId: MachineId
+        };
+    }
+
+    function EditMachineHistoryPara() {
+        var ManageMachineHistory = {
+            MachineId: $("#MachineId").val(),
+            MachineHistoryId: $("#MachineHistoryId").val()
+        };
+        return { objMachineHistoryParameter: ManageMachineHistory };
+    }
+
+    var count = 0;
+    function check_extension(e) {
+        var files = e.files;
+        var Result = true;
+
+        var filesInList = $(".k-upload-files .k-filename");
+        for (var i = 0; i < files.length; i++) {
+            var filename = files[i].name;
+
+            filesInList.each(function () {
+                if ($(this).text() === filename) {
+                    e.preventDefault();
+                    $.alert({ content: 'Duplicate files cannot be uploaded!', confirm: function () { } });
+                    Result = false;
+                }
+            });
+        }
+
+        $.each(files, function () {
+
+            //if (this.extension.toLowerCase() != ".pdf") {
+            //    if (this.extension.toLowerCase() != ".doc") {
+            if (this.extension.toLowerCase() != ".jpg") {
+                if (this.extension.toLowerCase() != ".png") {
+                    //if (this.extension.toLowerCase() != ".xlsx") {
+                    //    if (this.extension.toLowerCase() != ".xls") {
+                    toastr.error("Only .jpg, .jpeg or .png files can be uploaded!");
+                    e.preventDefault();
+                    Result = false;
+                }
+            }
+            //            }
+            //        }
+            //    }
+            //}
+
+            if (this.size / 1024 < 10) {
+                toastr.error("Min 10kb file size is allowed!")
+                e.preventDefault();
+                Result = false;
+            }
+
+            if (this.size / 1024 / 1024 > 5) {
+                toastr.error("Max 5Mb file size is allowed!")
+                e.preventDefault();
+                Result = false;
+            }
+        });
+
+        if (Result != false) {
+            $.each(files, function () {
+                count++;
+            });
+        }
+
+        return Result;
+    }
+
+    var CountOnRemove = 0;
+    function onRemove(e) {
+        var files = e.files;
+        //var x = $("#files").data("kendoUpload");
+        //var FileExist = value;
+        //if (FileExist == "False") {
+        //    //x.element.context.files.length
+        //    if (count == 0) {
+        //        x.element.context.value = "";
+        //        $('#fileUpload').show();
+        //    }
+        //}
+        $.each(files, function () {
+            CountOnRemove++;
+        });
+
+    }
+
+
+</script>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

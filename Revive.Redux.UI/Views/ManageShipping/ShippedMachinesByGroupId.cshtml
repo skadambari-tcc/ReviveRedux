@@ -1,0 +1,76 @@
+﻿@model Revive.Redux.Entities.ShippedMachines
+@{
+    ViewBag.Title = "Shipped Machines";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.UI.Fluent
+
+<!DOCTYPE html>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div>
+                    <div class="row">
+                        @Html.DropDownListFor(M => M.GroupId, new SelectList(Model.LocationGroupList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlGroupList" })
+                    </div>
+
+
+                    <div class="row"><div style="margin-left: 0.5%;"><h2>Shipped Machines</h2></div></div>
+                    <div class="row">
+                        <div class="col-md-7"></div>
+                        <div class="col-md-4" style="float: right;">
+                         
+                        </div>
+                    </div>
+                    <br />
+                    <div class="Kendogrid table-responsive" style="margin-left:-0.8%">
+
+                        @(Html.Kendo().Grid<Revive.Redux.Entities.ShippedMachines>()
+                                .Name("ShippedMachines")
+                                .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(10)
+                                        .Read("GetShippedMachines", "ManageShipping")
+                                .ServerOperation(false)
+
+                        )
+                    .Columns(columns =>
+                        {
+                            columns.Bound(c => c.Customer).Width(60).Title("Customer");
+                            columns.Bound(c => c.SubAgent).Width(60).Title("SubAgent");
+                            columns.Bound(c => c.Location).Width(100).Title("Location");
+                            columns.Bound(c => c.StoreNumber).Width(100).Title("Store");
+                            columns.Bound(c => c.TrackNumber).Width(100).Title("Tracking Number");
+                           
+                        })
+
+                                .HtmlAttributes(new { style = "width: 100%;" })
+                                .Pageable(pageable =>
+                                    {
+                                        pageable.Refresh(true);
+                                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                                        pageable.Messages(messages => messages.Empty("No record found!"));
+                                    })
+                                    .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                    {
+                                        fs.Clear().Contains("Contains");
+                                        fs.DoesNotContain("Does not contain");
+                                        fs.IsEqualTo("Equal to");
+                                        fs.IsNotEqualTo("Not equal to");
+                                        fs.StartsWith("Starts with");
+                                        fs.EndsWith("Ends with");
+                                    })))
+                                .Sortable()
+                                .Scrollable()
+
+
+                        )
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

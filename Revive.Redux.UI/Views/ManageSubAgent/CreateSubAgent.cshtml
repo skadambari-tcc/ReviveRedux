@@ -1,0 +1,530 @@
+﻿@model Revive.Redux.Entities.ManageSubAgentModel
+@{
+    ViewBag.Title = "Create SubAgent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("AddSubAgent", "ManageSubAgent", FormMethod.Post, new { @id = "frmSubAgent" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 nomargin nopadding">
+                <div class="contant_page">
+                    <!-- tittle -->
+                    <div class="row">
+                        <div class="col-md-8 nomargin nopadding">
+                            @if (ViewData["Create"].ToString() == "false")
+                            {
+                                <h2 style="margin-left:2%">Create Sub-Agent</h2>
+                            }
+                            else
+                            {
+                                <h2 style="margin-left:2%">Edit Sub-Agent</h2>
+                            }
+
+                            @Html.HiddenFor(m => m.SubAgent_ID)
+                        </div>
+
+                        <div class="col-md-4 nopadding Account_display">
+                            <h4 class="align-right" style="margin-right:4%">Sub Agent Contact Details</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("Name", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right required" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.SubAgent_Name, new { @class = "form-control", @id = "txtName", maxlength = "100", required = "required" })
+                                    <div>
+                                        @Html.ValidationMessageFor(model => model.SubAgent_Name, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(M => M.CustomerId, htmlAttributes: new { @class = " required col-md-5  col-sm-3 control-label text-right required" })
+                                <div class="col-md-7 col-sm-9">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.CustomerId, new SelectList(ViewBag.Customerlst, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName" })
+                                        @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(M => M.SubsidiaryId, htmlAttributes: new { @class = " required col-md-5  col-sm-3 control-label text-right required" })
+                                <div class="col-md-7 col-sm-9">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.SubsidiaryId, new SelectList(ViewBag.Subsidiarylst, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlSubsidiaryName" })
+                                        @Html.ValidationMessageFor(model => model.SubsidiaryId, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(M => M.AccountmanagerUserID, htmlAttributes: new { @class = " required col-md-5  col-sm-3 control-label text-right required" })
+                                <div class="col-md-7 col-sm-9">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.AccountmanagerUserID, new SelectList(ViewBag.AccountMgrlst, "CompleteId", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "txtAccountMgr" })
+                                        @Html.ValidationMessageFor(model => model.AccountmanagerUserID, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("SubAgent ID", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right required" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.SubAgent_Ref_Code, new { @class = "form-control ",@AutoComplete="off", @id = "SubAgent_Ref_Code" })
+                                    @Html.ValidationMessageFor(M => M.SubAgent_Ref_Code, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("ZipCode", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Primary_ZipCode, new { @class = "form-control numericOnly ", maxlength = "5", @id = "txtZipCode" })
+                                    @Html.ValidationMessageFor(M => M.Primary_ZipCode, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Phone", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Primary_Phone, new { @class = "form-control", maxlength = "50", @id = "txtPhone" })
+                                    @Html.ValidationMessageFor(model => model.Primary_Phone, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Address", htmlAttributes: new { @class = "required col-md-5  col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextAreaFor(M => M.Primary_Address, new { @class = "form-control", maxlength = "100", @id = "txtAddress1" })
+                                    @Html.ValidationMessageFor(model => model.Primary_Address, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group display ">
+                                @Html.Label("State", htmlAttributes: new { @class = "col-md-5 required col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.Primary_State, new SelectList(ViewBag.Statelst, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", maxlength = "50" })
+                                        @Html.ValidationMessageFor(model => model.Primary_State, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                @Html.Label("City", htmlAttributes: new { @class = "required col-md-5  col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    <div>
+                                        @Html.TextBoxFor(M => M.Primary_City_Name, new { @class = "form-control ", @id = "txtCityName" })
+                                        @Html.ValidationMessageFor(model => model.Primary_City_Name, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(M => M.UserTypeID, htmlAttributes: new { @class = " required col-md-5  col-sm-3 control-label text-right required" })
+                                <div class="col-md-7 col-sm-9">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.UserTypeID, new SelectList(ViewBag.UserTypelst, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "txtAccountMgr" })
+                                        @Html.ValidationMessageFor(model => model.UserTypeID, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Lease Start Date", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @(Html.Kendo().DatePickerFor(m => m.Lease_Start_Date).HtmlAttributes(new { @class = "DisableKeyboardInput", @id = "StartDate", @style = "width: 100%;" })
+                                    )
+                                    <span id="invalidstartdate" class="field-validation-error" style="display:none">Invalid date</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Lease End Date", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @(Html.Kendo().DatePickerFor(m => m.Lease_end_date).Events(e => e.Change("endChange")).HtmlAttributes(new { @class = "DisableKeyboardInput ", @id = "EndDate", @style = "width: 100%;" }))
+                                    <span id="date" class="field-validation-error" style="display:none">Start date should be less than end date</span>
+                                    <span id="invalidenddate" class="field-validation-error" style="display:none">Invalid date</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="col-md-4 nopadding Account_display2">
+                                <h4 class="align-right">Account Manager Details</h4>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Copy address from SubAgent", htmlAttributes: new { @class = " col-md-10  col-sm-6  control-label text-right", @id = "CopyData" })
+                                <div class="col-sm-2">
+                                    <input id="inputtype1" class="check" type="checkbox" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Ship To Attention", htmlAttributes: new { @class = " required col-md-5  col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.ShiptoAttention, new { @class = "form-control ", maxlength = "100", @id = "txtShipAttentionname" })
+                                    @Html.ValidationMessageFor(model => model.ShiptoAttention, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Name", htmlAttributes: new { @class = " required col-md-5  col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Acct_manager_Name, new { @class = "form-control ", maxlength = "100", @id = "txtNameCopy" })
+                                    @Html.ValidationMessageFor(model => model.Acct_manager_Name, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Address", htmlAttributes: new { @class = "required col-md-5  col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextAreaFor(M => M.Acct_manager_Primary_Address, new { @class = "form-control ", maxlength = "100", @id = "txtAddress1Copy" })
+                                    @Html.ValidationMessageFor(model => model.Acct_manager_Primary_Address, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                @Html.Label("ZipCode", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Acct_manager_Primary_Zip, new { @class = "form-control numericOnly", maxlength = "5", @id = "txtZipCodeCopy" })
+                                    @Html.ValidationMessageFor(M => M.Acct_manager_Primary_Zip, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                @Html.Label("State", htmlAttributes: new { @class = "col-md-5 required col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.Acct_manager_Primary_State, new SelectList(ViewBag.Statelst, "Id", "Text"), "--Select--", new { @class = " form-control pull-right topspace selecter", maxlength = "50" })
+                                        @Html.ValidationMessageFor(M => M.Acct_manager_Primary_State, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("City", htmlAttributes: new { @class = "required col-md-5  col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    <div>
+                                        @Html.TextBoxFor(M => M.Acct_manager_Primary_City_Name, new { @class = "form-control ", @id = "txtAcctCityName" })
+                                        @Html.ValidationMessageFor(model => model.Acct_manager_Primary_City_Name, "", new { @class = "text-danger Aligntext" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                @Html.Label("Phone", htmlAttributes: new { @class = "col-md-5  col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Acct_manager_Primary_Phone, new { @class = "form-control", maxlength = "50", @id = "txtPhoneCopy" })
+                                    @Html.ValidationMessageFor(model => model.Acct_manager_Primary_Phone, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Email", htmlAttributes: new { @class = "col-md-5 required col-sm-3 control-label text-right" })
+                                <div class="col-md-7 col-sm-9">
+                                    @Html.TextBoxFor(M => M.Email_ID, new { @class = "form-control", maxlength = "50", @id = "txtEmail" })
+                                    @Html.ValidationMessageFor(model => model.Email_ID, "", new { @class = "text-danger Aligntext" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-6">
+                        <div class="col-md-12 col-md-offset-1 col-sm-6">
+                            <button id="btnSavedata" class="btn GreenBtn" type="button">Save</button>
+                            <button id="btnCancel" class="btn YellowBtn" onclick='CancelCreateCustomer()' type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<style type="text/css">
+    #body {
+        height: auto;
+    }
+
+    .Aligntext {
+        display: block;
+        width: 15em;
+        word-wrap: break-word;
+        /*white-space:normal;*/
+    }
+
+    .k-reset {
+        /*border: 0 none;*/
+        font-size: 100%;
+        list-style: outside none none;
+        /*margin: 0;*/
+        outline: 0 none;
+        /*padding: 0;*/
+        text-decoration: none;
+        /*width: 190px !important;*/
+        /*padding-top: 5%*/
+    }
+
+    .k-upload-files {
+        margin: 0 0 .6em;
+        /*line-height: 1.5;*/
+        border-style: solid;
+        border-width: 1px 0 0;
+    }
+
+    .k-input {
+        height: inherit !important;
+        /* border: 0 none;
+
+     line-height: 1.65em!important;
+     margin: 0;
+    padding: 0.177em 0;
+     padding: 1em!important;
+     text-indent: 4px!important;*/
+    }
+
+    .modal.fade.in {
+        top: 5%;
+    }
+
+    .modal-open .modal {
+        overflow-x: hidden;
+        /* overflow-y: auto; */
+    }
+
+    .col-md-offset-1 {
+        margin-left: 10.333333%;
+    }
+
+    .k-widget.k-upload.k-header.k-upload-sync {
+        background-color: transparent;
+        border: 0 none;
+    }
+
+    .col-md-offset-8 {
+        margin-left: 75%;
+    }
+</style>
+<script type="text/javascript">
+    $(".DisableKeyboardInput").keypress(function () {
+        return false;
+    });
+    var validateflag = true;
+    var value = '@ViewBag.File';
+    $(document).on('click', '.check', function () {
+        if ($(this).prop('checked')) {
+
+            $('#txtNameCopy').val($('#txtName').val());
+            $('#txtShipAttentionname').val($('#txtName').val());
+            
+
+            $('#txtAddress1Copy').val($('#txtAddress1').val());
+            //Copy Primary State value to AcctMgr State only when primary state is not null
+
+            //If Primary State value is null and the on Check Box click Copy null value to Acct Mge State And unload AcctMgr City
+
+            $('#txtZipCodeCopy').val($('#txtZipCode').val());
+            $('#txtPhoneCopy').val($('#txtPhone').val());
+            $('#txtEmailCopy').val($('#txtEmail').val());
+            $('#txtAcctCityName').val($('#txtCityName').val());
+
+            if ($("#Primary_State").val() != "") {
+                $('#Acct_manager_Primary_State').val($('#Primary_State').val());
+            }
+            //If Primary State value is null and the on Check Box click Copy null value to Acct Mge State And unload AcctMgr City
+            if ($("#Primary_State").val() == "") {
+                $('#Acct_manager_Primary_State').val($('#Primary_State').val());
+            }
+
+        }
+        else {
+            $('#txtNameCopy').val('');
+            $('#txtAddress1Copy').val('');
+            $('#txtZipCodeCopy').val('');
+            $('#txtPhoneCopy').val('');
+            $('#txtEmailCopy').val('');
+            $('#txtAcctCityName').val('');
+            $('#Acct_manager_Primary_State').val('');
+        }
+    });
+
+    $(".DisableKeyboardInput").keydown(function (e) {
+        if (e.shiftKey || e.ctrlKey || e.altKey) {
+            e.preventDefault();
+        }
+        var key = e.keyCode;
+        if (((key == 32) || (key >= 65 && key <= 90) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105))) {
+            e.preventDefault();
+        }
+        if ((key >= 35 && key <= 40) || (key == 46)) {
+
+        }
+    });
+
+    function CheckStartDate()
+    {
+        var startPicker = $("#StartDate").data("kendoDatePicker");
+        if (startPicker._value == null) {
+            $("#invalidstartdate").show();
+            return false;
+        }
+        else { $("#invalidstartdate").hide(); return true; }
+    }
+
+    function CheckEndDdate()
+    {
+        var endPicker = $("#EndDate").data("kendoDatePicker");
+        if (endPicker._value == null) {
+            $("#invalidenddate").show();
+            return false;
+        } else { $("#invalidenddate").hide(); return true; }
+    }
+
+    $(document).ready(function () {
+
+
+        Revive.Redux.Common.SetParentMenuSelected('Customers');
+        $("#txtPhoneCopy").mask("(999) 999-9999", { autoclear: false });
+        $("#txtPhone").mask("(999) 999-9999", { autoclear: false });
+        //File Upload Validation on Save Click
+        $("#btnSavedata").click(function (e) {
+
+            $("#invalidstartdate").hide();
+            $("#invalidenddate").hide()
+
+            var startPicker = $("#StartDate").data("kendoDatePicker");
+            var endDate = $("#EndDate").data("kendoDatePicker");
+
+            var sDate = Date.parse(startPicker.value());
+            var eDate = Date.parse(endDate.value());
+            if ($("#StartDate").val() != "" && $("#EndDate").val() != "") {
+                if (!sDate && !eDate) {
+                    $("#invalidstartdate").show();
+                    $("#invalidenddate").show();
+                    validateflag = false;
+                }
+            }
+            if ($("#StartDate").val() != "") {
+                if (!sDate) {
+                    $("#invalidstartdate").show();
+                    validateflag = false;
+                }
+            }
+            if ($("#EndDate").val() != "") {
+                if (!eDate) {
+                    $("#invalidenddate").show();
+                    validateflag = false;
+                }
+            }
+            else { }
+
+            if (startPicker.value() != null && endDate.value() != null) {
+                if (endDate.value() < startPicker.value()) {
+                    $("#date").show();
+                    validateflag = false;
+
+                }
+            }
+
+            //Work if button type =button to validate complete form
+            if (!$('#frmSubAgent').valid()) {
+                $("#frmSubAgent").prop('disabled', false);
+                return false;
+            }
+            else {
+                if (validateflag == true) {
+                    $("#btnSavedata").prop('disabled', true);
+                    $('#frmSubAgent').submit();
+                }
+                // else { return false; }
+            }
+            //Validate Upload Control
+            validateflag = true;
+        });
+        // Validation End
+
+        // Customer dropdown change event
+        $("#ddlCustomerName").change(function () {
+            if ($("#ddlCustomerName").val() != "") {
+                $("#ddlSubsidiaryName").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: $("#ddlCustomerName").val() },
+                    success: function (data) {
+                        $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+                        if (data.length > 0) {
+                            $.each(data, function (i, dataitem) {
+                                $("#ddlSubsidiaryName").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                            });
+                        }
+                    },
+                    error: function (ex) {
+                        if ($("#ddlCustomerName").val() != null && $("#ddlCustomerName").val() != '')
+                            $.alert({ content: 'Failed to retrieve Subsidairy. ' + ex, confirm: function () { } });
+                    }
+                });
+            }
+            else {
+                $("#ddlSubsidiaryName").empty();
+                $("#ddlSubsidiaryName").append('<option value="">' + "--Select--" + '</option>');
+            }
+        });
+
+
+        $("#ddlCustomerName").change(function () {
+            $("#SubAgent_Ref_Code").val('');
+        });
+
+
+    });
+
+    function CancelCreateCustomer() {
+        window.location.href = '@Url.Action("ManageSubAgents", "ManageSubAgent")'; // Redirected to Home Page'../ManageRoles/ManageRoles';
+    }
+
+    function endChange() {
+        var startPicker = $("#StartDate").data("kendoDatePicker"),
+            end = this.value();
+        var endDate = $("#EndDate").data("kendoDatePicker");
+        var eDate = Date.parse(endDate._value);
+
+        if (!eDate) {
+            $("#invalidenddate").show();
+            return false;
+        }
+        $("#date").hide();
+        if (startPicker._value != "") {
+            if (endDate._value < startPicker._value) {
+                $("#date").show();
+
+            }
+        }
+        $("#invalidenddate").hide();
+    }
+
+    $(function () {
+        $('.demo-section > .k-upload >div ').css({ "width": "9em", "margin": "2% 4% 0 0" });
+    });
+    $(function () {
+        $('#CustomerDocumentGrid div:nth-child(2)').css("height", "auto");
+    });
+
+     @if (TempData["isDuplicateSubAgentId"] != null && (bool)TempData["isDuplicateSubAgentId"] == true)
+    {
+        <text>toastr.error('SubAgent with same Id Already Exists.');</text>
+    }
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<style>
+    .demo-section > .k-upload > ul li > span:nth-child(3) {
+        width: 60%;
+        margin-left: -2%;
+    }
+
+    .k-file > .k-icon {
+        background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    }
+    span.DisableKeyboardInput {
+        background-color: transparent;
+    }
+</style>
+

@@ -1,0 +1,313 @@
+Type : info || Text : connectMachineThread2, method entry || TimeStamp : 2016-04-26 18-21-48##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-21-48##
+Type : info || Text : connectMachineThread3, method entry || TimeStamp : 2016-04-26 18-21-50##
+Type : info || Text : connectMachineThread4, method entry || TimeStamp : 2016-04-26 18-21-50##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-21-59##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-00##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-00##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-00##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-04##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-04##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-04##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-04##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-04##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-04##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-05##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-05##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-05##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-05##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-05##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-05##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-05##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-05##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-05##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-05##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-05##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-05##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-06##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-06##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-06##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-06##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-06##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-06##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-06##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-06##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-06##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-07##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-07##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-07##
+Type : info || Text : 192.168.20.24 || TimeStamp : 2016-04-26 18-22-07##
+Type : error || Text : 61 || TimeStamp : 2016-04-26 18-22-07##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-07##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-07##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-07##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-07##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-07##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-07##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-08##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-08##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-08##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-08##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-08##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-08##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-08##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-08##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-08##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-08##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-08##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-08##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-09##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-09##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-09##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-09##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-09##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-09##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-09##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-09##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-09##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-09##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-09##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-10##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-10##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-10##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-10##
+mp : 2016-04-26 18-22-10##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-10##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-10##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-10##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-10##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-10##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-10##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-10##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-11##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-11##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-11##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-11##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-11##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-11##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-11##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-11##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-11##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-11##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-11##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-11##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : 192.168.20.18 || TimeStamp : 2016-04-26 18-22-12##
+Type : error || Text : 61 || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-12##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-13##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-13##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-13##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-13##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-13##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-13##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-13##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-13##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-13##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-13##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-13##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-13##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-14##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-14##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-14##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-14##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-14##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-14##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-14##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-14##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-14##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-14##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-15##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-15##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-15##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-15##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-15##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-15##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-15##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-15##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-15##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-15##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-15##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : 192.168.20.207 || TimeStamp : 2016-04-26 18-22-16##
+Type : error || Text : 61 || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : 192.168.20.40 || TimeStamp : 2016-04-26 18-22-16##
+Type : error || Text : 61 || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-16##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-17##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-17##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-17##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-17##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-17##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-17##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-17##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-17##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-17##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-17##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-17##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-17##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-18##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-18##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-18##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-18##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-18##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-18##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-18##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-18##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-18##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-18##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-18##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-18##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-19##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-19##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-19##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-19##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-19##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-19##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-19##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-19##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-19##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-19##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-19##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-19##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-20##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-20##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-20##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-20##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-20##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-20##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-20##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-20##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-20##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-20##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-20##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-20##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-21##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-21##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-21##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-21##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-21##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-21##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-21##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-21##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-21##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-21##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-21##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-21##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-22##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-22##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-22##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-22##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-22##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-22##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-22##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-22##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-22##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-22##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-22##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-22##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-23##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-23##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-23##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-23##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-23##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-23##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-23##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-23##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-23##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-23##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-23##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-23##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-24##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-24##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-24##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-24##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-24##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-24##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-24##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-24##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-24##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-24##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-24##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-24##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-25##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-25##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-25##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-25##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-25##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-25##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-25##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-25##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-25##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-25##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-25##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-25##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-26##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-26##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-26##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-26##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-26##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-26##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-26##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-26##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-26##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-26##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-26##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-26##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : 192.168.20.113 || TimeStamp : 2016-04-26 18-22-27##
+Type : error || Text : 61 || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : 192.168.20.195 || TimeStamp : 2016-04-26 18-22-27##
+Type : error || Text : 61 || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : connectToMachine, method entry || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : try || TimeStamp : 2016-04-26 18-22-27##
+Type : info || Text : 192.168.20.194 || TimeStamp : 2016-04-26 18-22-28##
+Type : info || Text : successful connection = 192.168.20.194 || TimeStamp : 2016-04-26 18-22-28##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-28##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-28##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-28##
+Type : info || Text : connectToMachine, method Exit || TimeStamp : 2016-04-26 18-22-28##

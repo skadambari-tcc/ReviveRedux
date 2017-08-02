@@ -1,0 +1,699 @@
+﻿@model Revive.Redux.Entities.LocationModel
+@using Kendo.Mvc.UI
+@{
+    ViewBag.Title = "Customer Location";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm("Create", "ManageCustomers", FormMethod.Post, new { id = "AddEditlocationForm", name = "AddEditlocationForm", enctype = "multipart/form-data" }))
+{  @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+
+    <div>
+
+        <div class="col-md-12">
+            <div class="contant_page">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="col-md-8">
+                        @Html.HiddenFor(model => model.Status)
+                        <h2>@Html.DisplayFor(model => model.PageHeader)</h2>
+                    </div>
+                </div>
+
+                <!-- Error Panel -->
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="row">
+                        <div class="col-md-8">
+                            <span class="field-validation-error">@ViewData.ModelState["Name"].Errors[0].ErrorMessage</span>
+                        </div>
+                    </div>
+                }
+
+                <div class="row">
+                    <div class="col-md-6" style="margin-left: -4%;">
+
+                        <div class="form-group">
+                            @Html.Label("Customer", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+
+                                @if (Model.PageMode == 2)
+                                {
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.CustomerId, new SelectList(Model.CustomerNameList, "Id", "Text"), "--Select--", new { @disabled = "disabled", @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName" })
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="select-icon">
+
+                                        @Html.DropDownListFor(M => M.CustomerId, new SelectList(Model.CustomerNameList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlCustomerName", @tabindex = 1 })
+
+                                        @Html.ValidationMessageFor(model => model.CustomerId)
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Sub Agent", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                @if (Model.PageMode == 2)
+                                {
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.SubAgentId, new SelectList(Model.AgentNameList, "Id", "Text"), "--Select--", new { @disabled = "disabled", @class = "form-control pull-right topspace selecter", @id = "SubAgentId" })
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(m => m.SubAgentId, new SelectList(Model.AgentNameList, "Id", "Text"), "--Select--", new { @class = "form-control topspace selecter" })
+                                        @Html.ValidationMessageFor(model => model.SubAgentId)
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Address1", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+
+                            <div class="col-sm-5">
+                                @if (Model.PageMode == 2)
+                                {
+
+                                    @Html.TextAreaFor(M => M.AddressLine1, new { @readonly = "readonly", @class = "form-control", maxlength = "100", @id = "txtAddress1" })
+                                }
+                                else
+                                {
+                                    @Html.TextAreaFor(M => M.AddressLine1, new { @class = "form-control", maxlength = "100", @id = "txtAddress1", @tabindex = 3 })
+                                    @Html.ValidationMessageFor(model => model.AddressLine1)
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("State", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+
+                            <div class="col-sm-5">
+                                @if (Model.PageMode == 2)
+                                {
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.State, new SelectList(Model.StateList, "Id", "Text"), "--Select--", new { @disabled = "disabled", @class = "form-control pull-right topspace selecter", maxlength = "50", @id = "ddlState" })
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.State, new SelectList(Model.StateList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", maxlength = "50", @id = "ddlState", @tabindex = 5 })
+                                        @Html.ValidationMessageFor(model => model.State)
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Phone", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                @if (Model.PageMode == 2)
+                                {
+                                    @Html.TextBoxFor(M => M.PrimaryPhone, new { @readonly = "readonly", @class = "form-control ", maxlength = "20", @id = "txtPhone" })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(M => M.PrimaryPhone, new { @class = "form-control ", maxlength = "20", @id = "txtPhone", @tabindex = 7 })
+                                    @Html.ValidationMessageFor(model => model.PrimaryPhone, "", new { @class = "abc" })
+                                }
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            @*@Html.Label("Name", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })*@
+                            @Html.LabelFor(model => model.StoreOpeningTime, htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+
+
+                            <div class="col-sm-5">
+                                @if (Model.PageMode == 2)
+                                {
+                                    @Html.TextBoxFor(M => M.StoreOpeningTime, new { @readonly = "readonly", @class = "form-control", maxlength = "5", @id = "txtStoreOpeningTime" })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(M => M.StoreOpeningTime, new { @class = " form-control", maxlength = "5", @id = "txtStoreOpeningTime", @tabindex = 9 })
+                                    @Html.ValidationMessageFor(model => model.StoreOpeningTime)
+                                }
+
+                            </div>
+
+
+                        </div>
+                        <div class="form-group">
+                            @*@Html.Label("Name", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })*@
+                            @Html.LabelFor(model => model.StoreClosingTime, htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-5">
+                                @if (Model.PageMode == 2)
+                                {
+                                    @Html.TextBoxFor(M => M.StoreClosingTime, new { @readonly = "readonly", @class = "form-control", maxlength = "5", @id = "txtStoreClosingTime" })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(M => M.StoreClosingTime, new { @class = "form-control", maxlength = "5", @id = "txtStoreClosingTime", @tabindex = 10 })
+                                    @Html.ValidationMessageFor(model => model.StoreClosingTime)
+                                }
+
+                            </div>
+                        </div>
+                        @if (Model.CustomField1Valid)
+                        {
+                            <div class="form-group">
+                                <label class="col-md-6 col-sm-3 control-label text-right" for="PageHeader">@Html.Label(Model.CustomField1Text, htmlAttributes: new { @id = "lblCustomField1" })</label>
+                                <div class="col-sm-5">
+
+                                    @if (Model.PageMode == 2)
+                                    {
+                                        @Html.TextBoxFor(M => M.CustomField1, new { @readonly = "readonly", @class = "form-control", maxlength = "50", @id = "txtCustomField1" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(M => M.CustomField1, new { @class = "form-control", maxlength = "50", @id = "txtCustomField1" })
+                                    }
+                                </div>
+                            </div>
+                        }
+                        @if (Model.CustomField3Valid)
+                        {
+                            <div class="form-group">
+                                <label class="col-md-6 col-sm-3 control-label text-right" for="PageHeader">@Html.Label(Model.CustomField3Text, htmlAttributes: new { @id = "lblCustomField3" })</label>
+                                <div class="col-sm-5">
+                                    @if (Model.PageMode == 2)
+                                    {
+                                        @Html.TextBoxFor(M => M.CustomField3, new { @readonly = "readonly", @class = "form-control", maxlength = "50", @id = "txtCustomField3" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(M => M.CustomField3, new { @class = "form-control", maxlength = "50", @id = "txtCustomField3" })
+                                    }
+                                </div>
+                            </div>
+                        }
+                        @if (Model.CustomField5Valid)
+                        {
+                            <div class="form-group">
+                                <label class="col-md-6 col-sm-3 control-label text-right" for="PageHeader">@Html.Label(Model.CustomField5Text, htmlAttributes: new { @id = "lblCustomField5" })</label>
+                                <div class="col-sm-5">
+                                    @if (Model.PageMode == 2)
+                                    {
+                                        @Html.TextBoxFor(M => M.CustomField5, new { @readonly = "readonly", @class = "form-control", maxlength = "50", @id = "txtCustomField5" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(M => M.CustomField5, new { @class = "form-control", maxlength = "50", @id = "txtCustomField5" })
+                                    }
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PageMode == 2)
+                        {
+                            <div class="form-group">
+                                @Html.Label("Date Created", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                <div class="col-sm-5">
+
+                                    @Html.TextBoxFor(M => M.DateCreated, new { @readonly = "readonly", @class = "form-control", maxlength = "50", @id = "txtDateCreated" })
+
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PageMode == 2)
+                        {
+                            <div class="form-group">
+                                @Html.Label("Created By", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                <div class="col-sm-5">
+
+                                    @Html.TextBoxFor(M => M.CreatedBy, new { @readonly = "readonly", @class = "form-control", maxlength = "50", @id = "txtCreatedBy" })
+
+                                </div>
+                            </div>
+                        }
+
+
+                    </div>
+                    <div class="col-md-6" style="margin-left: -4%;">
+                        <div class="form-group">
+                            @Html.Label("Subsidiary", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                @if (Model.PageMode == 2)
+                                {
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.SubsidiaryId, new SelectList(Model.SubsidiaryNameList, "Id", "Text"), "--Select--", new { @disabled = "disabled", @class = "form-control pull-right topspace selecter", @id = "SubsidiaryId" })
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(m => m.SubsidiaryId, new SelectList(Model.SubsidiaryNameList, "Id", "Text"), "--Select--", new { @class = "form-control topspace selecter" })
+                                        @Html.ValidationMessageFor(model => model.SubsidiaryId)
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+
+                            @Html.Label("Location Name", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+
+                            <div class="col-sm-5">
+                                @if (Model.PageMode == 2)
+                                {
+                                    @Html.TextBoxFor(M => M.LocationName, new { @readonly = "readonly", @class = "form-control", maxlength = "100", @id = "txtLocationName" })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(M => M.LocationName, new { @class = " form-control", maxlength = "100", @id = "txtLocationName", @tabindex = 2 })
+                                    @Html.ValidationMessageFor(model => model.LocationName)
+                                }
+
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            @Html.Label("Address2", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right " })
+
+                            <div class="col-sm-5">
+                                @if (Model.PageMode == 2)
+                                {
+                                    @Html.TextAreaFor(M => M.AddressLine2, new { @readonly = "readonly", @class = "form-control ", maxlength = "100", @id = "txtAddress2" })
+                                }
+                                else
+                                {
+                                    @Html.TextAreaFor(M => M.AddressLine2, new { @class = "form-control ", maxlength = "100", @id = "txtAddress2", @tabindex = 4 })
+                                    @Html.ValidationMessageFor(model => model.AddressLine2)
+                                }
+
+                            </div>
+                        </div>
+
+                        <div class="form-group ">
+                            @Html.Label("City", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+
+                            <div class="col-sm-5">
+                                @if (Model.PageMode == 2)
+                                {
+
+                                    @Html.TextBoxFor(M => M.CityName, new { @readonly = "readonly", @class = "form-control ", @id = "txtCityName" })
+
+                                }
+                                else
+                                {
+
+                                    @Html.TextBoxFor(M => M.CityName, new { @class = "form-control ", @id = "txtCityName", @tabindex = 6 })
+                                    @Html.ValidationMessageFor(model => model.CityName)
+
+                                }
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+
+                            @Html.Label("ZipCode", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+
+                            <div class="col-sm-5">
+                                @if (Model.PageMode == 2)
+                                {
+                                    @Html.TextBoxFor(M => M.ZipCode, new { @readonly = "readonly", @class = "form-control ", maxlength = "5", @id = "txtZipCode" })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(M => M.ZipCode, new { @class = "form-control ", maxlength = "5", @id = "txtZipCode", @tabindex = 8 })
+                                    @Html.ValidationMessageFor(model => model.ZipCode)
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Store Number", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                @if (Model.PageMode == 2)
+                                {
+                                    @Html.TextBoxFor(M => M.StoreNumber, new { @readonly = "readonly", @class = "form-control ", maxlength = "100", @id = "txtStoreNumber" })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(M => M.StoreNumber, new { @class = "form-control ", maxlength = "100", @id = "txtStoreNumber", @tabindex = 11 })
+                                    @Html.ValidationMessageFor(model => model.StoreNumber)
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Group", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right  " })
+                            <div class="col-sm-5">
+                                @if (Model.PageMode == 2 || Model.ShippingStatusId > 0)
+                                {
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.GroupId, new SelectList(Model.GroupNameList, "Id", "Text"), "--Select--", new { @disabled = "disabled", @class = "form-control pull-right topspace selecter", @id = "GroupId" })
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(m => m.GroupId, new SelectList(Model.GroupNameList, "Id", "Text"), "--Select--", new { @class = "form-control topspace selecter" })
+                                        @*@Html.ValidationMessageFor(model => model.GroupId)*@
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                        </div>
+                        @if (Model.CustomField2Valid)
+                        {
+                            <div class="form-group">
+                                <label class="col-md-6 col-sm-3 control-label text-right" for="PageHeader">@Html.Label(Model.CustomField2Text, htmlAttributes: new { @id = "lblCustomField2" })</label>
+                                <div class="col-sm-5">
+                                    @if (Model.PageMode == 2)
+                                    {
+                                        @Html.TextBoxFor(M => M.CustomField2, new { @readonly = "readonly", @class = "form-control", maxlength = "50", @id = "txtCustomField2" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(M => M.CustomField2, new { @class = "form-control", maxlength = "50", @id = "txtCustomField2" })
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        @if (Model.CustomField4Valid)
+                        {
+                            <div class="form-group">
+                                <label class="col-md-6 col-sm-3 control-label text-right" for="PageHeader">@Html.Label(Model.CustomField4Text, htmlAttributes: new { @id = "lblCustomField4" })</label>
+                                <div class="col-sm-5">
+                                    @if (Model.PageMode == 2)
+                                    {
+                                        @Html.TextBoxFor(M => M.CustomField4, new { @readonly = "readonly", @class = "form-control", maxlength = "50", @id = "txtCustomField4" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(M => M.CustomField4, new { @class = "form-control", maxlength = "50", @id = "txtCustomField4" })
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        @if (Model.PageMode == 2)
+                        {
+                            <div class="form-group">
+                                @Html.Label("Modified By", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                                <div class="col-sm-5">
+
+                                    @Html.TextBoxFor(M => M.ModifiedBy, new { @readonly = "readonly", @class = "form-control", maxlength = "50", @id = "txtModifiedBy" })
+
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+
+
+                </div>
+
+                <div class="row" style="padding-top:2%">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-8">
+                        <div class="col-md-3 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            @if (Model.PageMode != 2)
+                            {
+                                <button id="btnCreate" class="btn GreenBtn" type="button">@Html.DisplayFor(model => model.PageButtonSubmit)</button>
+                            }
+                            else
+                            {
+                                <button id="btnBack" onclick="GoBack()" class="btn GreenBtn cancel" type="button">@Html.DisplayFor(model => model.PageButtonSubmit)</button>
+                            }
+                            @if (Model.PageMode != 2)
+                            {
+                                <button id="btnCancel" class="btn YellowBtn" type="button">Cancel</button>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(M => M.CustomerId);
+    @Html.HiddenFor(M => M.PageMode);
+    @Html.HiddenFor(M => M.LocationId);
+    @Html.HiddenFor(M => M.GroupId);
+}
+
+<script type="text/javascript">
+
+    function GoBack() {
+        //to store the URL of previous page
+        window.location = document.referrer;
+    }
+    $(".DisableKeyboardInput").keypress(function () {
+        return false;
+    });
+
+    function hideCustomFields() {
+        $("#lblCustomField1").hide();
+        $("#lblCustomField2").hide();
+        $("#lblCustomField3").hide();
+        $("#lblCustomField4").hide();
+        $("#lblCustomField5").hide();
+        $("#txtCustomField1").val('');
+        $("#txtCustomField2").val('');
+        $("#txtCustomField3").val('');
+        $("#txtCustomField4").val('');
+        $("#txtCustomField5").val('');
+        $("#txtCustomField1").hide();
+        $("#txtCustomField2").hide();
+        $("#txtCustomField3").hide();
+        $("#txtCustomField4").hide();
+        $("#txtCustomField5").hide();
+
+
+
+    }
+
+    $(document).ready(function () {
+        Revive.Redux.Common.SetPhoneFormat('txtPhone');
+        Revive.Redux.Common.SetParentMenuSelected('Customers');
+
+        $("#btnCreate").click(function () {
+            $(".abc").css("display", "block");
+            $('#AddEditlocationForm').validate();
+            if (!$('#AddEditlocationForm').valid()) {
+                //{
+                $("#btnCreate").prop('disabled', false);
+                return false;
+            }
+            else if ($("#AddEditlocationForm").valid()) {
+                $("#btnCreate").prop('disabled', true);
+                $('#AddEditlocationForm').submit();
+            }
+        });
+
+
+
+        var pageMode = $("#PageMode").val();
+        if (pageMode == 0) {
+            hideCustomFields();
+        }
+
+
+        $("#txtPhone").mask("(999) 999-9999", { autoclear: false });
+        var nPreviousCustomerId = $("#ddlCustomerName").val();
+        $("#btnResult").click(function (e) {
+            window.location.href = '@Url.Action("Locations", "ManageCustomers")';
+        });
+        // Cancel Button Click event
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("Locations", "ManageCustomers")';
+        });
+        // State dropdown change event
+        @*$("#ddlState").change(function () {
+            $("#ddlCity").empty();
+            var nState = $("#ddlState").val();
+            if (nState == '')
+            { nState = 0; }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/GetCascadeCity")', // Calling json method
+                dataType: 'json',
+                data: { Id: nState },
+                success: function (CityList) {
+                    $("#ddlCity").append('<option value="">' + "--Select--" + '</option>');
+                    if (CityList != null) {
+                        if (CityList.length > 0) {
+                            $.each(CityList, function (i, CityList) {
+                                $("#ddlCity").append('<option value="' + CityList.Id + '">' + CityList.Text + '</option>');
+                            });
+                        }
+                    }
+
+                },
+                error: function (ex) { $.alert({ content: 'Failed to retrieve Citylist. ' + ex, confirm: function () { } }); }
+            });
+            return false;
+        });*@
+
+        // Customer dropdown change event
+        $("#ddlCustomerName").change(function () {
+            hideCustomFields();
+            var nCustomerId = $("#ddlCustomerName").val();
+            var nLocationId = $("#LocationId").val();
+            var nPageMode = $("#PageMode").val();
+            var _adrs1 = $("#txtAddress1").val();
+            var _stateId = $("#ddlState").val();
+            var _phoneNo = $("#txtPhone").val();
+            var _locname = $("#txtLocationName").val();
+            var _adrs2 = $("#txtAddress2").val();
+            var _cityId = $("#ddlCity").val();
+            var _zipCode = $("#txtZipCode").val();
+            var _StoreNumber = $("#txtStoreNumber").val();
+            var _openTime = $("#txtStoreOpeningTime").val();
+            var _closeTime = $("#txtStoreClosingTime").val();
+            var _GroupId = $("#GroupId").val();
+
+            if (nPageMode == 1) {
+
+                if (nCustomerId > 0) {
+                    var url = '@Url.Action("Edit", "ManageCustomers")' + '?Id=' + nLocationId + '&CustId=' + nCustomerId;
+                    window.location.href = url;
+
+                }
+                else {
+                    $("#SubsidiaryId").empty();
+                    $("#SubAgentId").empty();
+                    $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                    $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+                }
+            }
+            else if (nPageMode == 0) {
+
+                $.ajax({
+                    type: "POST",
+                    datatype: 'json',
+                    url: "/ManageCustomers/Add",
+                    data: JSON.stringify({ Id: nCustomerId, adrs1: _adrs1, stateId: _stateId, phoneNo: _phoneNo, locname: _locname, adrs2: _adrs2, cityId: _cityId, zipCode: _zipCode, StoreNumber: _StoreNumber, openTime: _openTime, closeTime: _closeTime, GroupId: _GroupId }),
+                    contentType: 'application/json; charset=utf-8',
+                }).done(function (data) {
+                    if (data != null) {
+                        if (data.CustomField1Valid == true) {
+                            $("#lblCustomField1").text(data.CustomField1Text);
+                            $("#lblCustomField1").show();
+                            $("#txtCustomField1").show();
+                        }
+                        if (data.CustomField2Valid == true) {
+                            $("#lblCustomField2").text(data.CustomField2Text);
+                            $("#lblCustomField2").show();
+                            $("#txtCustomField2").show();
+                        }
+                        if (data.CustomField3Valid == true) {
+                            $("#lblCustomField3").text(data.CustomField3Text);
+                            $("#lblCustomField3").show();
+                            $("#txtCustomField3").show();
+                        }
+                        if (data.CustomField4Valid == true) {
+                            $("#lblCustomField4").text(data.CustomField4Text);
+                            $("#lblCustomField4").show();
+                            $("#txtCustomField4").show();
+                        }
+                        if (data.CustomField5Valid == true) {
+                            $("#lblCustomField5").text(data.CustomField5Text);
+                            $("#lblCustomField5").show();
+                            $("#txtCustomField5").show();
+                        }
+                        //alert(data.CustomField1Text);
+
+                    }
+                });
+
+                $("#SubsidiaryId").empty();
+                $("#SubAgentId").empty();
+                $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+
+                if ($("#ddlCustomerName").val() != "") {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+                        dataType: 'json',
+                        data: { CustomerId: $("#ddlCustomerName").val() },
+                        success: function (data) {
+                            $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+                            if (data.length > 0) {
+                                $.each(data, function (i, dataitem) {
+                                    $("#SubsidiaryId").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                                });
+
+                            }
+                        },
+                        error: function (ex) {
+                            if ($("#ddlCustomerName").val() != null && $("#ddlCustomerName").val() != '')
+                                $.alert({ content: 'Failed to retrieve Subsidairy. ' + ex, confirm: function () { } });
+                        }
+                    });
+                }
+                else {
+                    $("#SubsidiaryId").empty();
+                    $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+                }
+
+            }
+
+
+
+        });
+
+        //subsidiary Changes
+
+        $("#SubsidiaryId").change(function () {
+            $("#SubAgentId").empty();
+            if ($("#SubsidiaryId").val() != "") {
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetAgentBySubsidiary")', // Calling json method
+                    dataType: 'json',
+                    data: { SubsidiaryId: $("#SubsidiaryId").val() },
+                    success: function (data) {
+                        $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                        if (data.length > 0) {
+                            $.each(data, function (i, dataitem) {
+                                $("#SubAgentId").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                            });
+                        }
+
+                    },
+                    error: function (ex) {
+                        if ($("#SubsidiaryId").val() != null && $("#SubsidiaryId").val() != '')
+                            $.alert({ content: 'Failed to retrieve Agent. ' + ex, confirm: function () { } });
+                    }
+                });
+            }
+            else {
+                $("#SubAgentId").empty();
+                $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            }
+            return false;
+        });
+
+
+
+    });
+</script>
+
+<style>
+    .contant_sector {
+        height: 100%;
+    }
+</style>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

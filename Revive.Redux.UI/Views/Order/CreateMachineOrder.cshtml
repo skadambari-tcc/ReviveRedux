@@ -1,0 +1,207 @@
+﻿@model Revive.Redux.Entities.OrderModel
+@using Kendo.Mvc
+@{
+    ViewBag.Title = "Create Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .Title {
+        text-align: left;
+        font-size: larger;
+        color: #7c0000;
+        margin-left: 10px;
+    }
+    .k-picker-wrap.k-state-default {
+        width: 103%;
+    }
+    .k-widget.k-datepicker.k-header.DisableKeyboardInput.form-control {
+        padding-left: 0px;
+    }
+    .chicher{
+        float:left;
+    }
+    span.DisableKeyboardInput {
+        background-color: transparent;
+    }
+</style>
+<style>
+    table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        align-content: center;
+        box-sizing: content-box;
+        width: 100%;
+    }
+
+    thead, tbody {
+        display: block;
+    }
+
+    th, td {
+        height: 1em;
+        text-align: center;
+    }
+
+    .c1 {
+        width: 10em;
+    }
+
+    .c12 {
+        width: 11.60em;
+    }
+    .cb {
+        float: left;
+    }
+
+    tbody, thead {
+        overflow-y: scroll;
+    }
+
+    tbody {
+        height: 9em;
+        box-sizing: border-box;
+    }
+</style>
+
+
+
+<head>
+    <title>NEW MACHINE ORDER</title>
+</head>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script src="~/Scripts/knockout-3.2.0.js"></script>
+
+@using (Html.BeginForm("CreateMachineOrder", "Order", FormMethod.Post, new { @ID = "CreateMachineOrderForm" }))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="modal-body">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="contant_page">
+                    <div class="row">
+                        <div class="lable-align-top">
+                            <h2>NEW MACHINE ORDER</h2>
+                        </div>
+                        <!-- tittle -->
+                        <div class="row">
+                            <!-- collun1 -->
+                            <div class="col-md-4">
+                                
+                                <div class="form-group">
+                                    <label class="col-md-6  col-sm-3 control-label text-right required" for="inputtype1">Machine Specs</label>
+                                    <div class="col-sm-6">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(M => M.MachineSpecsId, new SelectList(Model.MachineSpecsList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlMachineSpecsList" })
+                                            @Html.ValidationMessageFor(model => model.MachineSpecsId)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- collun2 -->
+                            
+                            <div class="col-md-4">
+                                
+                                <div class="form-group">
+                                    <label class="col-md-6  col-sm-3 control-label text-right required" for="inputtype1">No. of Machines</label>
+                                    <div class="col-sm-6">
+                                        @Html.TextBoxFor(model => model.NoOfMachines, new { @class = "form-control numericOnly", maxlength = "50", @id = "txtNoOfMachines" })
+                                        <span class="field-validation-error">@Html.ValidationMessageFor(model => model.NoOfMachines) &nbsp;</span>
+                                    </div>
+                                </div>                                
+                                
+                            </div>
+                            <!-- collun3 -->
+                            <div class="col-md-4">
+                                
+                                <div class="form-group">
+                                    @Html.Label("Manufacturer", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                                    <div class="col-sm-6">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(M => M.ManufacturerId, new SelectList(Model.ManufacturerList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @id = "ddlManufacturerList" })
+                                        </div>
+                                        <span class="field-validation-error">@Html.ValidationMessageFor(model => model.ManufacturerId)&nbsp;</span>
+                                    </div>
+                                </div>
+                                
+                                
+                            </div>
+                        
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-2">
+                                        <label style="float:right;" class="col-md-6  col-sm-3 control-label text-right" for="inputtype2">Notes</label>
+                                    </div>
+                                    <div class="col-sm-6" style="padding: 0 1.3% 0 0.3%;">
+                                        @Html.TextAreaFor(model => model.ClientExecComments, 2, 20, new { @class = "form-control", @placeholder = "Add notes here", @id = "txtComments" })
+                                        <span class="field-validation-error">@Html.ValidationMessageFor(model => model.ClientExecComments)&nbsp;</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     
+                        
+                        <div class="row" style="padding-top: 2%">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-8">
+                                <div class="col-md-3 col-sm-3"></div>
+                                <div class="col-md-6 col-sm-6">
+                                    @*@if (Model.PageAccessCode == "ACCNTMGR" || Model.PageAccessCode == "CLIENTEXEC")
+    {
+
+
+    }*@
+                                    <button id="btnCreate" type="submit" class="btn login_button btn-primary GreenBtn">Submit</button>
+
+                                      <button id="btnCancel" type="button" class="btn login_button btn-primary yellow">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            @Html.TextAreaFor(model => model.JsonPostbackVal, new Dictionary<string, Object> { { "data-bind", "value: lastSavedJson" }, { "id", "JsonPostbackVal" }, { "style", "display:none;" } })
+                        </div>
+                        <!-- collun4 ends-->
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+        }
+        <script type="text/javascript">          
+
+            $(".DisableKeyboardInput").keypress(function () {
+                return false;
+            });
+
+            $(document).ready(function () {
+                Revive.Redux.Common.SetParentMenuSelected('Orders');
+                // Remove value of first val in customer PO's to make data annotation work.
+                if ($("select#ddlCustPOs") != null && $("select#ddlCustPOs").length > 0)
+                    $("select#ddlCustPOs").find(":selected").val('');
+              
+
+                // Cancel Button Click event
+                $("#btnCancel").click(function () {
+                    window.location.href = '@Url.Action("ManageMachineOrder", "Order")';
+                });
+                function ApplyNumericOnly(){
+                    $(".numericOnly").on("keypress keyup blur", function (e) {
+                        //$(this).val($(this).val().replace(/[^\d].+/, ""));
+                        var regex = /[^\d].+/;
+                        if (regex.test($(this).val())) {
+                            $(this).val($(this).val().replace(regex, ''));
+                        }
+                        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                            return false;
+                        }
+                    });
+                }
+              
+
+
+            });
+        </script>

@@ -1,0 +1,130 @@
+﻿@model Revive.Redux.Entities.ManageGroupShippingQueueModel
+@{
+    ViewBag.Title = "Manage Group Shipping Queue";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.UI.Fluent
+<style>
+    .GreenBtn {
+        float: right;
+    }
+</style>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div>
+                    <div class="row"><div style="margin-left: 0.5%;"><h2>Manage Group Shipping Queue</h2></div></div>
+                    <div class="row">
+                        <div class="col-md-7"></div>
+                        <div class="col-md-4" style="float: right;">
+                            @*<div class="col-md-10">
+                                <button id="btnAddGroupShippingQueue" type="button" class="GreenBtn ">Add </button>
+                            </div>*@
+                        </div>
+                    </div>
+                    <br />
+                    <div class="Kendogrid table-responsive" style="margin-left:-0.8%">
+                      
+                        @(Html.Kendo().Grid<Revive.Redux.Entities.ShipMachineModel>()
+                                .Name("GroupShippingQueueGrid1")
+                                .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(10)
+                                .Read("GetShippingQueue", "ManageShipping")
+                                .ServerOperation(false)
+                               
+                        )
+                    .Columns(columns =>
+                        {
+                            columns.Bound(c => c.GroupName).Width(60).Title("Group");
+                            columns.Bound(c => c.PriorityName).Width(60).Title("Priority");
+                            columns.Bound(c => c.CustomerName).Width(100).Title("Customer");
+                            columns.Bound(c => c.SubsidiaryName).Width(100).Title("Subsidiary");
+                            columns.Bound(c => c.SubAgentName).Width(100).Title("Sub Agent");
+                            columns.Bound(c => c.NoOfMachinesOrdered).Width(80).Title("#Machines");
+                            columns.Bound(c => c.TotalReadyToShip).Width(100).Title("#Shippable");
+                            columns.Bound(c => c.TotalShipped).Width(80).Title("#Shipped");
+                            columns.Bound(c => c.BeginShippingDate).Width(110).Title("Shipping Date").Format("{0:MM-dd-yyyy}");
+                            columns.Bound(c => c.Status).Width(100).Title("Status");
+
+                            columns.Bound(c => c.GroupId).ClientTemplate("#if(Status!='Completed'){# <a href='" + Url.Action("UpdateLocationStatus", "ManageShipping") + "/#= GroupId #'" + "><i class='fa fa-pencil fa-lg icon-color' , style='align:center'></i></a> #}#").Title("Edit Status").Filterable(false).Sortable(false).Width(80).HtmlAttributes(new { @style = "cursor:pointer" });
+                            columns.Bound(c => c.GroupId).ClientTemplate("#if(Status!='Completed'){# <a href='" + Url.Action("EditGroup", "ManageUsers") + "/#= GroupId #'" + "><i class='fa fa-pencil fa-lg icon-color' , style='align:center'></i></a> #}#").Title("Set Priority").Filterable(false).Sortable(false).Width(80).HtmlAttributes(new { @style = "cursor:pointer" });
+                            
+                            
+                        })
+                   
+                                .HtmlAttributes(new { style = "width: 100%;" })
+                                .Pageable(pageable =>
+                                    {
+                                        pageable.Refresh(true);
+                                        pageable.PageSizes(new int[] { 10, 20, 50 });
+                                        pageable.Messages(messages => messages.Empty("No record found!"));
+                                    })
+                                    .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                    {
+                                        fs.Clear().Contains("Contains");
+                                        fs.DoesNotContain("Does not contain");
+                                        fs.IsEqualTo("Equal to");
+                                        fs.IsNotEqualTo("Not equal to");
+                                        fs.StartsWith("Starts with");
+                                        fs.EndsWith("Ends with");
+                                    })))
+                                .Sortable()
+                                .Scrollable()
+                               
+                                
+                        )
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Tooltip added to email column of storeUserGrid
+        $("#GroupShippingQueueGrid1").kendoTooltip({
+            filter: "td:nth-child(3)", //this filter selects the second column's cells
+            position: "top",
+            content: function (e) {
+                var dataItem = $("#GroupShippingQueueGrid1").data("kendoGrid").dataItem(e.target.closest("tr"));
+                var content = dataItem.SubsidiaryName;
+                return content;
+            }
+        }).data("kendoTooltip");
+
+        $("#GroupShippingQueueGrid1").kendoTooltip({
+            filter: "td:nth-child(4)", //this filter selects the second column's cells
+            position: "top",
+            content: function (e) {
+                var dataItem = $("#GroupShippingQueueGrid1").data("kendoGrid").dataItem(e.target.closest("tr"));
+                var content = dataItem.SubAgentName;
+                return content;
+            }
+        }).data("kendoTooltip");
+
+        $("#GroupShippingQueueGrid1").kendoTooltip({
+            filter: "td:nth-child(1)", //this filter selects the second column's cells
+            position: "top",
+            content: function (e) {
+                var dataItem = $("#GroupShippingQueueGrid1").data("kendoGrid").dataItem(e.target.closest("tr"));
+                var content = dataItem.GroupName;
+                return content;
+            }
+        }).data("kendoTooltip");
+        //end
+    });
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Orders');
+        Revive.Redux.Common.SetKendoGridHeight();
+
+        var grid = $("#GroupShippingQueueGrid").data("kendoGrid");
+        grid.dataSource.read();
+    });
+   
+    $('#btnAddGroupShippingQueue').click(function () {
+        window.location.href = '@Url.Action("ViewGroupShippingQueue", "ManageShipping")';
+    });
+</script>

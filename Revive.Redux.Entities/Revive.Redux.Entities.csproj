@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{00DDA1F8-C649-424E-968B-30C5011A9106}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Revive.Redux.Entities</RootNamespace>
+    <AssemblyName>Revive.Redux.Entities</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\Revive.Redux.UI\Libraries\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\DtoList.cs" />
+    <Compile Include="Common\OrderStatusType.cs" />
+    <Compile Include="Common\PageBasic.cs" />
+    <Compile Include="Common\WebApi\WriteLog.cs" />
+    <Compile Include="FAQ\FAQModel.cs" />
+    <Compile Include="Machine\MachineTestingModel.cs" />
+    <Compile Include="ManageMembership\AppMachineHistoryModel.cs" />
+    <Compile Include="ManageShipping\GroupedLocationForShip.cs" />
+    <Compile Include="ManageShipping\ShipMachineModel.cs" />
+    <Compile Include="ManageShipping\ShippingConfigModel.cs" />
+    <Compile Include="ManageShipping\UPSSettings.cs" />
+    <Compile Include="UPS Integration\ShipmentRequest.cs" />
+    <Compile Include="UPS Integration\ShipmentResponse.cs" />
+    <Compile Include="ManageShipping\ManageGroupShippingQueueModel.cs" />
+    <Compile Include="UserManagement\GroupModel.cs" />
+    <Compile Include="Machine\MachineBulkUploadModel.cs" />
+    <Compile Include="Machine\WebApiMachineModel.cs" />
+    <Compile Include="ManageLogging\LoggingModel.cs" />
+    <Compile Include="ManageMachineSpecs\ConfigureMachineHistoryModel.cs" />
+    <Compile Include="ManageMachineSpecs\KillMachineModel.cs" />
+    <Compile Include="ManageMachineSpecs\MachineHistory.cs" />
+    <Compile Include="ManageMachineSpecs\MoveMachineModel.cs" />
+    <Compile Include="ManageMachineSpecs\ReplaceMachineModel.cs" />
+    <Compile Include="ManageMembershipConfig\MembershipConfigModel.cs" />
+    <Compile Include="ManageMembership\CustomizedParameterModel.cs" />
+    <Compile Include="ManageMembership\MachineFaultModel.cs" />
+    <Compile Include="ManageMembership\MemberActivityModel.cs" />
+    <Compile Include="ManageMembership\MembershipWebModel.cs" />
+    <Compile Include="ManageMembership\ModeConfigurationModel.cs" />
+    <Compile Include="ManageMembership\ReviveDataByPhoneParam.cs" />
+    <Compile Include="ManageMembership\SoftwareVersionModel.cs" />
+    <Compile Include="Manufacturers\ManufacturersModel.cs" />
+    <Compile Include="ModeConfiguration\ModeConfigurationModel.cs" />
+    <Compile Include="Reports\ReportConfigModel.cs" />
+    <Compile Include="Reports\ReportFilterType.cs" />
+    <Compile Include="Reports\ReportMasterModel.cs" />
+    <Compile Include="Reports\ReportModel.cs" />
+    <Compile Include="RoleManagement\Role.cs" />
+    <Compile Include="Common\WebApi\APIStatusValues.cs" />
+    <Compile Include="Common\WebApi\ReturnStatusCode.cs" />
+    <Compile Include="CustomerManagement\ManageCustomersModel.cs" />
+    <Compile Include="Locations\CustomerLocationModel.cs" />
+    <Compile Include="Locations\LocationModel.cs" />
+    <Compile Include="Locations\OrderLocationsModel.cs" />
+    <Compile Include="Machine\MachineModel.cs" />
+    <Compile Include="ManageMachineSpecs\DebugTemplatesModel.cs" />
+    <Compile Include="ManageMachineSpecs\Debug_Templates_DefinitionModel.cs" />
+    <Compile Include="ManageForm\FormCustomerModel.cs" />
+    <Compile Include="ManageForm\FormModel.cs" />
+    <Compile Include="ManageMachineSpecs\MachineSpecsModel.cs" />
+    <Compile Include="ManageMachineSpecs\ManageDebugParaModel.cs" />
+    <Compile Include="ManageMachineSpecs\ManageSoftwareVersionModel.cs" />
+    <Compile Include="ManageMembership\APIResponseData.cs" />
+    <Compile Include="ManageMembership\MemberShipDetailsModel.cs" />
+    <Compile Include="ManageMembership\MembersShipModel.cs" />
+    <Compile Include="ManageMembership\RepositoryResult.cs" />
+    <Compile Include="Notification\NotificationModel.cs" />
+    <Compile Include="Order\OrderModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoleManagement\MenuModel.cs" />
+    <Compile Include="RoleManagement\Manage_User_Level_RoleModel.cs" />
+    <Compile Include="RoleManagement\RoleDetailsModel.cs" />
+    <Compile Include="RoleManagement\modelUser.cs" />
+    <Compile Include="RoleManagement\User_LevelModel.cs" />
+    <Compile Include="RoleManagement\modelUser_Level_Menu_Mapping.cs" />
+    <Compile Include="RoleManagement\modelUser_Level_Users.cs" />
+    <Compile Include="SubAgentManage\ManageSubAgentModel.cs" />
+    <Compile Include="SubsidiaryManagement\ManageSubsidiaryModel.cs" />
+    <Compile Include="Testing\TestingModel.cs" />
+    <Compile Include="UserManagement\DtoUser.cs" />
+    <Compile Include="UserManagement\UserModels.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MachineSpecs\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

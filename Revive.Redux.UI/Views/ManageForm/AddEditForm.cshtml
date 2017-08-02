@@ -1,0 +1,161 @@
+﻿@model Revive.Redux.Entities.FormModel
+
+@{
+    ViewBag.Title = "Add/Edit Custom Field";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Create", "ManageForm", FormMethod.Post, new { id = "userform", name = "userform", enctype = "multipart/form-data" }))
+{  @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+
+
+    @Html.HiddenFor(model => model.PageMode)
+    <div>
+        <div class="col-md-12">
+            <div class="contant_page">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>@Html.DisplayFor(model => model.PageHeader)</h2>
+                    </div>
+                </div>
+
+                <!-- Error Panel -->
+                @*<div class="row">
+                        <div class="col-md-8">
+                            @if (!ViewData.ModelState.IsValid)
+                            {
+                                <span class="field-validation-error">@ViewData.ModelState["Name"].Errors[0].ErrorMessage</span>
+                            }
+
+                        </div>
+                    </div>*@
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+
+
+                            @Html.Label("Customer", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+
+
+                            @if (ViewBag.isUpdatedMode == true)
+                            {
+
+                                <div class="col-sm-6">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.CustomerId, new SelectList(Model.CustomerNameList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @style = "", @id = "ddlCustomerName", @disabled = "disabled" })
+                                    </div>
+                                </div>
+
+
+                            }
+                            else
+                            {
+                                <div class="col-sm-6">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(M => M.CustomerId, new SelectList(Model.CustomerNameList, "Id", "Text"), "--Select--", new { @class = "form-control pull-right topspace selecter", @style = "", @id = "ddlCustomerName" })
+                                        @Html.ValidationMessageFor(model => model.CustomerId)
+                                    </div>
+                                </div>
+                            }
+
+
+
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Custom Field Name", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                @Html.TextBoxFor(M => M.CustomFieldName, new { @class = "k-textbox form-control CapitalizeWord", maxlength = "100", @id = "txtZipCode" })
+                                @Html.ValidationMessageFor(model => model.CustomFieldName)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1">
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-5 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            <button id="btnCreate" class="btn GreenBtn" type="submit">@Html.DisplayFor(model => model.PageButtonSubmit)</button>
+                            <button id="btnCancel" class="btn YellowBtn" type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1 spacer1">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(M => M.CustomerId);
+    @Html.HiddenFor(M => M.PageMode);
+    @Html.HiddenFor(M => M.CustomFieldId);
+    @Html.HiddenFor(M => M.Message);
+    @Html.HiddenFor(M => M.FieldCountValid);
+    @Html.HiddenFor(M => M.CustomFieldCount);
+}
+
+
+
+
+
+
+
+<style type="text/css">
+    .k-grid-content {
+        max-height: 240px;
+    }
+
+    .modal .fade {
+        top: 30%;
+        transition: opacity 0.3s linear;
+    }
+
+        .modal.fade.in {
+            top: 30%;
+        }
+
+    .modal-backdrop {
+        background-color: #000;
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 0 !important;
+    }
+
+    .col-sm-6 {
+        padding-right: 1px;
+    }
+</style>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Admin');
+
+        // Cancel Button Click event
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("Form", "ManageForm")';
+        });
+
+
+    });
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <text>toastr.error('@ViewData.ModelState["Name"].Errors[0].ErrorMessage');</text>
+
+
+    }
+
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

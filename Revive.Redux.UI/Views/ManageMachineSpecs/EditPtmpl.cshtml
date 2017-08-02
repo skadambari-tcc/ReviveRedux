@@ -1,0 +1,170 @@
+﻿@model Revive.Redux.Entities.Debug_Templates_DefinitionModel
+@{
+    ViewBag.Title = "EditPtmpl";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/dual-list-box.js"></script>
+
+<script>
+    $(function (data) {
+
+        $.ajax({
+            type: "POST",
+            datatype: 'json',
+            url: "/ManageMachineSpecs/GetExceptPara",
+            data: JSON.stringify(data),
+            contentType: 'application/json; charset=utf-8',
+            success: function (result) {
+                $.each(result, function (i, result) {
+                    $('.unselected').append($('<option>', {
+                        value: result.DebugParameter_Id,
+                        text: result.DebugParameterName
+                    }));
+                });
+                $('.filter-unselected').keyup(function () {
+                    var valThis = $(this).val().toLowerCase();
+                    $('.unselected  > option').each(function () {
+                        var text = $(this).text().toLowerCase().trim();
+                        (text.indexOf(valThis) == 0) ? $(this).show() : $(this).hide();
+                    });
+                });
+            }
+        })
+    })
+</script>
+@{
+    
+    int ID = Convert.ToInt16(Session["Template_ID"]);
+    
+    
+}
+
+
+<div>
+    <div class="col-md-12">
+        <div class="contant_page">
+            <!-- tittle -->
+            <div class="row">
+                <div class="col-md-8">
+                    <h2>Edit Template</h2>
+                </div>
+            </div>
+            </div>
+        </div></div>
+
+
+<div style="display:inline-block">  @Html.Label("Template Name", htmlAttributes: new { @class = " required" })</div>
+
+<div style="display:inline-block">
+    @Html.TextBoxFor(M => M.Template_Name, new { @class = " required ", @style = "width:200px;", @id = "txt" })
+
+</div>
+            @Html.HiddenFor(M => M.Template_ID)
+            @Html.HiddenFor(M => M.PageMode)
+@*<div id="dual-list-box" class="form-group row">
+
+
+
+    <select multiple="multiple" data-title="Parameters" data-selected="false" data-check="false"
+            id="mySelect" data-value="Id" data-text="Text" data-source="/ManageMachineSpecs/GetParaMeters"></select>
+
+
+</div>*@
+
+
+
+
+
+    <div id="dual-list-box" class="form-group row">
+
+        <select multiple="multiple" data-title="Parameters" data-json="true" data-selected="true" data-check="true"  
+                id="mySelect" data-value="DebugParameter_Id" data-text="DebugParameterName" data-source="/ManageMachineSpecs/GetParaMetersById"></select>
+    </div>
+
+
+
+
+
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="col-md-3 col-sm-3"></div>
+        <div class="col-md-6 col-sm-6">
+            <button id="btnSavedata" class="btn GreenBtn" onclick="set()" type="submit">Save</button>
+
+            <button type="reset" class="btn YellowBtn" onclick="location.href='@Url.Action("DebugParaTempl", "ManageMachineSpecs")'">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+    });
+    $('select').DualListBox();
+</script>
+
+
+
+<script>
+
+    function set() {
+    var templateName = $("#txt").val();
+        var nTemplateId = $("#Template_ID").val();
+                    var nPageMode = $("#PageMode").val();
+        var k = 0;
+        var values = [];
+
+        $('.selected > option').each(function () {
+
+            var paraId = this.value;
+            var paraName = this.text;
+                        values[k] = { 'DebugParameter_Id': paraId, 'DebugParameterName': paraName, 'Template_Name': templateName, 'Template_ID': nTemplateId, 'PageMode': nPageMode };
+            k++;
+        });
+
+        if (templateName == "") {
+            toastr.warning('Please enter template name!');
+        }
+        else if (!(/^[A-Z0-9 ]+$/i.test(templateName))) {
+            toastr.warning('Invalid template name!');
+        }
+        else if ($('.selected > option').length == 0) {
+                toastr.warning('Please select parameters!');
+            }
+
+        else {
+            $.ajax({
+
+
+                type: "POST",
+                datatype: 'json',
+                data: JSON.stringify({ debugTemplatesDefinitions: values, }),
+                url: "/ManageMachineSpecs/AddTemplate",
+
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                }
+            }).done(function (data) {
+                if (data) {
+                    //toastr.options.onHidden = function () { window.location.href = '@Url.Action("DebugParaTempl", "ManageMachineSpecs")'; }
+                    //toastr.success('@ReviveMessages.Update');
+                    window.location.href = '@Url.Action("DebugParaTempl", "ManageMachineSpecs")';
+
+                    result = true;
+                }
+                    else {
+                        toastr.error('Template with same name already exists!');
+                    result = false;
+                }
+            })
+        }
+    }
+</script>
+
+
+
+   
+

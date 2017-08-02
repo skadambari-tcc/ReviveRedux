@@ -1,0 +1,251 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model UserModels
+@{
+    ViewBag.Title = "Configurelogging";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="logModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    @Html.Label("Do You Want To log other User Also", htmlAttributes: new { @class = "", @id = "Title" })
+                </div>
+            </div>
+
+            <!-- dialog buttons -->
+            <div class="modal-footer footerbtn">
+                <button type="button" id="LogMultipleUserbtn" class="btn GreenBtn btn-primary" data-dismiss="modal">YES</button>
+                <button type="button" id="LogSingleUserbtn" class="btn btn-primary YellowBtn" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="logModalforSingleLog" class="modal fade" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- dialog body -->
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div>
+                    @Html.Label("Do You Want To log other User Also", htmlAttributes: new { @class = "", @id = "Title1" })
+                </div>
+            </div>
+
+            <!-- dialog buttons -->
+            <div class="modal-footer footerbtn">
+                <button type="button" id="LogSingleUserbtn1" class="btn GreenBtn btn-primary" data-dismiss="modal">YES</button>
+                <button type="button" class="btn btn-primary YellowBtn" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div style="margin-left:0.5%">
+                        <h2>Configure Logging</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("User Name", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6">                              
+                                @Html.LabelForModel(Model.FirstName, htmlAttributes: new { @style="text-align: left;",@class = "col-md-6  col-sm-3 control-label text-right" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Logging Types", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-5">
+                                <div class="select-icon">
+                                    @*@Html.DropDownListFor(m => m.Customer_Id, new SelectList(ViewBag.StoreUsers, "CompleteId", "Text", "dada"), "Select",
+                                        new { @style = "width: 200px;", @class = " form-control pull-right topspace selecter", @id = "ddlstoreUserloging", onchange = "onDrpChange();" })*@
+                                    @*<select id="ddlstoreUserloging" class="form-control pull-right topspace selecter" onchange="onDrpChange();">
+                                            <option value="">
+                                                Select Store User
+                                            </option>
+                                            @foreach (var item in ViewBag.StoreUsers)
+                                            {
+                                                <option id="@item.CompleteId" data-userlog="@item.issel" value="@item.CompleteId">@item.Text</option>
+                                            }
+                                        </select>*@
+                                    @Html.DropDownListFor(m => m.LoggTypeId, new SelectList(ViewBag.StoreUsers, "Id", "Text", "dada"),
+                                    new {  @class = " form-control pull-right topspace selecter", @id = "ddlUserlogingType" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Logging Enable", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                            <div class="col-sm-6">
+                                @Html.CheckBoxFor(m => m.Status, new { @style = "width: 18px;height:18px" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                @Html.HiddenFor(m => m.UserId)
+                @Html.HiddenFor(m => m.IsStoreUserLogging)
+                
+                <div class="row spacer1 spacer1">
+
+                </div>
+                <div class="row spacer1 spacer1">
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-6 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6">
+                            <button class="btn GreenBtn" id="UserLog" type="button">Save</button>
+
+                            <button id="btnCancel" class="btn YellowBtn" onclick="Cancel()" type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spacer1 spacer1">
+
+                </div>
+                <br />
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var usercount = 0;
+
+    //function onDrpChange() {
+    //    var selectedId = $("#ddlstoreUserloging").val();
+    //    if (selectedId != "") {
+    //        var currentval = $("#" + selectedId).attr('data-userlog')
+
+    //        if (currentval == "True") {
+    //            $('#Status').prop("checked", true);
+
+    //            result = true;
+    //        }
+    //        else {
+    //            $('#Status').prop("checked", false);
+    //        }
+
+
+    //    }
+    //}
+    function Cancel() {
+        window.location.href = '@Url.Action("ViewLoging", "ManageUsers")'; // Redirected to Home Page'../ManageRoles/ManageRoles';
+    }
+
+    $(document).ready(function () {
+
+        $("#UserLog").click(function () {
+            if ($("#ddlUserlogingType").val() != "") {
+                if ($("#Status").is(':checked') == true) {
+                    getLogvalues();
+                }
+                else if ($("#Status").is(':checked') == false) {
+                    getLogvalues();
+                }
+
+            }
+            else {
+                $.alert({ content: 'Please select Value in dropDown', confirm: function () { } });
+            }
+        });
+
+        $('#LogMultipleUserbtn').click(function (e) {
+            LogStoreUser();
+        });
+        $('#LogSingleUserbtn,#LogSingleUserbtn1').click(function (e) {
+            usercount = 0;
+            LogStoreUser();
+        });
+
+        function getLogvalues() {
+            //var value = $("#IsStoreUserLogging").val();
+            //if ($("#IsStoreUserLogging").val() == "True")
+            //{
+            //    value = true;
+            //}
+            //else {
+            //    value = false;
+            //}
+            //if (value == $("#Status").is(':checked')) {
+            //    if ($("#Status").is(':checked') == true) {
+            //        $.alert({ content: 'User is already logged', confirm: function () { } });
+            //    }
+            //    else {
+            //        $.alert({ content: 'User is already unlogged', confirm: function () { } });
+            //    }
+            //} else 
+            if ($("#Status").is(':checked') == true) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetStoreUserByLocation")', // Calling json method
+                    dataType: 'json',
+                    data: { UserId: $("#UserId").val() },
+                    success: function (data) {
+                        usercount = data;
+                        if (data > 1) {
+                            $("#Title").text(usercount + " more users are attached to this location. Do you want to enable logging for other user also?");
+                            $('#logModal').modal('show');
+                        }
+                        else {
+                            $("#Title1").text("Do you want to log the user?");
+                            $('#logModalforSingleLog').modal('show');
+                            usercount = 0;
+                            //$('#LogSingleUserbtn').trigger('click');
+                        }
+
+                    },
+                    error: function (ex) {
+                    }
+                });
+            }
+            else if ($("#Status").is(':checked') == false) {
+                $("#Title1").text("Do you want to disable logging for this user?");
+                $('#logModalforSingleLog').modal('show');
+            }
+
+        }
+        function LogStoreUser() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/LogStoreUserByLocation")', // Calling json method
+                dataType: 'json',
+                data: { UserId: $("#UserId").val(), count: usercount, Status: $("#Status").is(':checked'), LogType: parseInt($("#ddlUserlogingType").val()) },
+
+            }).done(function (data) {
+                if (data.IsUserLogging == true && data.Count == 0) {
+                    toastr.success("User Successfully Logged");
+                    result = true;
+                    $('#Status').attr("checked", true);
+                }
+                else if (data.IsUserLogging == false && data.Count == 0) {
+                    toastr.success("User Successfully UnLogged");
+                    result = true;
+                    $('#Status').attr("checked", false);
+                }
+                else if (data.Count > 0) {
+                    $('#Status').attr("checked", true);
+                    toastr.success("All User Successfully Logged");
+                    result = true;
+                }
+                //location.reload();
+                setTimeout(function () { window.location.href = '@Url.Action("ViewLoging", "ManageUsers")'; }, 2000)
+
+                //$("#ManageStoreUsersLogingGrid").data("kendoGrid").dataSource.read();
+            })
+        }
+    });
+</script>

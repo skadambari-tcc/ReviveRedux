@@ -1,0 +1,383 @@
+﻿@model Revive.Redux.Entities.MoveMachineModel
+@{
+    ViewBag.Title = "Move Machine";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+    <style>
+        .headingMachineMoving {
+            color: #7c0000 !important;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 35px;
+            text-align: center !important;
+            width: 100%;
+            padding-left: 140px;
+        }
+    </style>
+    using (Html.BeginForm("UpdateMoveMachine", "ManageMachineSpecs", FormMethod.Post, new { id = "submitForm" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.AntiForgeryToken()
+        <div>
+            <div class="col-md-12">
+                <div class="contant_page">
+                    <!-- tittle -->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2>Move Machine</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6" style="margin-left: -4%;">
+                            <div class="form-group">
+                                @Html.Label("MACHINE MOVING FROM", new { @class = "headingMachineMoving" })
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Customer", new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(m => m.CustomerIdFrom, new SelectList(Model.CustomerListFrom, "Id", "Text"), "--Select--", new Dictionary<string, Object> { { "id", "CustomerIdFrom" }, { "class", "form-control pull-right topspace selecter" } })
+                                    </div>
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(m => m.CustomerIdFrom)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Subsidiary", new {@class = "col-md-6  col-sm-3 control-label text-right required"})
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(m => m.SubsidiaryIdFrom, new SelectList(Model.SubsidiaryNameListFrom, "Id", "Text"), "--Select--", new Dictionary<string, Object> {{"id", "SubsidiaryIdFrom"}, {"class", "form-control pull-right topspace selecter"}})
+                                    </div>
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(m => m.SubsidiaryIdFrom)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Agent", new {@class = "col-md-6  col-sm-3 control-label text-right required"})
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(m => m.SubAgentIdFrom, new SelectList(Model.SubAgentNameListFrom, "Id", "Text"), "--Select--", new Dictionary<string, Object> {{"id", "SubAgentIdFrom"}, {"class", "form-control pull-right topspace selecter"}})
+                                    </div>
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(m => m.SubAgentIdFrom)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Location", new {@class = "col-md-6  col-sm-3 control-label text-right required"})
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(m => m.LocationIdFrom, new SelectList(Model.LocationListFrom, "Id", "Text"), "--Select--", new Dictionary<string, Object> {{"id", "LocationIdFrom"}, {"class", "form-control pull-right topspace selecter"}})
+                                    </div>
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(m => m.LocationIdFrom)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Machine", new {@class = "col-md-6  col-sm-3 control-label text-right required"})
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(m => m.ShippedMachId, new SelectList(Model.ShippedMachines, "Id", "Text"), "--Select--", new {@class = "form-control pull-right topspace selecter", @id = "ddlShippedMachines"})
+                                    </div>
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(m => m.ShippedMachId)&nbsp;</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="margin-left: -6%;">
+                            <div class="form-group">
+                                @Html.Label("MACHINE MOVING TO", new { @class = "headingMachineMoving" })
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Customer", new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(m => m.CustomerIdTo, new SelectList(Model.CustomerListTo, "Id", "Text"), "--Select--", new Dictionary<string, Object> { { "id", "CustomerIdTo" }, { "class", "form-control pull-right topspace selecter" } })
+                                    </div>
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(m => m.CustomerIdTo)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Subsidiary", new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(m => m.SubsidiaryIdTo, new SelectList(Model.SubsidiaryNameListTo, "Id", "Text"), "--Select--", new Dictionary<string, Object> { { "id", "SubsidiaryIdTo" }, { "class", "form-control pull-right topspace selecter" } })
+                                    </div>
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(m => m.SubsidiaryIdTo)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Agent", new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(m => m.SubAgentIdTo, new SelectList(Model.SubAgentNameListTo, "Id", "Text"), "--Select--", new Dictionary<string, Object> { { "id", "SubAgentIdTo" }, { "class", "form-control pull-right topspace selecter" } })
+                                    </div>
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(m => m.SubAgentIdTo)&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("Location", new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(m => m.LocationIdTo, new SelectList(Model.LocationListTo, "Id", "Text"), "--Select--", new Dictionary<string, Object> { { "id", "LocationIdTo" }, { "class", "form-control pull-right topspace selecter" } })
+                                    </div>
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(m => m.LocationIdTo)&nbsp;</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Transaction Type", new { @class = "col-md-6  col-sm-3 control-label text-right required" })
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(m => m.TransactionType, new SelectList(Model.TransactionTypeLst, "Id", "Text"), "--Select--", new Dictionary<string, Object> { { "id", "Transaction Type" }, { "class", "form-control pull-right topspace selecter" } })
+                                    </div>
+                                    <span class="field-validation-error">@Html.ValidationMessageFor(m => m.TransactionType)&nbsp;</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding-top: 2%">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-8">
+                            <div class="col-md-3 col-sm-3"></div>
+                            <div class="col-md-6 col-sm-6">
+                                <a id="btnMove" href="#" class="btn login_button btn-primary">Move</a>&nbsp;&nbsp;
+                                <a id="btnCancel" href="#" style="margin-left: 0px;" class="btn login_button btn-primary yellow">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        @if (TempData["MachineMoved"] != null && (bool)TempData["MachineMoved"] == true)
+            {
+                <text>toastr.success('You have successfully moved the machine.');</text>
+            }
+        function emptyAndSingleDropdown(controlName) {
+            $(controlName).empty();
+            $(controlName).append('<option value="">' + "--Select--" + '</option>');
+        }
+
+        $("#btnMove").click(function () {
+            var isValid = false;
+            if ($('#submitForm') != null && $('#submitForm').valid()) {
+                if ($("#CustomerIdFrom").val() === $("#CustomerIdTo").val() &&
+                    $("#SubsidiaryIdFrom").val() === $("#SubsidiaryIdTo").val() &&
+                    $("#SubAgentIdFrom").val() === $("#SubAgentIdTo").val() &&
+                    $("#LocationIdFrom").val() === $("#LocationIdTo").val()) {
+                    $.alert({ content: 'Cannot move machine to same location! ', confirm: function () { } });
+                } else {
+                    if ($('#submitForm').valid()) {
+                        $.confirm({
+                            content: 'Are you sure want to move Machine: ' + $("#ddlShippedMachines").find(":selected").text() + ' to: ' + $("#LocationIdTo").find(":selected").text() + '?',
+                            confirm: function () {
+                                isValid = true;
+                                $("#submitForm").submit();
+                            },
+                            cancel: function () {
+                                isValid = false;
+                            }
+                        });
+                    } else {
+                        isValid = false;
+                    }
+                }
+            } else {
+                isValid = false;
+            }
+            return isValid;
+        });
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("Index", "Home")';
+        });
+
+        $("#CustomerIdFrom").change(function () {
+            emptyAndSingleDropdown("#SubsidiaryIdFrom");
+            emptyAndSingleDropdown("#SubAgentIdFrom");
+            emptyAndSingleDropdown("#LocationIdFrom");
+            emptyAndSingleDropdown("#ddlShippedMachines");
+
+            var customerFrom = $("#CustomerIdFrom").val();
+
+            if (customerFrom !== '') {
+                var deferredObj = $.Deferred();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: customerFrom },
+                    success: function (subsidiaryList) {
+                        if (subsidiaryList.length > 0) {
+                            $.each(subsidiaryList, function (i, subsidiary) { $("#SubsidiaryIdFrom").append('<option value="' + subsidiary.Id + '">' + subsidiary.Text + '</option>'); });
+                        }
+                    },
+                    error: function (ex) {
+                        if (customerFrom != null && customerFrom !== '')
+                            $.alert({ content: 'Failed to retrieve Subsidiary. ' + ex, confirm: function () { } });
+                    }
+                });
+                return deferredObj.promise();
+            }
+        });
+
+        $("#SubsidiaryIdFrom").change(function () {
+            emptyAndSingleDropdown("#SubAgentIdFrom");
+            emptyAndSingleDropdown("#LocationIdFrom");
+            emptyAndSingleDropdown("#ddlShippedMachines");
+
+            var subsidiaryFrom = $("#SubsidiaryIdFrom").val();
+
+            if (subsidiaryFrom !== '') {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetAgentBySubsidiary")', // Calling json method
+                    dataType: 'json',
+                    data: { SubsidiaryId: subsidiaryFrom },
+                    success: function (agentList) {
+                        if (agentList.length > 0) {
+                            $.each(agentList, function (i, agent) { $("#SubAgentIdFrom").append('<option value="' + agent.Id + '">' + agent.Text + '</option>'); });
+                        }
+
+                    },
+                    error: function (ex) {
+                        if (subsidiaryFrom != null && subsidiaryFrom !== '') {
+                            $.alert({ content: 'Failed to retrieve Agent. ' + ex, confirm: function () { } });
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#SubAgentIdFrom").change(function () {
+            emptyAndSingleDropdown("#LocationIdFrom");
+            emptyAndSingleDropdown("#ddlShippedMachines");
+
+            var subAgentFrom = $("#SubAgentIdFrom").val();
+
+            if (subAgentFrom !== "") {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetCustomerLocationbyAgent")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: $("#CustomerIdFrom").val(), SubsidiaryId: $("#SubsidiaryIdFrom").val(), AgentId: subAgentFrom, IsActive: true },
+                    success: function (locList) {
+                        if (locList.length > 0) {
+                            $.each(locList, function (i, loc) {
+                                $("#LocationIdFrom").append('<option value="' + loc.Id + '">' + loc.Text + '</option>');
+                            });
+                        }
+                    },
+                    error: function (ex) { $.alert({ content: 'Failed to retrieve Locations. ' + ex, confirm: function () { } }); }
+                });
+            }
+        });
+
+        $("#LocationIdFrom").change(function () {
+            emptyAndSingleDropdown("#ddlShippedMachines");
+
+            var locationFrom = $("#LocationIdFrom").val();
+
+            if (locationFrom !== '') {
+                var deferredObj = $.Deferred();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetShippedMachines")', // Calling json method
+                    dataType: 'json',
+                    data: { customerId: $("#CustomerIdFrom").val(), locationId: locationFrom },
+                    success: function (machinesList) {
+                        if (machinesList.length > 0) {
+                            $.each(machinesList, function (i, machine) {
+                                $("#ddlShippedMachines").append('<option value="' + machine.Id + '">' + machine.Text + '</option>');
+                            });
+                        }
+                        deferredObj.resolve();
+                    },
+                    error: function (ex) { $.alert({ content: 'Failed to retrieve Machines. ' + ex, confirm: function () { } }); }
+                });
+                return deferredObj.promise();
+            }
+        });
+
+        $("#CustomerIdTo").change(function () {
+            emptyAndSingleDropdown("#SubsidiaryIdTo");
+            emptyAndSingleDropdown("#SubAgentIdTo");
+            emptyAndSingleDropdown("#LocationIdTo");
+
+            var customerFrom = $("#CustomerIdTo").val();
+
+            if (customerFrom !== '') {
+                var deferredObj = $.Deferred();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: customerFrom },
+                    success: function (subsidiaryList) {
+                        if (subsidiaryList.length > 0) {
+                            $.each(subsidiaryList, function (i, subsidiary) { $("#SubsidiaryIdTo").append('<option value="' + subsidiary.Id + '">' + subsidiary.Text + '</option>'); });
+                        }
+                    },
+                    error: function (ex) {
+                        if (customerFrom != null && customerFrom !== '')
+                            $.alert({ content: 'Failed to retrieve Subsidiary. ' + ex, confirm: function () { } });
+                    }
+                });
+                return deferredObj.promise();
+            }
+        });
+
+        $("#SubsidiaryIdTo").change(function () {
+            emptyAndSingleDropdown("#SubAgentIdTo");
+            emptyAndSingleDropdown("#LocationIdTo");
+
+            var subsidiaryFrom = $("#SubsidiaryIdTo").val();
+
+            if (subsidiaryFrom !== '') {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetAgentBySubsidiary")', // Calling json method
+                    dataType: 'json',
+                    data: { SubsidiaryId: subsidiaryFrom },
+                    success: function (agentList) {
+                        if (agentList.length > 0) {
+                            $.each(agentList, function (i, agent) { $("#SubAgentIdTo").append('<option value="' + agent.Id + '">' + agent.Text + '</option>'); });
+                        }
+
+                    },
+                    error: function (ex) {
+                        if (subsidiaryFrom != null && subsidiaryFrom !== '') {
+                            $.alert({ content: 'Failed to retrieve Agent. ' + ex, confirm: function () { } });
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#SubAgentIdTo").change(function () {
+            emptyAndSingleDropdown("#LocationIdTo");
+
+            var subAgentFrom = $("#SubAgentIdTo").val();
+
+            if (subAgentFrom !== "") {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetCustomerLocationbyAgent")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: $("#CustomerIdTo").val(), SubsidiaryId: $("#SubsidiaryIdTo").val(), AgentId: subAgentFrom, IsActive: true },
+                    success: function (locList) {
+                        if (locList.length > 0) {
+                            $.each(locList, function (i, loc) {
+                                $("#LocationIdTo").append('<option value="' + loc.Id + '">' + loc.Text + '</option>');
+                            });
+                        }
+                    },
+                    error: function (ex) { $.alert({ content: 'Failed to retrieve Locations. ' + ex, confirm: function () { } }); }
+                });
+            }
+        });
+
+    });
+</script>

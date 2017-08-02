@@ -1,0 +1,168 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model MachineModel
+<style>
+    .LableTextMargin {
+        margin-top: 3px;
+    }
+
+
+    .k-grid tbody tr:hover {
+        background: #faecc1;
+    }
+</style>
+
+@{
+    ViewBag.Title = "View Order Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="modal-body" style="padding:15px 15px 0;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>VIEW ORDER Details</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="col-md-12">
+        <div class="contant_page">
+            <div class="row">
+                <!-- collun1 -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.Label("Order Number", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                        <div class="col-sm-6 LableTextMargin">
+                            @ViewBag.OrderNumber
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Expected Date</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @ViewBag.ExpectedDate
+                        </div>
+                    </div>
+                </div>
+                <!-- collun2 -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Customer Name</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @ViewBag.CustomerName
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Machine Specs</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @ViewBag.MachineSpecs
+                        </div>
+                    </div>
+                </div>
+                <!-- collun3 -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">No. of Machines</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @ViewBag.NoOfMachines
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- collun4 -->
+            @Html.HiddenFor(m => m.JobOrderHeaderID)
+            <div class="row" style="height:30px"></div>
+            <div class="row">
+                <div class="col-md-2  col-sm-12 control-label text-right">Machine Details </div>
+                <div class="">
+                    <div class="grid-align table-responsive Kendogrid">
+                        @(Html.Kendo().Grid<MachineModel>()
+                .Name("MoreDetails")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.MachineId_Val).Title("Machine Id");
+                    columns.Bound(p => p.Location).Title("Location");
+                    columns.Bound(p => p.MachineStatusName).Title("Machine Status");
+                    columns.Bound(p => p.MidLineTest).Title("Mid-Line Test");
+                    columns.Bound(p => p.ULTest).Title("UL Test");
+                    columns.Bound(p => p.FinalTest).Title("Final Test");
+                    columns.Bound(p => p.ShippingId).Title("Shipping Id");
+                })
+                        .Pageable(pageable =>
+                                                        {
+                                                            pageable.Refresh(true);
+                                                            pageable.PageSizes(new int[] { 10, 20, 50 });
+                                                            pageable.Messages(messages => messages.Empty("No record found!"));
+                                                        })
+                        .Filterable(f => f.Operators(o => o.ForString(fs =>
+                            {
+                                fs.Clear().Contains("Contains");
+                                fs.DoesNotContain("Does not contain");
+                                fs.IsEqualTo("Equal to");
+                                fs.IsNotEqualTo("Not equal to");
+                                fs.StartsWith("Starts with");
+                                fs.EndsWith("Ends with");
+                            })))
+                        .Sortable()
+                                .Scrollable()
+                        .ColumnResizeHandleWidth(900)
+                                    .HtmlAttributes(new { style = "width:91%;height:215px;" })
+                .DataSource(dataSource => dataSource.Ajax()
+                    .PageSize(10)
+                            .Events(events => events.Error("onError"))
+                    .Model(model =>
+                    {
+                        model.Id(p => p.MachineMappingId);
+                        model.Field(p => p.MachineId).Editable(false);
+                        model.Field(p => p.Location).Editable(false);
+                        model.Field(p => p.MachineStatusName).Editable(false);
+                        model.Field(p => p.MidLineTest).Editable(false);
+                        model.Field(p => p.ULTest).Editable(false);
+                        model.Field(p => p.FinalTest).Editable(false);
+                    })
+                                    .Read(read => read.Action("GetMoreDetailsAjax", "Machine").Data("additionalInfo"))
+                )
+                        )
+                    </div>
+
+                </div>
+            </div>
+            <div class="row" style="padding-top: 2%">
+                <div class="col-md-3"></div>
+                <div class="col-md-8">
+                    <div class="col-md-3 col-sm-3"></div>
+                    <div class="col-md-6 col-sm-6">
+                        <a class="btn login_button btn-primary yellow" href='@Url.Action("ViewOrder", "Order", new { Id = Model.JobOrderHeaderIdEncoded })' target="_self">Back</a>
+                    </div>
+                </div>
+            </div>
+            <!-- collun4 ends-->
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Orders');
+    });
+
+    function additionalInfo() {
+        return { jobOrderId: $("input#JobOrderHeaderID").val() }
+    }
+    function onError(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+    </script>

@@ -1,0 +1,179 @@
+﻿@using Revive.Redux.UI
+@model LoginViewModel
+@{
+     ViewBag.Title = "REDUX";
+}
+@*<h2>@ViewBag.Title</h2>*@
+<div class="body-content">
+
+    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+       
+        <div class="row">
+            <div class="col-md-12">
+                <div class="contant_page">
+                    <div id="loginDiv" class="table-responsive" style="width:50%">
+                     
+                        <div style="width: 100%; border: medium none;">
+                            <div class="headerlabel" style="text-align:center">
+                                Login Information
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-0"></div>
+                                <div class="col-md-12">
+                                    <div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger", @id = "IdEmailError" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group" >
+                                            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                                            <div class="col-md-9">
+                                                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger", @id = "IdPasswordError" })
+                                                @Html.ValidationMessageFor(m => m.ErrorMessage, "", new { @class = "red",@id="IdOthermsgError" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-2"></div>
+                                            <div class="col-md-10" >@*style="margin-left: 18%;"*@                                                
+                                                    @Html.CheckBoxFor(m => m.RememberMe)
+                                                    @Html.Label("Keep me signed in", new { @style = " vertical-align: 2px;" })                                                
+                                            </div>
+                                        </div>
+                                      
+                                        <div class="form-group">
+                                            <div class="col-md-2"></div>
+                                            <div class="col-md-10">
+                                                
+                                                @Html.ActionLink("Forgot Password?", "ForgotPassword", "Account")
+
+                                            </div>
+
+                                        </div>
+                                        <br />
+                                        <div class="form-group">
+                                            <div class="col-md-2"></div>
+                                            <div class="col-md-10">
+                                                <input type="submit" value="Log in" class="btn btn-default GreenBtn" id="loginBTN" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+
+            </div>
+        </div>
+
+        @* Enable this once you have account confirmation enabled for password reset functionality
+            <p>
+                @Html.ActionLink("Forgot your password?", "ForgotPassword")
+            </p>*@
+
+
+        @*<div class="col-md-4">
+                <section id="socialLoginForm">
+                    @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                </section>
+            </div>*@
+
+    }
+</div>
+
+<style>
+    #loginDiv {
+        box-shadow: 0 4px 20px -4px black;
+        margin: 50px auto 0;
+        padding: 20px;
+        background-color: white;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+
+    .headerlabel {
+        color: #113b96;
+        font: bold 24px Ubuntu,Arial,Helvetica;
+    }
+
+
+    #Tabs {
+        visibility: hidden;
+    }
+
+    #logout {
+        visibility: hidden;
+    }
+    .navbar-toggle{
+          visibility: hidden;
+    }
+</style>
+<script type="text/javascript">
+ 
+
+        @if (TempData["isForgotPwdSuccess"] != null && (bool)TempData["isForgotPwdSuccess"] == true)
+    {
+        <text>toastr.success('Password has been sent to your registered email address successfully.');</text>
+
+
+    }
+    $(document).ready(function () {
+       
+        $('#Email').blur(function () {
+            if ($('#Email').val() == "") {
+                $('#IdEmailError').show();
+                $('#IdOthermsgError').hide()
+            }
+        });
+
+        $('#Password').blur(function () {
+            if ($('#Password').val() == "") {
+                $('#IdPasswordError').show();
+                $('#IdOthermsgError').hide();
+            }
+        });
+
+        $('#loginBTN').click(function () {
+            if ($('#IdPasswordError').val() != "" && $('#Password').val()!='') {
+                $('#IdPasswordError').hide();
+                $('#IdOthermsgError').show();
+            }
+            
+            if ( $('#Password').val() == '') {
+                $('#IdPasswordError').show();
+                $('#IdOthermsgError').hide();
+            }
+            if ($('#Email').val() == '') {
+                $('#IdEmailError').show();
+                $('#IdOthermsgError').hide();
+            }
+
+            if ($('#IdPasswordError').val() != "" && $('#Password').val() == '') {
+                $('#IdPasswordError').show();
+                $('#IdOthermsgError').hide();
+            }
+
+
+
+        });
+
+     
+        
+
+      
+
+        
+    });
+   </script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,172 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model OrderModel
+@{
+    ViewBag.Title = "Manage Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #body {
+        /*height: 550px;*/
+    }
+    .k-grid tbody tr:hover {
+        background: #faecc1;
+    }
+    .col-md-4 {
+        width: 30%;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Orders');
+        @if (TempData["OrderCreated"] != null && (bool)TempData["OrderCreated"] == true)
+        {
+
+            <text>toastr.success('Order Created Successfully.');</text>
+        }
+        @if (TempData["OrderApproved"] != null && (bool)TempData["OrderApproved"] == true)
+        {
+
+            <text>toastr.success('Order Approved Successfully.');</text>
+        }
+        @if (TempData["OrderRejected"] != null && (bool)TempData["OrderRejected"] == true)
+        {
+
+            <text>toastr.success('Order Rejected Successfully.');</text>
+        }
+        @if (TempData["OrderAssigned"] != null && (bool)TempData["OrderAssigned"] == true)
+        {
+
+            <text>toastr.success('Order Assigned Successfully.');</text>
+        }
+        @if (TempData["OrderLocationsUpdated"] != null && (bool)TempData["OrderLocationsUpdated"] == true)
+        {
+
+            <text>toastr.success('Order locations updated successfully.');</text>
+        }
+        Revive.Redux.Common.SetKendoGridHeight();
+    });
+</script>
+<div class="modal-body" @*style="padding:0px!important"*@>
+    <input type="hidden" id="PageAccessCode" name="PageAccessCode" value="@Model.PageAccessCode" />
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>MANAGE ORDERS</h2>
+                    </div>                 
+                    @if (@Model.PageAccessCode == "CLIENTEXEC" || @Model.PageAccessCode == "ACCNTMGR")
+                    {
+                    <div class="row">
+                        <div class="col-md-8 col-sm-8"></div>
+                        <div class="col-md-4 col-sm-4" style="float: right;">
+                            <div class="col-md-5 col-sm-5 "></div>
+                            <div class="col-md-7 col-sm-7 ">                                
+                                <a class="btn login_button btn-primary" href='@Url.Action("Create", "Order")'>New Order</a>                                
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    }
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid">
+                            @(Html.Kendo().Grid<OrderModel>()
+                .Name("ManageOrders")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.JobOrderHeaderId).Title("Order Number");
+                    columns.Bound(p => p.CustomerName).Title("Customer Name");
+                    columns.Bound(p => p.StatusName).Title("Status");
+                    columns.Bound(p => p.NoOfMachines).Title("No of Mc's");
+                    columns.Bound(p => p.CreatedDate).Title("Order Date").ClientTemplate("#= kendo.toString(kendo.parseDate(CreatedDate, 'yyyy-MM-dd'), 'MM-dd-yyyy') #");
+                    columns.Bound(p => p.ExpectedDate).Title("Expected Date").ClientTemplate("#= kendo.toString(kendo.parseDate(ExpectedDate, 'yyyy-MM-dd'), 'MM-dd-yyyy') #");
+                    columns.Bound(p => p.ManufacturerName).Title("Manufacturer");
+                    columns.Bound(p => p.JobOrderHeaderId).Title("View").ClientTemplate(
+                        "<a title='View Order' href='" + Url.Action("ViewOrder", "Order") + "/#= JobOrderHeaderIdEncoded #'" + "><i class='fa fa-eye fa-lg icon-color'></i></a>"
+                    ).Filterable(false).Sortable(false);
+                    columns.Bound(p => p.JobOrderHeaderId).Title("Edit").ClientTemplate(
+                        "# if (PageAccessCode == 'ACCNTMGR' || PageAccessCode == 'CLIENTEXEC') {" +
+                        // Logic as per => 2.36.2.1
+                            "if(StatusName == 'Pending Approval' || StatusName == 'Pending PC' || StatusName == 'In-Progress'){" +
+                                "#<a href='" + Url.Action("UpdateLocations", "Order") + "/#= JobOrderHeaderIdEncoded #'" + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>#" +
+                            "}" +
+                        "}" +
+                        // Changes done for showing PendingApproval tasks to Admin & SuperAdmin also
+                        //"else if (PageAccessCode == 'APPROVER'){" +
+                        "else if (PageAccessCode == 'APPROVER' || PageAccessCode == 'SUPERADMIN' || PageAccessCode == 'ADMIN'){" +
+                        // Logic as per => 2.33.2.1
+                            "if(StatusName == 'Pending Approval'){" +
+                                "#<a href='" + Url.Action("Approve", "Order") + "/#= JobOrderHeaderIdEncoded #'" + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>#" +
+                            "}" +
+                        "}" +
+                        "else if (PageAccessCode == 'MFPC') {" +
+                        // Logic as per => 2.35.2.1
+                            "if(StatusName == 'Pending PC'){" +
+                                "#<a href='" + Url.Action("Assign", "Order") + "/#= JobOrderHeaderIdEncoded #'" + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>#" +
+                            "}" +
+                        "}" +
+                        "else if (PageAccessCode == 'MFASSEMBLY') {" +
+                        // Logic as per email dated: 22Apr15
+                            "if(StatusName == 'In-Progress'){" +
+                                "#<a href='" + Url.Action("ShipMachines", "ManageShipping") + "/#= JobOrderHeaderIdEncoded #'" + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>#" +
+                            "}" +
+
+                        "}" +
+                        "else if (PageAccessCode == 'MFSHIP') {" +
+                        // Logic as per email dated: 22Apr15
+                            "if(StatusName == 'In-Progress'){" +
+                                "#<a href='" + Url.Action("Shipping", "Machine") + "/#= JobOrderHeaderIdEncoded #'" + "><i class='fa fa-pencil fa-lg icon-color', style='align:center'></i></a>#" +
+                            "}" +
+
+                        "}" +
+                        "else{}#"
+
+
+                    ).Filterable(false).Sortable(false);
+                })
+                .Pageable(pageable =>
+                {
+                    pageable.Refresh(true);
+                    pageable.PageSizes(new int[] { 10, 20, 50 });
+                    pageable.Messages(messages => messages.Empty("No records available!"));
+                })
+                        .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                       {
+                                           fs.Clear().Contains("Contains");
+                                           fs.DoesNotContain("Does not contain");
+                                           fs.IsEqualTo("Equal to");
+                                           fs.IsNotEqualTo("Not equal to");
+                                           fs.StartsWith("Starts with");
+                                           fs.EndsWith("Ends with");
+                                       })))
+                .Sortable()
+                .Scrollable()
+                .ColumnResizeHandleWidth(900)
+                .HtmlAttributes(new { style = "width:91%;" })
+                .DataSource(dataSource => dataSource.Ajax().PageSize(10)
+                .ServerOperation(false) // paging, sorting, filtering and grouping will be applied client-side
+                .Read("ManageOrdersAjax", "Order")
+                        .Events(events => events.RequestEnd("onRequestEnd"))
+                )
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function onRequestEnd(e) {
+        var PageAccessCode = $("#PageAccessCode").val();
+        if (PageAccessCode != null && PageAccessCode != '') {
+            // Changes done for showing PendingApproval tasks to Admin & SuperAdmin also
+            //if (PageAccessCode != 'APPROVER' && PageAccessCode != 'CLIENTEXEC' && PageAccessCode != 'MFASSEMBLY' && PageAccessCode != 'MFPC' && PageAccessCode != 'MFSHIP' && PageAccessCode != 'ACCNTMGR') {
+            if (PageAccessCode != 'APPROVER' && PageAccessCode != 'SUPERADMIN' && PageAccessCode != 'ADMIN' && PageAccessCode != 'CLIENTEXEC' && PageAccessCode != 'MFASSEMBLY' && PageAccessCode != 'MFPC' && PageAccessCode != 'MFSHIP' && PageAccessCode != 'ACCNTMGR') {
+                var grid = $('#ManageOrders').data('kendoGrid');
+                grid.hideColumn(8);
+            }
+        }
+    }
+</script>

@@ -1,0 +1,793 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model OrderModel
+<style>
+    #body {
+        height: 100%;
+    }
+
+    .LableTextMargin {
+        margin-top: 3px;
+    }
+
+    .Title {
+        text-align: left;
+        font-size: larger;
+        color: #7c0000;
+        margin-left: 8px;
+    }
+
+    .k-window-titlebar {
+        height: 35px !important;
+    }
+
+    .k-window div.k-window-content {
+        overflow-x: hidden !important;
+    }
+</style>
+@{
+    ViewBag.Title = "Map Machines";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.UI.Fluent
+<style type="text/css">
+    .modal .fade {
+        top: 30%;
+        transition: opacity 0.3s linear;
+    }
+
+        .modal.fade.in {
+            top: 30%;
+        }
+
+    .modal-backdrop {
+        background-color: #000;
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 0 !important;
+    }
+
+    .butn-space {
+        padding-top: 10px;
+    }
+
+    .k-list-container {
+        color: #000000;
+        background-color: #fff;
+        border-color: #363940;
+    }
+</style>
+<style>
+    table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        align-content: center;
+        box-sizing: content-box;
+        width: 100%;
+    }
+
+    thead, tbody {
+        display: block;
+    }
+
+    th, td {
+        height: 1em;
+        text-align: center;
+    }
+
+    .c1 {
+        width: 11em;
+    }
+
+    .c11 {
+        width: 9.8em;
+    }
+    .c12 {
+        width: 9.9em;
+    }
+    .c13 {
+        width: 9.8em;
+    }
+    .c14 {
+        width: 9.9em;
+    }
+    .c15 {
+        width: 9em;
+    }
+    .c16 {
+        width: 9em;
+    }
+    .c17 {
+        width: 9.8em;
+    }
+    .c18 {
+        width: 9.7em;
+    }
+    .c19 {
+        width: 9em;
+    }
+    tbody, thead {
+        overflow-y: scroll;
+    }
+
+    tbody {
+        height: 9em;
+        box-sizing: border-box;
+    }
+</style>
+
+<script src="~/Scripts/knockout-3.2.0.js"></script>
+
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Edit Location/Machine ID</h4>
+            </div>
+            <div class="modal-body" style="height:105px">
+                <input type="hidden" id="hdnCurrentMachineMappingId" value="" />
+                <input type="hidden" id="hdnMachineIdToChange" value="" />
+                <input type="hidden" id="hdnSoftwareVersionId" value="" />
+               
+
+                <div class="form-group">
+                   
+                    @*<label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">No. of Machines Remaining To Be Mapped</label>
+                    <div class="col-sm-6 LableTextMargin">
+                        @Html.DisplayFor(order => order.NoOfMachinesMapped) @Html.Label(order => order.NoOfMachinesMapped)
+                    </div>*@
+
+
+                    <label class="col-md-2  col-sm-3 control-label text-right" for="inputtype1">Locations</label>
+                    <div class="col-sm-4">
+                        @(Html.Kendo().ComboBox()
+                                .Name("ddlLocationEdit")
+                                .Events(e => e
+                                    .Change("ddlLocationEditChange")
+                                )
+                                .DataTextField("Text")
+                                .DataValueField("Id")
+                                .Filter(FilterType.Contains)
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("GetOrderLocationsEdit", "Machine").Data("additionalInfo");
+                                    });
+                                })
+                        )
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2  col-sm-3 control-label text-right" for="inputtype1">Machine ID</label>
+                    <div class="col-sm-4">
+                        @(Html.Kendo().ComboBox()
+                        .Name("ddlMachineIdsEdit")
+                        .Events(e => e
+                            .Change("ddlMachineIdsEditChange")
+                        )
+                        .DataTextField("Text")
+                        .DataValueField("Id")
+                        .Filter(FilterType.Contains)
+                        .DataSource(source =>
+                        {
+                            source.Read(read =>
+                            {
+                                read.Action("GetUnassignedMachineIDForUpdate", "Machine").Data("CurrentMachineMapId");
+                            });
+                        })
+                        )
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default YellowBtn" data-dismiss="modal">Close</button>
+                <a id="UpdateMachine" class="btn btn-primary GreenBtn" data-bind="event:{click:OnUpdateMachine}">Update</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="contant_page">
+            <!-- tittle -->
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 style="margin-left:-1.5%;padding-top: 15px;">Map Machines</h2>
+                </div>
+            </div>
+            <div class="row">
+                <!-- collun1 -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.Label("Order Number", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.JobOrderHeaderId) @Html.HiddenFor(order => order.JobOrderHeaderId)
+                            @Html.HiddenFor(model => model.softwareVersionId)
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Expected Date</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.ExpectedOrderDate)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Remaining Machines To Be Mapped</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.NoOfMachinesMapped)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.Label("Customer Name", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.CustomerName)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">M/s Specs</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @*@Html.DisplayFor(order => order.MachineSpecs)*@
+                            <a onclick='return MachineSpecs_View("@Model.MachineSpecsId");' href='javascript:void(0);'>@Html.DisplayFor(modelItem => modelItem.MachineSpecs)</a>
+
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Locations</label>
+                        <div class="col-sm-6">
+                            @(Html.Kendo().ComboBox()
+                                .Name("ddlLocation")
+                                .Events(e => e
+                                    .Change("ddlLocationChange")
+                                )
+                                .DataTextField("Text")
+                                .DataValueField("Id")
+                                .Filter(FilterType.Contains)
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("GetOrderLocations", "Machine").Data("additionalInfo");
+                                    });
+                                })
+                            )
+                        </div>
+                    </div>
+                    
+                </div>
+                <!-- collun2 -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">No. of Machines</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @Html.DisplayFor(order => order.NoOfMachines) @Html.HiddenFor(order => order.NoOfMachines)
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right" for="inputtype1">Software</label>
+                        <div class="col-sm-6 LableTextMargin">
+                            @if (Model.DownloadSWUrl == "#")
+                            {
+                                <a href='@Model.DownloadSWUrl'>Download</a>
+                            }
+                            else
+                            {
+                                <a href='@Model.DownloadSWUrl' target="_blank">Download</a>
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6  col-sm-3 control-label text-right required" for="inputtype1">Machine ID</label>
+                        <div class="col-sm-6">
+                            @(Html.Kendo().ComboBox()
+                                .Name("ddlMachineIds")
+                                .Events(e => e
+                                    .Change("ddlMachineIdsChange")
+                                )
+                                .DataTextField("Text")
+                                .DataValueField("Id")
+                                .Filter(FilterType.Contains)
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("GetUnassignedMachineID", "Machine").Type(HttpVerbs.Post);
+                                    });
+                                })
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- collun4 -->
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-7">
+                    <div class="col-md-3 col-sm-3"></div>
+                    <div class="col-md-1 col-sm-6  butn-space">
+                        <a id="AddMachine" style="width:120px" class="btn login_button btn-primary btn-block butn_speacer" data-bind="event:{click:OnAddMachine}">Add Machine</a>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row" style="margin-left: -3%">
+                <div class="col-md-11">
+                    <div class="table-responsive scroller scrollerMapMachine" data-bind="visible: machineList().length > 0">
+                        <table style="width:100%; max-width: 99.99%" class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="c1"><span class="order_tittle">Machine ID</span></th>
+                                    <th class="c1"><span class="order_tittle">Location</span></th>
+                                    <th class="c1"><span class="order_tittle">Machine Status</span></th>
+                                    <th class="c1"><span class="order_tittle">Mid-Line Test</span></th>
+                                    <th class="c1"><span class="order_tittle">UL Test</span></th>
+                                    <th class="c1"><span class="order_tittle">Final Test</span></th>
+                                    <th class="c1"><span class="order_tittle">Shipping ID</span></th>
+                                    <th class="c1"><span class="order_tittle">Testing</span></th>
+                                    <th class="c1"><span class="order_tittle">Edit Details</span></th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: machineList">
+
+                                <tr data-bind="attr: {id:MachineMappingId}">
+                                    <td class="c11"><label data-bind='text: MachineId_Val' /><label data-bind='text: MachineId' style="display:none;" /></td>
+                                    <td class="c12"><label data-bind='text: Location' /><label data-bind='text: LocationId' style="display:none;" /></td>
+                                    <td class="c13"><label data-bind='text: MachineStatusName' /></td>
+                                    <td class="c14"><label data-bind='text: MidLineTest' /><label data-bind='text: MidLineTestId' style="display:none;" /></tdclass>
+                                    <td class="c15"><label data-bind='text: ULTest' /><label data-bind='text: ULTestId' style="display:none;" /></td>
+                                    <td class="c16"><label data-bind='text: FinalTest' /><label data-bind='text: FinalTestId' style="display:none;" /></td>
+                                    <td class="c17"><label data-bind='text: ShippingId' /></td>
+                                    <td class="c18">
+                                        <a data-bind="attr: { 'href': '@Url.Action("Perform", "Testing")/' + MachineMappingIdEncoded}" class="cssClass">
+                                            <i class="fa fa-pencil fa-lg icon-color" style='align:center'></i>
+                                        </a>
+                                    </td>
+                                    <td class="c19">
+                                        <a id="Edit" data-bind="visible: MachineStatusName == 'Pending Testing' || MachineStatusName == 'In-Testing', event:{click:$root.PopulateEditGrid}, attr:{MachineMappingId:MachineMappingId}" href="#">
+                                            <i class="fa fa-pencil fa-lg icon-color" style='align:center'></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        @*<table class="table table-striped table-hover table-bordered" style="overflow-x: scroll">
+                                <thead>
+                                    <tr>
+                                        <th style="min-width: 100px;"><span class="order_tittle">Machine ID</span></th>
+                                        <th style="min-width: 100px;"><span class="order_tittle">Location</span></th>
+                                        <th style="min-width: 100px;"><span class="order_tittle">Machine Status</span></th>
+                                        <th style="min-width: 120px;"><span class="order_tittle">Mid-Line Test</span></th>
+                                        <th style="min-width: 100px;"><span class="order_tittle">UL Test</span></th>
+                                        <th style="min-width: 100px;"><span class="order_tittle">Final Test</span></th>
+                                        <th style="min-width: 100px;"><span class="order_tittle">Shipping ID</span></th>
+                                        <th style="min-width: 60px;"><span class="order_tittle">Testing</span></th>
+                                        <th style="min-width: 50px;"><span class="order_tittle">Edit Details</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: machineList">
+                                    <tr data-bind="attr: {id:MachineMappingId}">
+                                        <td><label data-bind='text: MachineId_Val' /><label data-bind='text: MachineId' style="display:none;" /></td>
+                                        <td><label data-bind='text: Location' /><label data-bind='text: LocationId' style="display:none;" /></td>
+                                        <td><label data-bind='text: MachineStatusName' /></td>
+                                        <td><label data-bind='text: MidLineTest' /><label data-bind='text: MidLineTestId' style="display:none;" /></td>
+                                        <td><label data-bind='text: ULTest' /><label data-bind='text: ULTestId' style="display:none;" /></td>
+                                        <td><label data-bind='text: FinalTest' /><label data-bind='text: FinalTestId' style="display:none;" /></td>
+                                        <td><label data-bind='text: ShippingId' /></td>
+                                        <td>
+                                            <a data-bind="attr: { 'href': '@Url.Action("Perform", "Testing")/' + MachineMappingIdEncoded}" class="cssClass">
+                                                <i class="fa fa-pencil fa-lg icon-color" style='align:center'></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a id="Edit" data-bind="visible: MachineStatusName == 'Pending Testing' || MachineStatusName == 'In-Testing', event:{click:$root.PopulateEditGrid}, attr:{MachineMappingId:MachineMappingId}" href="#">
+                                                <i class="fa fa-pencil fa-lg icon-color" style='align:center'></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>*@
+                    </div>
+                    <div data-bind="visible: machineList().length == 0" class="LableTextMargin">
+                        <b>No machines have been mapped for this order.</b>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                </div>
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-7">
+                        <div class="col-md-3 col-sm-3"></div>
+                        <div class="col-md-6 col-sm-6  butn-space">
+                            <button id="btnBack" type="button" class="btn login_button btn-primary yellow">Back</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="MachineWindow">
+    @(Html.Kendo().Window()
+           .Name("MachineSpecsWindow")
+           .Title("View Machine Specs")
+           .Modal(true)
+           .Content(@<text>
+
+        </text>)
+                                                                                                        .Draggable()
+                                                                                                        .Resizable()
+                                                                                                        .Width(600)
+                                                                                                        .Height(370)
+                                                                                                        .Actions(actions => actions.Close())
+
+    )
+</div>
+
+
+
+<script type="text/javascript">
+    function additionalInfo() {
+        return { jobOrderId: $("input#JobOrderHeaderId").val() }
+    }
+    function CurrentMachineMapId() {
+        return { machineMapId: $("#hdnCurrentMachineMappingId").val() }
+    }
+
+    function ddlLocationChange() {
+        var cmb = this;
+        if (cmb.selectedIndex < 0) {
+            cmb.value(null);
+        }
+    }
+    function ddlLocationEditChange() {
+        var cmb = this;
+        if (cmb.selectedIndex < 0) {
+            cmb.value(null);
+        }
+    }
+    function ddlMachineIdsChange() {
+        var cmb = this;
+        if (cmb.selectedIndex < 0) {
+            cmb.value(null);
+        }
+    }
+    function ddlMachineIdsEditChange() {
+        var cmb = this;
+        if (cmb.selectedIndex < 0) {
+            cmb.value(null);
+        }
+    }
+
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Orders');
+        $(".k-overlay").hide();
+        $(".k-window").hide();
+
+        @if (TempData["MachineTestingUpdated"] != null && (bool)TempData["MachineTestingUpdated"] == true)
+        {
+            <text>toastr.success('You have successfully updated Machine Testing results.');</text>
+        }
+        $("#btnBack").click(function () {
+            window.location.href = '@Url.Action("Manage", "Order")';
+        });
+        var MachinesModel = function () {
+            var self = this;
+            self.machineList = ko.observableArray();
+            self.Machines = function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetMappedMachinesByOrderId")',
+                    dataType: 'json',
+                    data: { id: $("input#JobOrderHeaderId").val() },
+                    success: function (Machs) {
+                        if (Machs.length > 0) {
+                            $.each(Machs, function (i, Mach) {
+                                self.machineList.push(Mach);
+                            });
+                        }
+                    },
+                    error: function (ex) {
+                        $.alert({ content: 'Failed to retrieve Mapped machines list. ' + ex, confirm: function () { } });
+                    }
+                });
+            };
+            self.OnAddMachine = function () {
+                if ($("#ddlMachineIds").data("kendoComboBox").select() == -1 || $("#ddlMachineIds").val() == '') {
+                    $.alert({ content: 'Please select a Machine ID!', confirm: function () { } });
+                    return false;
+                }
+                if (self.machineList().length >= $("#NoOfMachines").val()) {
+                    $.alert({ content: 'You cannot enter more than No of Machines specified!', confirm: function () { } });
+                    return false;
+                }
+                InsertRecord().done(function (machines) {
+                    self.machineList([]);
+                    $.each(machines, function (i, mach) {
+                        self.machineList.push(mach);
+                    });
+                    window.location.href = '@Url.Action("MapMachines", "Machine")';
+
+                    $("#ddlMachineIds").data("kendoComboBox").text('');
+                    $("#ddlMachineIds").data("kendoComboBox").dataSource.read();
+                    //$("#ddlMachineIdsEdit").data("kendoComboBox").text('');
+                    //$("#ddlMachineIdsEdit").data("kendoComboBox").dataSource.read();
+                    $("#ddlLocation").data("kendoComboBox").text('');
+                    $("#ddlLocation").data("kendoComboBox").dataSource.read();
+                    $("#ddlLocationEdit").data("kendoComboBox").text('');
+                    $("#ddlLocationEdit").data("kendoComboBox").dataSource.read();
+                });
+            };
+            self.PopulateEditGrid = function () {
+                if ($("#hdnCurrentMachineMappingId").length == 0 || $("#hdnMachineIdToChange").length == 0) {
+                    $.alert({ content: 'Error setting current row.', confirm: function () { } });
+                    return false;
+                }
+                else {
+                    if ($(this) == null || $(this)[0].MachineMappingId == null || $(this)[0].MachineId == null) {
+                        $.alert({ content: 'Error getting current row ID.', confirm: function () { } });
+                        return false;
+                    }
+                    else {
+                        $("#hdnCurrentMachineMappingId").val($(this)[0].MachineMappingId);
+                        $("#ddlMachineIdsEdit").data("kendoComboBox").text('');
+                        $("#ddlMachineIdsEdit").data("kendoComboBox").dataSource.read();
+                        $("#ddlMachineIdsEdit").data("kendoComboBox").value($(this)[0].MachineId);
+                        //debugger;
+                        $("#ddlLocationEdit").data("kendoComboBox").value($(this)[0].JobOrderLocationId);
+
+
+                        $('#myModal').modal('show');
+                        $("#hdnMachineIdToChange").val($(this)[0].MachineId);
+                    }
+                }
+            };
+            self.OnUpdateMachine = function () {
+                if ($("#hdnCurrentMachineMappingId").val() != '' && $("#hdnMachineIdToChange").val() != '') {
+                    if ($("#ddlMachineIdsEdit").data("kendoComboBox").select() == -1 || $("#ddlMachineIdsEdit").val() == '') {
+                        $.alert({ content: 'Please select a Machine ID!', confirm: function () { } });
+                        return false;
+                    }
+                    UpdateRecord().done(function (machines) {
+                        self.machineList([]);
+                        $.each(machines, function (i, mach) {
+                            self.machineList.push(mach);
+                        });
+                        $("#ddlMachineIds").data("kendoComboBox").text('');
+                        $("#ddlMachineIds").data("kendoComboBox").dataSource.read();
+                        //$("#ddlMachineIdsEdit").data("kendoComboBox").text('');
+                        //$("#ddlMachineIdsEdit").data("kendoComboBox").dataSource.read();
+                        // Set 0th index
+                        //$("#ddlLocationEdit")[0].selectedIndex = 0;
+                        $("#ddlLocation").data("kendoComboBox").text('');
+                        $("#ddlLocation").data("kendoComboBox").dataSource.read();
+                        $("#ddlLocationEdit").data("kendoComboBox").text('');
+                        $("#ddlLocationEdit").data("kendoComboBox").dataSource.read();
+                        $('#myModal').modal('hide');
+                        $("#hdnCurrentMachineMappingId").val('');
+                        $("#hdnMachineIdToChange").val('');
+                    });
+                }
+                else {
+                    $.alert({ content: 'There is some error updating the record.', confirm: function () { } });
+                    $('#myModal').modal('hide');
+                }
+            };
+            self.Machines();
+        };
+        ko.applyBindings(new MachinesModel());
+
+        function InsertRecord() {
+            var deferredObj = $.Deferred();
+            var locId = $("#ddlLocation").val();
+            var softwareVersionId = $("#softwareVersionId").val();
+            if (locId == '')
+                locId = 0;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/InsertMachineWithLocation")',
+                dataType: 'json',
+                //async:false,
+                data: { jobOrdHeaderId: $("input#JobOrderHeaderId").val(), jobOrdLocId: locId, machineId: $("#ddlMachineIds").val(), softwareVersion_id: softwareVersionId },
+                success: function (machineslst) {
+                    // _data = machineslst;
+                    if (machineslst.length > 0) {
+                        deferredObj.resolve(machineslst);
+                    }
+                    else {
+                        $.alert({ content: 'You can not map more machines as selected in order!', confirm: function () { } });
+                        return false;
+                    }
+
+                },
+                error: function (ex) {
+
+                    deferredObj.reject(ex);
+                }
+            });
+            return deferredObj.promise();
+        }
+        function UpdateRecord() {
+            var editedRowId = $("#hdnCurrentMachineMappingId").val();   // Current edited row id.
+            var editLocId = $("#ddlLocationEdit").val();                // Edited location ID.
+            var editMachineId = $("#ddlMachineIdsEdit").val();          // Edited machine ID.
+            var jobOrdHeaderId = $("input#JobOrderHeaderId").val();     // Job order ID.
+            var oldMachId = $("#hdnMachineIdToChange").val();
+            var softwareVersionId = $("#softwareVersionId").val();
+            // Old machine ID to set as unassigned.
+            if (editLocId == '')
+                editLocId = 0;
+            // TODO: Pending. Verify if already machines/shipped at this location/etc.
+
+            var deferredObj = $.Deferred();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("/UpdateMachineWithLocation")',
+                dataType: 'json',
+                data: { machineMappingId: editedRowId, jobOrdLocId: editLocId, newMachineId: editMachineId, oldMachineId: oldMachId, jobOrdHeaderId: jobOrdHeaderId, softwareVersion_id: softwareVersionId },
+                success: function (machines) {
+                    if (machines.length > 0) {
+                        deferredObj.resolve(machines);
+                    }
+                    else {
+                        $.alert({ content: 'You can not mapp more machines as selected in order!', confirm: function () { } });
+                        return false;
+                    }
+
+
+
+                },
+                error: function (ex) {
+                    deferredObj.reject(ex);
+                }
+            });
+            return deferredObj.promise();
+        }
+    });
+</script>
+
+
+<script type="text/x-kendo-template" id="ViewMachineTemplate">
+    <div id="details-container">
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Generation", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Generation #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("PCB Version", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= PCB_Version #
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Power Supply1(HV)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= PowerSupply_1 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Power Supply1(LV)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= PowerSupply_2 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Valve 1(Vaccum)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Valve_1 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Valve 3(Fresh Air)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Valve_3 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others1", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield1 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others3", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield3 #
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Pump", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Pump #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Injection Heater", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= INjection_Heater #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Platen heater", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Platen_heater #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Valve 2(Injection)", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Valve_2 #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Firmware Version", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= software_version #
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Others2:", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield2 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others4", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield4 #
+                    </div>
+                </div><div class="form-group">
+                    @Html.Label("Others5", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                    <div class="col-sm-6 LableTextMargin">
+                        #= Customfield5 #
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/javascript">
+    function MachineSpecs_View(ID) {
+        var detailsTemplate = kendo.template($("#ViewMachineTemplate").html());
+        $.ajax({
+            dataType: 'json',
+            type: 'Post',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ id: ID }),
+            url: '/ManageMachineSpecs/ViewMachineSpecs',
+            success: function (result) {
+                var wnd = $("#MachineSpecsWindow").data("kendoWindow");
+                wnd.content(detailsTemplate(result));
+                wnd.center().open();
+                $(".k-overlay").show();
+                $(".k-window").show();
+            },
+            error: function (obj) {
+                $.alert({ content: 'Error while getting record!', confirm: function () { } });
+            }
+        });
+    }
+</script>

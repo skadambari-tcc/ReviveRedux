@@ -1,0 +1,113 @@
+﻿@model Revive.Redux.Entities.ManufacturersModel
+
+@{
+    ViewBag.Title = "View Manufacturer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .LableTextMargin {
+        margin-top: 3px;
+    }
+</style>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12 nomargin nopadding">
+            <div class="contant_page">
+                <!-- tittle -->
+                <div class="row">
+                    <div class="col-md-8 nomargin nopadding">
+                        <h2 style="margin-left:2%">View Manufacturer</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Label("Company Name", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @Html.DisplayFor(M => M.Manufacturer_Name)
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            @Html.Label("Address", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @if (@Model.Address.Length > 20)
+                                {
+                                    <label>@Model.Address.Substring(0, 17)...</label><a id='lnkMoreAddress' class='more' title='@Model.Address' href='#'>more</a>
+                                    <input id="Address" type="hidden" value='@Model.Address' />
+                                }
+                                else
+                                {
+                                    <label>@Model.Address</label>
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            @Html.Label("Phone Number", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @Html.DisplayFor(M => M.Phone_Number)
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            @Html.Label("Manufacturer ID", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @Html.DisplayFor(M => M.Manufacturer_Ref_Code)
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            @Html.Label("Website", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @Html.DisplayFor(M => M.Company_Website)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group display ">
+                            @Html.Label("Project Manager Name", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @Html.DisplayFor(M => M.PM_Name)
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            @Html.Label("Project Manager Email", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @Html.DisplayFor(M => M.PM_Email)
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            @Html.Label("Project Manager Office Phone", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @Html.DisplayFor(M => M.PM_Office_Phone)
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            @Html.Label("Project Manager Mobile", htmlAttributes: new { @class = "col-md-6  col-sm-3 control-label text-right" })
+                            <div class="col-sm-6 LableTextMargin">
+                                @Html.DisplayFor(M => M.PM_Mobile)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-top: 2%">
+                <div class="col-md-5"></div>
+                <div class="col-md-6">
+                    <div class="col-md-12 col-md-offset-1 col-sm-6">
+                        <a class="btn login_button btn-primary yellow" href="/Manufacturers/Manage">Back</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('a#lnkMoreAddress').click(function (e) {
+            $.dialog({
+                title: 'Company Address',
+                content: $("input#Address").val(),
+            });
+        });
+    });
+</script>

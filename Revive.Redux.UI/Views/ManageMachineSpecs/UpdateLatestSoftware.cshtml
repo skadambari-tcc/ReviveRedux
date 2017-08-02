@@ -1,0 +1,490 @@
+﻿@model Revive.Redux.Entities.MachineModel
+
+@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@using System.Web.Optimization
+@using Revive.Redux.Repositories
+@{
+    ViewBag.Title = "UpdateLatestSoftware";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    .k-grid-content {
+        overflow-y: auto;
+        max-height: 250px;
+        overflow-x: auto;
+    }
+</style>
+
+
+
+<div class="modal-body" @*style="padding: 0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>Update Software Version</h2>
+                    </div>
+                    <div class="row">
+
+
+
+
+                        <div class="col-md-12 col-sm-12">
+                            <div class="col-md-4 col-sm-4">
+                                <div class="form-group">
+
+                                    <label class="col-md-6   col-sm-6 control-label text-right" style="margin-left:-30%" for="customers">Customer</label>
+                                    <div class="col-md-6  col-sm-6 ">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.Customer_Id, new SelectList(ViewBag.culst, "Id", "Text"), "--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", onchange = "refreshUpdateLatestSoftware();" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <div class="form-group">
+
+                                    <label class="col-md-6   col-sm-6 control-label text-right" style="margin-left:-25%" for="subsidiary">Subsidiary</label>
+                                    <div class="col-md-6  col-sm-6 ">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.SubsidiaryId, new SelectList(ViewBag.SubsidiaryLst, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter", onchange = "refreshUpdateLatestSoftware();" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <div class="form-group">
+
+                                    <label class="col-md-6   col-sm-6 control-label text-right" style="margin-left:-18%" for="agent">Agent</label>
+                                    <div class="col-md-6  col-sm-6 ">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.SubAgentId, new SelectList(ViewBag.AgentLst, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter", onchange = "refreshUpdateLatestSoftware();" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <div class="form-group">
+                                    <label for=" location" style="margin-left:-30%" class="col-md-6  col-sm-6  control-label text-right ">
+                                        Locations
+                                    </label>
+                                    <div class="col-md-6  col-sm-6 ">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.Location_Id, new SelectList(ViewBag.Locations, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter", onchange = "refreshUpdateLatestSoftware();" })
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <div class="form-group">
+
+                                    <div id="templ">
+
+                                        <label for="softwareversion" style="margin-left:-25%" class="col-md-6  col-sm-6 control-label text-right">Software Version<span style="color:red">*</span></label>
+                                        <div class="col-md-6  col-sm-6 ">
+                                            <div class="select-icon">
+                                                @Html.DropDownListFor(model => model.CurrentVersion_Id, new SelectList(ViewBag.GetFirmware, "Id", "Text"), "--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter", @id = "softwareversion" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+
+
+                        <div class="col-md-8 col-sm-8"></div>
+                        <div class="col-md-4 col-sm-4" style="float: right;margin-right:5.8%;">
+                            <div class="col-md-5 col-sm-5 "></div>
+                            <div class="col-md-7 col-sm-7 ">
+
+                                <input type="button" title="Update Latest Software" class="GreenBtn" id="updtSoft" value="Update Software Version" onclick="updtSoft()" />
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid" @*style="margin-left: 2%"*@>
+                            @(Html.Kendo().Grid<MachineModel>()
+                                                  .Name("UpdateLatestSoftware")
+                                                  .Columns(columns =>
+                  {
+                      columns.Bound(p => p.MachineMappingId).Visible(false);
+                      columns.Bound(p => p.MachineId_Val).Title("Machine ID").Visible(true);
+                      columns.Bound(p => p.CustomerName).Title("Customer").Visible(true).HtmlAttributes(new { @class = "longTextPopup", @id = "cus" }); ;
+                      columns.Bound(p => p.Location).Title("Location").HtmlAttributes(new { @class = "longTextPopup", @id = "loc" });
+                      columns.Bound(p => p.SoftwareVersion).Title("Current S/W Version").HtmlAttributes(new { @class = "longTextPopup", @id = "cv" });
+                      columns.Bound(p => p.ProposedVersion).Title("Proposed Version").HtmlAttributes(new { @class = "longTextPopup", @id = "cv" });
+                      columns.Bound(p => p.isSelected).Title("All").ClientTemplate("<input type='checkbox' #= isSelected ? checked='checked':'' # class='inpchk' ></input>").HeaderTemplate("<input type='checkbox' id='chkSelectAll' class='chicher2' onchange='SelectAll(this)'/><span class='order_tittle' style='margin-top: 1px;'>All</span>").Filterable(false);
+
+
+                  })
+                  .Pageable(pageable =>
+                  {
+                      pageable.Refresh(true);
+                      pageable.PageSizes(new int[] { 10, 20, 50 });
+                      pageable.Messages(messages => messages.Empty("No record found!"));
+                  })
+                             .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                                                  {
+                                                                      fs.Clear().Contains("Contains");
+                                                                      fs.DoesNotContain("Does not contain");
+                                                                      fs.IsEqualTo("Equal to");
+                                                                      fs.IsNotEqualTo("Not equal to");
+                                                                      fs.StartsWith("Starts with");
+                                                                      fs.EndsWith("Ends with");
+                                                                  })))
+                  .Scrollable()
+                  .HtmlAttributes(new { style = "width:92%" })
+                  .DataSource(dataSource => dataSource
+                  .Ajax().PageSize(10)
+                  .ServerOperation(false)
+                  .Read(read => read.Action("SoftUpdtAjax", "ManageMachineSpecs").Data("AddFilter"))
+                  .Events(events => events.Error("error_handler"))
+                  .Model(model => model.Id(p => p.JobOrderHeaderID))
+
+               )
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        Revive.Redux.Common.SetKendoGridHeight();
+        $("#Customer_Id").change(function () {
+            $("#Location_Id").empty();
+            $("#SubAgentId").empty();
+            $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+            var cust_id = 0;
+            if ($("#Customer_Id").val() != null && $("#Customer_Id").val() != '') {
+                cust_id = $("#Customer_Id").val();
+            }
+
+            //Subsidiary Changes
+            if ($("#Customer_Id").val() != "") {
+                $("#SubsidiaryId").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: cust_id },
+                    success: function (data) {
+                        $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+                        if (data.length > 0) {
+                            $.each(data, function (i, dataitem) {
+                                $("#SubsidiaryId").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                            });
+                        }
+                    },
+                    error: function (ex) {
+                        if ($("#Customer_Id").val() != null && $("#Customer_Id").val() != '')
+                            $.alert({ content: 'Failed to retrieve Subsidairy. ' + ex, confirm: function () { } });
+                    }
+                });
+            }
+            else {
+                $("#SubsidiaryId").empty();
+                $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+            }
+            return false;
+        });
+
+        $("#SubsidiaryId").change(function () {
+            $("#Location_Id").empty();
+            $("#SubAgentId").empty();
+            $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+            if ($("#SubsidiaryId").val() != "") {
+                $("#SubAgentId").empty();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetAgentBySubsidiary")', // Calling json method
+                    dataType: 'json',
+                    data: { SubsidiaryId: $("#SubsidiaryId").val() },
+                    success: function (AgentList) {
+                        $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                        if (AgentList.length > 0) {
+                            $.each(AgentList, function (i, AgentList) {
+                                $("#SubAgentId").append('<option value="' + AgentList.Id + '">' + AgentList.Text + '</option>');
+                            });
+                        }
+
+                    },
+                    error: function (ex) {
+                        if ($("#SubsidiaryId").val() != null && $("#SubsidiaryId").val() != '')
+                            $.alert({ content: 'Failed to retrieve Agent. ' + ex, confirm: function () { } });
+                    }
+                });
+            }
+            else {
+                $("#SubAgentId").empty();
+                $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            }
+        });
+
+
+        $("#SubAgentId").change(function () {
+            $("#Location_Id").empty();
+            if ($("#SubAgentId").val() != "") {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetCustomerLocationbyAgent")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: $("#Customer_Id").val(), SubsidiaryId: $("#SubsidiaryId").val(), AgentId: $("#SubAgentId").val(), IsActive: true },
+                    success: function (LocationList) {
+                        if (LocationList.length > 0) {
+                            $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+                            $.each(LocationList, function (i, LocationList) {
+                                $("#Location_Id").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                            });
+                        }
+                        else {
+                            $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+                        }
+                    },
+                    error: function (ex) { $.alert({ content: 'Failed to retrieve Loaction. ' + ex, confirm: function () { } }); }
+                });
+            }
+            else {
+                $("#Location_Id").empty();
+                $("#Location_Id").append('<option value="">' + "--Select--" + '</option>');
+            }
+        });
+
+
+    });
+</script>
+
+<script>
+    //select all checkbox function
+
+    function SelectAll(e) {
+
+        var state = $(e).is(':checked');
+        if (state == true) {
+            var grid = $('#UpdateLatestSoftware').data("kendoGrid");
+            $.each(grid.dataSource.view(), function () {
+                $(".inpchk").prop('checked', 'checked');
+                if (this['isSelected'] != state)
+                    this['isSelected'] = state;
+            })
+        }
+        else {
+            $(".inpchk").removeAttr('checked');
+            var grid = $('#UpdateLatestSoftware').data("kendoGrid");
+            $.each(grid.dataSource.view(), function () {
+                this['isSelected'] = false;
+            })
+
+
+        }
+    }
+
+
+    //select selected checkboxes
+
+    $(function () {
+        $('#UpdateLatestSoftware').on('change', '.inpchk', function () {
+            var checked = $(this).is(':checked');
+            $("#chkSelectAll").removeAttr('checked');
+            if ($('.inpchk:checked').length == $('.inpchk').length) {
+                $("#chkSelectAll").prop('checked', 'checked');
+            }
+            var grid = $('#UpdateLatestSoftware').data().kendoGrid;
+            var dataItem = grid.dataItem($(this).closest('tr'));
+            dataItem.set('isSelected', checked);
+
+        })
+    })
+
+    //function called on set debug btn and get current grid data
+
+    function updtSoft() {
+
+        var grid = $('#UpdateLatestSoftware').data().kendoGrid;
+
+
+        var items = $("#UpdateLatestSoftware").data("kendoGrid").dataSource.data();
+        var st = 0;
+        for (var i = 0; i < items.length; i++) {
+
+            var item = items[i];
+            if (item.isSelected == false) {
+                st = st + 1;
+            }
+
+
+        }
+
+
+        if (softverson == "") {
+
+
+            toastr.warning('Please select software version!');
+
+
+        }
+
+
+        else if (st == items.length) {
+            toastr.warning('Please select machine to update!');
+        }
+
+
+        else {
+
+            var grid = $('#UpdateLatestSoftware').data("kendoGrid");
+            var dat = grid.dataSource.data();
+            var MachineIdList = [];
+            for (var i = 0; i < dat.length; i++) {
+                if (dat[i].isSelected == true) {
+                    MachineIdList.push({ 'MachineId': dat[i].MachineId });
+                }
+            }
+
+            $("#updtSoft").attr('disabled', true);
+
+            $.ajax({
+                type: "POST",
+                datatype: 'json',
+                url: "/ManageMachineSpecs/UpdSoftware",
+                data: JSON.stringify({ data: MachineIdList, softversn: softverson }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    $("#updtSoft").attr('disabled', false);
+
+                }
+            }).done(function (data) {
+                //Successfully pass to server and get response
+
+                $('#UpdateLatestSoftware').data().kendoGrid.dataSource.read(data);
+                $('#UpdateLatestSoftware').data('kendoGrid').refresh();// or
+                if (data.result = "OK") {
+                    toastr.success('@ReviveMessages.Update');
+
+                    result = true;
+                    $("#chkSelectAll").removeAttr('checked')
+                }
+            })
+        }
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+    //current selected template value
+    softverson = "";
+    $("#softwareversion").on('change', function () {
+
+
+        softverson = $("#softwareversion").val()
+
+    });
+
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            $.alert({ content: message, confirm: function () { } });
+        }
+    }
+
+    //function for server side filtering the managedebug grid
+    function refreshUpdateLatestSoftware(e) {
+        $("#UpdateLatestSoftware").data('kendoGrid').dataSource.read();
+        //$("#BatchGrid").data('kendoGrid').refresh();
+
+
+    }
+
+    function AddFilter() {
+        var custfilter = $("#Customer_Id").val();
+        var locfilter = $("#Location_Id").val();
+        var Subsidiaryfilter = $("#SubsidiaryId").val();
+        var SubAgentfilter = $("#SubAgentId").val();
+
+        if (custfilter == '') {
+            custfilter = null;
+            locfilter = null;
+            Subsidiaryfilter = 0;
+            SubAgentfilter = 0;
+        }
+
+        if (locfilter == '') {
+            locfilter = null;
+
+        }
+
+        if (Subsidiaryfilter == '') {
+            Subsidiaryfilter = 0;
+            locfilter = null;
+            SubAgentfilter = 0;
+        }
+
+        if (SubAgentfilter == '') {
+            SubAgentfilter = 0;
+            locfilter = null;
+        }
+
+        return { cusdata: custfilter, locdata: locfilter, subsidiarydata: Subsidiaryfilter, subagentdata: SubAgentfilter };
+    }
+
+
+</script>
+
+<script>
+    $(function () {
+        $("form").kendoValidator();
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,367 @@
+﻿@model Revive.Redux.Entities.ModeConfigurationModel
+
+@{
+    ViewBag.Title = "EditModeConfig";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("UpdateModeConfig", "ModeConfiguration", FormMethod.Post, new { id = "userform", name = "userform", enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+
+
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="contant_page">
+                    <div class="row">
+                        @*nomargin nopadding*@
+                        <div class="lable-align-top">
+                            @*col-md-8 nomargin nopadding*@
+
+                            <h2>Edit Mode Configuration</h2>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                @Html.Label("Customer", htmlAttributes: new { @class = "required control-label col-md-4 text-right" })
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(model => model.customerID, new SelectList(ViewBag.CustomerLst, "Id", "Text"), "--Select--", htmlAttributes: new { @class = "form-control pull-right topspace selecter" })
+                                        @Html.ValidationMessageFor(m => m.customerID)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                @Html.Label("Agent", htmlAttributes: new { @class = "required control-label col-md-4 text-right" })
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(model => model.SubAgentId, new SelectList(ViewBag.AgentNameList, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter" })
+                                        @Html.ValidationMessageFor(model => model.SubAgentId)
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="form-group">
+
+                                    @Html.Label("Location")
+
+
+                                    <div class="col-sm-5">
+
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.locationID, new SelectList(ViewBag.LocationLst, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter" })
+                                        </div>
+
+                                    </div>
+                                </div>*@
+                            <div class="form-group">
+
+                                @Html.Label("From Date", htmlAttributes: new { @class = "required control-label col-md-4 text-right" })
+                                @*@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "required control-label col-md-4 text-right" })*@
+
+                                <div class="col-sm-5">
+
+                                    @(Html.Kendo().DatePickerFor(model => model.From_Date)
+                                .HtmlAttributes(new { @class = "DisableKeyboardInput", @style = "width:100%" }))
+                                    @*@Html.ValidationMessageFor(m => m.From_Date)*@
+                                    <span id="invalidstartdate" class="field-validation-error" style="display:none">Invalid date</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Number of Demos", htmlAttributes: new { @class = "required control-label col-md-4 text-right" })
+                                @*@Html.LabelFor(model => model.Customer_Id, htmlAttributes: new { @class = "required control-label col-md-4 text-right" })*@
+
+                                <div class="col-sm-5">
+                                    @Html.TextBoxFor(model => model.No_of_Activities, htmlAttributes: new { @class = "form-control numericOnly", @style = "width:100%" })
+                                    @Html.ValidationMessageFor(m => m.No_of_Activities)
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+
+                                @Html.Label("Subsidiary", htmlAttributes: new { @class = "required control-label col-md-4 text-right" })
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(model => model.SubsidiaryId, new SelectList(ViewBag.SubsidiaryNameList, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter" })
+                                        @Html.ValidationMessageFor(model => model.SubsidiaryId)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+
+
+                                @Html.Label("Location", htmlAttributes: new { @class = "required control-label col-md-4 text-right" })
+
+                                <div class="col-sm-5">
+                                    <div class="select-icon">
+                                        @Html.DropDownListFor(model => model.locationID, new SelectList(ViewBag.LocationLst, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter" })
+                                        @Html.ValidationMessageFor(m => m.locationID)
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+                                @Html.Label("To Date", htmlAttributes: new { @class = "required control-label col-md-4 text-right" })
+
+                                <div class="col-sm-5">
+                                    @(Html.Kendo().DatePickerFor(model => model.To_Date).Events(e => e.Change("endChange"))
+    .HtmlAttributes(new { @class = "DisableKeyboardInput", @style = "width:100%" }))
+                                    @*@Html.ValidationMessageFor(m => m.To_Date)*@
+                                    <span id="date" class="field-validation-error" style="display:none">Start date should be less than end date</span>
+                                    <span id="invalidenddate" class="field-validation-error" style="display:none">Invalid date</span>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+
+
+                                @Html.HiddenFor(m => m.Config_Id)
+
+
+                            </div>
+
+
+                            @*<div class="form-group " id="divLocation">
+
+
+                                    @Html.LabelFor(model => model.Location_Id, htmlAttributes: new { @class = " required control-label col-md-4 text-right" })
+
+                                    <div class="col-sm-5">
+                                        <div class="select-icon">
+                                            @Html.DropDownListFor(model => model.Location_Id, new SelectList(ViewBag.LocationLst, "Id", "Text"), htmlAttributes: new { @class = "form-control pull-right topspace selecter" })
+                                            @Html.ValidationMessageFor(model => model.Location_Id, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>*@
+
+                        </div>
+
+
+                    </div>
+                    <div class="row" style="padding-top: 5%;">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-8">
+                            <div class="col-md-3 col-sm-3"></div>
+                            <div class="col-md-6 col-sm-6">
+
+                                <button id="btnCreate" class="btn GreenBtn" type="submit">Save</button>
+                                <button id="btnCancel" class="btn YellowBtn" type="button">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('TechnicalManagement');
+        if ($("select#locationID") != null && $("select#locationID").length > 0 && $("select#locationID").val() == 0)
+            $("select#locationID").find(":selected").val('');
+
+
+
+        $("#customerID").change(function () {
+            $("#SubsidiaryId").empty();
+            $("#locationID").empty();
+            $("#SubAgentId").empty();
+            $("#locationID").append('<option value="">' + "--Select--" + '</option>');
+            $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            if ($("#customerID").val() != "") {
+               
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetSubsidiaryByCustomer")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: $("#customerID").val() },
+                    success: function (data) {
+                        $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+                        if (data.length > 0) {
+                            $.each(data, function (i, dataitem) {
+                                $("#SubsidiaryId").append('<option value="' + dataitem.Id + '">' + dataitem.Text + '</option>');
+                            });
+                        }
+                    },
+                    error: function (ex) {
+                        if ($("#customerID").val() != null && $("#customerID").val() != '')
+                            $.alert({ content: 'Failed to retrieve Subsidairy. ' + ex, confirm: function () { } });
+                    }
+                });
+
+            }
+            else {
+                $("#SubsidiaryId").empty();
+                $("#SubsidiaryId").append('<option value="">' + "--Select--" + '</option>');
+            }
+            return false;
+        });
+
+        $("#SubsidiaryId").change(function () {
+            $("#locationID").empty();
+            $("#SubAgentId").empty();
+            $("#locationID").append('<option value="">' + "--Select--" + '</option>');
+            if ($("#SubsidiaryId").val() != "") {
+                
+                var nCustomerId = $("#ddlCustomerName").val();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetAgentBySubsidiary")', // Calling json method
+                    dataType: 'json',
+                    data: { SubsidiaryId: $("#SubsidiaryId").val() },
+                    success: function (AgentList) {
+                        $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+                        if (AgentList.length > 0) {
+                            $.each(AgentList, function (i, AgentList) {
+                                $("#SubAgentId").append('<option value="' + AgentList.Id + '">' + AgentList.Text + '</option>');
+                            });
+                        }
+
+                    },
+                    error: function (ex) {
+                        if ($("#SubsidiaryId").val() != null && $("#SubsidiaryId").val() != '')
+                            $.alert({ content: 'Failed to retrieve Agent. ' + ex, confirm: function () { } });
+                    }
+                });
+
+            }
+            else {
+                $("#SubAgentId").empty();
+                $("#SubAgentId").append('<option value="">' + "--Select--" + '</option>');
+            }
+        });
+
+
+        $("#SubAgentId").change(function () {
+            $("#locationID").empty();
+            if ($("#SubAgentId").val() != "") {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("/GetCustomerLocationbyAgent")', // Calling json method
+                    dataType: 'json',
+                    data: { CustomerId: $("#customerID").val(), SubsidiaryId: $("#SubsidiaryId").val(), AgentId: $("#SubAgentId").val(), IsActive: true },
+                    success: function (LocationList) {
+                        if (LocationList.length > 0) {
+                            $("#locationID").append('<option value="">' + "--Select--" + '</option>');
+                            $.each(LocationList, function (i, LocationList) {
+                                $("#locationID").append('<option value="' + LocationList.Id + '">' + LocationList.Text + '</option>');
+                            });
+                        }
+                        else {
+                            $("#locationID").append('<option value="">' + "--Select--" + '</option>');
+                        }
+                    },
+                    error: function (ex) { $.alert({ content: 'Failed to retrieve Location. ' + ex, confirm: function () { } }); }
+                });
+            }
+            else {
+                $("#locationID").empty();
+                $("#locationID").append('<option value="">' + "--Select--" + '</option>');
+            }
+        });
+
+
+        // Cancel Button Click event
+        $("#btnCancel").click(function () {
+            window.location.href = '@Url.Action("Details", "ModeConfiguration")';
+        });
+
+        $("#btnCreate").click(function () {
+            $("#invalidstartdate").hide();
+            $("#invalidenddate").hide();
+            var startPicker = $("#From_Date").data("kendoDatePicker");
+            var endDate = $("#To_Date").data("kendoDatePicker");
+            var sDate = Date.parse(startPicker.value());
+            var eDate = Date.parse(endDate.value());
+            $("#invalidstartdate").text("Invalid Date");
+            $("#invalidenddate").text("Invalid Date");
+
+            if ($("#From_Date").val() == "") {
+                $("#invalidstartdate").text("From Date is required");
+                $("#invalidstartdate").show();
+                //return false;
+            }
+            if ($("#To_Date").val() == "") {
+                $("#invalidenddate").text("To Date is required");
+                $("#invalidenddate").show();
+                //return false;
+            }
+            if ($("#From_Date").val() != "" && $("#To_Date").val() != "") {
+                if (!sDate && !eDate) {
+                    $("#invalidstartdate").show();
+                    $("#invalidenddate").show();
+                    //validateflag = false;
+                    return false;
+                }
+            }
+            if ($("#From_Date").val() != "") {
+                if (!sDate) {
+                    $("#invalidstartdate").show();
+                    //validateflag = false;
+                    return false;
+                }
+            }
+            if ($("#To_Date").val() != "") {
+                if (!eDate) {
+                    $("#invalidenddate").show();
+                    //validateflag = false;
+                    return false;
+                }
+            }
+            else { }
+
+            if (startPicker.value() != null && endDate.value() != null) {
+                if (endDate.value() < startPicker.value()) {
+                    $("#date").show();
+                    //validateflag = false;
+                    return false;
+                }
+            }
+        });
+
+    });
+
+    function endChange() {
+        var startPicker = $("#From_Date").data("kendoDatePicker"),
+            end = this.value();
+        var endDate = $("#To_Date").data("kendoDatePicker");
+        var eDate = Date.parse(endDate._value);
+
+        if (!eDate) {
+            $("#invalidenddate").show();
+            return false;
+        }
+        $("#date").hide();
+        if (startPicker._value != "") {
+            if (endDate._value < startPicker._value) {
+                $("#date").show();
+
+            }
+        }
+        $("#invalidenddate").hide();
+    }
+</script>
+

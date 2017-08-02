@@ -1,0 +1,153 @@
+﻿@using Kendo.Mvc.UI
+@using Revive.Redux.Entities
+@model OrderModel
+@{
+    ViewBag.Title = "Archive Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #body {
+        height: 550px;
+    }
+
+    .k-grid tbody tr:hover {
+        background: #faecc1;
+    }
+</style>
+
+
+<div class="modal-body" @*style="padding:0px!important"*@>
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" contant_page">
+                <div class="row">
+                    <div class="lable-align-top">
+                        <h2>ARCHIVE ORDERS</h2>
+                    </div>                       
+                    <div class="row">
+                        <div class="grid-align table-responsive Kendogrid">
+                            @(Html.Kendo().Grid<OrderModel>()
+                            .Name("ArchiveOrders")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(p => p.JobOrderHeaderId).Title("Order Number");
+                                columns.Bound(p => p.CustomerName).Title("Customer Name");
+                                columns.Bound(p => p.StatusName).Title("Status");
+                                columns.Bound(p => p.NoOfMachines).Title("No of Mc's");
+                                columns.Bound(p => p.CreatedDate).Title("Order Date").ClientTemplate("#= kendo.toString(kendo.parseDate(CreatedDate, 'yyyy-MM-dd'), 'MM-dd-yyyy') #");
+                                columns.Bound(p => p.ExpectedDate).Title("Expected Date").ClientTemplate("#= kendo.toString(kendo.parseDate(ExpectedDate, 'yyyy-MM-dd'), 'MM-dd-yyyy') #");
+                                columns.Bound(p => p.ManufacturerName).Title("Manufacturer");
+                                columns.Bound(p => p.JobOrderHeaderId).Title("View").ClientTemplate(
+                                    "<a title='View Order' href='" + Url.Action("ViewOrder", "Order") + "/#= JobOrderHeaderIdEncoded #'" + "><i class='fa fa-eye fa-lg icon-color'></i></a>"
+                                ).Filterable(false).Sortable(false);
+                                columns.Command(commands =>
+                                {
+                                    commands.Destroy().Text("Archive");
+                                }).Title("Archive");
+                            })
+                            .Pageable(pageable =>
+                            {
+                                pageable.Refresh(true);
+                                pageable.PageSizes(new int[] { 10, 20, 50 });
+                                pageable.Messages(messages => messages.Empty("No orders available!"));
+                            })
+                                    .Filterable(f => f.Operators(o => o.ForString(fs =>
+                                                   {
+                                                       fs.Clear().Contains("Contains");
+                                                       fs.DoesNotContain("Does not contain");
+                                                       fs.IsEqualTo("Equal to");
+                                                       fs.IsNotEqualTo("Not equal to");
+                                                       fs.StartsWith("Starts with");
+                                                       fs.EndsWith("Ends with");
+                                                   })))
+                            .Editable(editable =>
+                            {
+                                editable.DisplayDeleteConfirmation("Are you sure want to Archive this order ?");
+                            })
+                            .Sortable()
+                            .Scrollable()
+                            .ColumnResizeHandleWidth(900)
+                            .Events(events => { events.DataBound("onDataBound"); })
+                                    .HtmlAttributes(new { style = "width:95%" })
+                            .DataSource(dataSource => dataSource.Ajax().PageSize(10)
+                                .Events(events =>
+                                {
+                                    events.Error("onGridError");// Handle the "error" event
+                                    events.RequestEnd("onRequestEnd");
+                                })
+                                .Model(model =>
+                                {
+                                    model.Id(p => p.JobOrderHeaderId);
+                                })
+                                .ServerOperation(false) // paging, sorting, filtering and grouping will be applied client-side
+                                .Read("ArchiveOrdersAjax", "Order")
+                                .Destroy(destroy => destroy.Action("UpdateArchiveStatus", "Order"))
+                                )
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        Revive.Redux.Common.SetParentMenuSelected('Orders');
+        Revive.Redux.Common.SetKendoGridHeight();
+    });
+    function onDataBound(e) {
+        var grid = $("#ArchiveOrders").data("kendoGrid");
+        var gridData = grid.dataSource.view();
+
+        if (grid != null && gridData != null) {
+            for (var i = 0; i < gridData.length; i++) {
+                var currentUid = gridData[i].uid;
+                if (gridData[i].PageAccessCode == null || gridData[i].PageAccessCode == '' || gridData[i].PageAccessCode == "SUPERADMIN" || gridData[i].PageAccessCode == "ADMIN") {
+                    HideDeleteBtn(currentUid, grid);
+                }
+                else {
+                    if (gridData[i].ArchiveFlag != null && gridData[i].ArchiveFlag == true) {
+                        HideDeleteBtn(currentUid, grid);
+                    }
+                }
+            }
+        }
+    }
+    function HideDeleteBtn(currentUid, grid) {
+        if (currentUid != null) {
+            var currentRow = grid.table.find("tr[data-uid='" + currentUid + "']"); {
+                if (currentRow != null && currentRow.length > 0)
+                    var deleteBtn = $(currentRow).find(".k-button.k-button-icontext.k-grid-delete");
+                if (deleteBtn != null && deleteBtn.length > 0) {
+                    deleteBtn.hide();   // Hide delete button in case of archived
+                }
+            }
+        }
+    }
+    function onGridError(e) {
+        if (e.errors) {
+            var message = "There are some errors:\n";
+            // Create a message containing all errors.
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            // Display the message
+            $.alert({ content: message, confirm: function () { } });
+            // Cancel the changes
+            var grid = $("#ArchiveOrders").data("kendoGrid");
+            grid.cancelChanges();
+        }
+    }
+    function onRequestEnd(e) {
+        if (e.type == "destroy") {
+            var grid = $("#ArchiveOrders").data("kendoGrid");
+            grid.dataSource.read();
+        }
+    }
+</script>

@@ -1,0 +1,310 @@
+﻿@using Revive.Redux.Controllers.Common
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8" />
+
+    <title>@ViewBag.Title </title>
+
+
+
+    <link href="~/Scripts/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Scripts/css/toastr.css" rel="stylesheet" />
+    <link href="~/Scripts/css/component.css" rel="stylesheet" />
+    <link href="~/Scripts/css/main.css" rel="stylesheet" />
+    <link href="~/Scripts/css/font-awesome.css" rel="stylesheet" />
+    @*<link href="~/Scripts/css/bootstrap-theme.css" rel="stylesheet" />*@
+    <link href="~/Scripts/css/jquery-confirm.css" rel="stylesheet" />
+    @*<script src=" ~ />Scripts/modernizr.custom.js"></script>*@
+
+    @*@Styles.Render("~/Files/others")
+        @Styles.Render("~/xontent/css")*@
+    @*@Styles.Render("~/Content/kendo")*@
+    <link href="~/Kendo/CSS/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Kendo/CSS/kendo.flat.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/others")
+    @Scripts.Render("~/bundles/kendo")
+
+
+
+</head>
+<body>
+    <!-- header starts -->
+    <header id="header">
+        <div class="container">
+            <div class="row nomargin nopadding">
+                <div class="col-md-12 nomargin nopadding">
+                    <div class="logo"><img src="~/Scripts/images/logo.png" /> </div>
+                    <div class="right_bar">
+                        <div class="loger_name">
+
+
+                            @{
+                                if (Session != null && Session["CurrentUser"] != null)
+                                {
+                                    var currentUser = (CurrentUserDetail)Session["CurrentUser"];
+                                    <span class="threeDots">Hello, @currentUser.FullName<br />@currentUser.userLevelName</span>
+                                    <div id="navaccountinfo" class="newclass">
+                                        Access your account &#9660
+                                        <div class="dropdown">
+                                            <div id="myul" class="submenu">
+                                                <a href="/Account/ChangePassword">Change Password</a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+
+
+                        </div>
+                        @*<div class="loger_name">@Html.ActionLink("Change Password", "ChangePassword", "Account")</div>*@
+                        <div id="logout" class="logout_butn"> <a class="btn  login_button btn-primary btn-block" href="/Account/LogOff">Logout</a></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row border_top nomargin">
+                <div class="col-md-12 nomargin nopadding">
+                    @*<div id="dl-menu" class="dl-menuwrapper fullmenu">
+                        <button class="dl-trigger">Open Menu</button>*@
+                    <div class="navbar navbar-inverse " role="navigation" id="slide-nav">
+                        <div class="container nopadding">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+
+                            </div>
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="margin-left:-1.3%">
+                                @*@Html.MvcSiteMap().Menu(false, true, true)*@
+                                @*<ul class="dl-menu"></ul>*@
+
+                                @Html.MvcSiteMap().Menu("MenuHelperModel")
+
+                            </div>
+
+                            <!-- /dl-menuwrapper -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header ends -->
+    <!-- container starts -->
+    <div class="wrapper">
+        <section id="body" class="contant_sector">
+            @*col-md-8 col-md-offset-2*@
+            @RenderSection("featured", required: false)
+            <div class="container">
+                @*content-wrapper main-content clear-fix*@
+                @RenderBody()
+            </div>
+        </section>
+    </div>
+    <!-- container ends -->
+    <!-- footer starts -->
+    <footer class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="copy-right" style="font-size:11px;"> All content © Copyright Redux LLC 2017. All Rights Reserved</div>
+                </div>
+                <div class="col-md-12">
+                    @{
+                        var BuildVersionName = Convert.ToString(System.Web.Configuration.WebConfigurationManager.AppSettings["ESBuildVersion"]);
+                        <div class="copy-right"><span class="threeDots" style="font-size:11px;">@BuildVersionName</span></div>
+                    }
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- footer ends -->
+    @*@Scripts.Render("~/bundles/jquery")*@
+
+    @RenderSection("scripts", required: false)
+
+    @*<script src="~/Scripts/jquery.dlmenu.js"></script>*@
+    <style type="text/css">
+        /*.navbar-nav > li > .dropdown-menu {
+                                border-top-left-radius: 0;
+                                border-top-right-radius: 0;
+                                margin-top: 0;
+                            }
+
+                            .open > .dropdown-menu {
+                                display: block;
+                            }*/
+        .wrapper {
+            /*background: rgba(0, 0, 0, 0) url("/../Scripts/images/container.jpg") no-repeat scroll 0 0 / 100% 100%;*/
+            height: auto !important;
+            margin: 0 auto -10px;
+            max-height: 100%;
+            min-height: 100%;
+        }
+
+        .container-fluid {
+            background-color: black;
+            margin-left: auto;
+            margin-right: auto;
+            *padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .dropdown-menu {
+            background-clip: padding-box;
+            background-color: #407ec9;
+            border-radius: 4px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+            display: none;
+            float: left;
+            font-size: 14px;
+            left: 0;
+            list-style: outside none none;
+            margin: 2px 0 0;
+            min-width: 160px;
+            padding: 0;
+            position: absolute;
+            text-align: left;
+            top: 100%;
+            z-index: 1000;
+        }
+
+            .dropdown-menu > li > a {
+                border-top: 1px solid #4f8bd3;
+                clear: both;
+                color: #fff;
+                display: block;
+                font-weight: normal;
+                line-height: 1.42857;
+                padding: 6px 20px;
+                white-space: nowrap;
+            }
+
+        .navbar-inverse .navbar-nav > li > a {
+            color: #fff;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .navbar-nav > li > a {
+            padding-bottom: 15px;
+            padding-top: 15px;
+        }
+
+        /*added to main .css
+                                    .navbar-nav > li > a:hover {
+                                    background-color: #407ec9 !important;
+                                    border-top-left-radius: 5px;
+                                    border-top-right-radius: 5px;
+                                }*/
+
+        .navbar-inverse {
+            background-color: #000 !important;
+        }
+
+        .threeDots {
+            display: inline-block;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden !important;
+            /*text-overflow: ellipsis;*/
+        }
+
+        div#navaccountinfo:hover {
+            cursor: pointer;
+        }
+
+        /*Kendo Grid CSS*/
+
+        /*.k-grid-header, .k-header {
+                                background-color: white !important;
+                                background-image: none,none !important;
+                            }
+
+                            .k-header {
+                                background-color: transparent !important;
+                            }*/
+
+        .k-grid-header .k-header {
+            font-weight: bold !important;
+        }
+        /*Bug#6783 - Calendar icon in center throught application*/
+        span.k-select > span.k-icon.k-i-calendar {
+            margin-top: -4px;
+        }
+    </style>
+    <script>
+
+
+        $("#navaccountinfo").click(function () {
+            var X = $(this).attr('class');
+            if (X == 'newclass') {
+                $(".submenu").show();
+                $(this).removeClass('newclass');
+            }
+            else {
+                $(".submenu").hide();
+                $(this).attr('class', 'newclass');
+            }
+
+        });
+
+        //Mouse click on sub menu
+        $(".submenu").mouseup(function () {
+            return false;
+        });
+
+        //Mouse click on my account link
+        $(".account").mouseup(function () {
+            return false;
+        });
+
+
+        //Document Click
+        $(document).mouseup(function () {
+            $(".submenu").hide();
+        });
+        $(function () {
+            $(".container-fluid div:first-child").removeClass("collapse");
+            $('#bs-example-navbar-collapse-1> nav:first-child').attr("id", "Tabs");
+            //$('#Tabs >.container-fluid>.navbar-collapse>ul>li:first').addClass('active');
+        });
+        @*
+        $(function () {
+            //$('ul.tabs li:first').addClass('active');
+
+            //$('#menu li ul').addClass('dl-submenu');
+            //  $('#menu li ul li:first').addClass('dl-back');
+            $('#bs-example-navbar-collapse-1 ul:first').addClass('nav');
+            $('#bs-example-navbar-collapse-1 ul:first').addClass('navbar-nav');
+            // $('ul:first li:first').addClass('active');
+
+        });
+
+        //$('.navbar-collapse > ul:first').find()
+
+        $('.navbar-collapse > ul:first > li:nth-child(2)').each(function () {
+
+
+            $(this).html('<a class="dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false" >' + $(this).html() + '</a>');
+
+        });
+        *@
+    </script>
+
+</body>
+</html>
